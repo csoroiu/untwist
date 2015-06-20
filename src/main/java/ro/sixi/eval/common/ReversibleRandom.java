@@ -53,7 +53,7 @@ public class ReversibleRandom extends Random {
 
         int j, k;
         do {// limit is not power of 2
-            j = prevInt(31);// (seed >> 17)
+            j = prev(31);// (seed >> 17)
             k = j % bound; // output is(seed >> 17) modulo limit
         } while ((j - k) + (bound - 1) < 0); // remove statistical bias
         return k;
