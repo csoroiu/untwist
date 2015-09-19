@@ -51,6 +51,14 @@ public final class ReversibleRandom extends Random {
         return (int) (nextSeed >>> (48 - bits));
     }
 
+    // public void prevBytes(byte[] bytes) {
+    // throw new UnsupportedOperationException();
+    // }
+
+    public int prevInt() {
+        return prev(32);
+    }
+
     public int prevInt(int bound) {
         if (bound <= 0)
             return bound;
@@ -66,12 +74,12 @@ public final class ReversibleRandom extends Random {
         return k;
     }
 
-    public int prevInt() {
-        return prev(32);
-    }
-
     public long prevLong() {
         return prev(32) + ((long) (prev(32)) << 32);
+    }
+
+    public boolean prevBoolean() {
+        return prev(1) != 0;
     }
 
     public float prevFloat() {
@@ -82,7 +90,7 @@ public final class ReversibleRandom extends Random {
         return (prev(27) + ((long) (prev(26)) << 27)) * DOUBLE_UNIT;
     }
 
-    public boolean prevBoolean() {
-        return prev(1) != 0;
-    }
+    // public synchronized double prevGaussian() {
+    // throw new UnsupportedOperationException();
+    // }
 }
