@@ -41,7 +41,7 @@ class Random(object):
 
     @seed.setter
     def seed(self, seed):
-        self._seed = (seed ^ 0x5deece66dL) & ((1 << 48) - 1)
+        self._seed = (seed ^ 0x5deece66d) & ((1 << 48) - 1)
 
     def next(self, bits):
         """
@@ -56,7 +56,7 @@ class Random(object):
         elif bits > 32:
             bits = 32
 
-        self._seed = (self._seed * 0x5deece66dL + 0xb) & ((1 << 48) - 1)
+        self._seed = (self._seed * 0x5deece66d + 0xb) & ((1 << 48) - 1)
         retval = self._seed >> (48 - bits)
 
         # Python and Java don't really agree on how ints work. This converts
