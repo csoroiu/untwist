@@ -5,7 +5,14 @@ Inspired from: https://github.com/MostAwesomeDude/java-random
 """
 import time
 
-class Random(object):
+
+def _signed_int(x):
+    if x > 0x7FFFFFFF:
+        x -= 0x100000000
+    return x
+
+
+class JavaRandom(object):
     """
     An implementation of the Java SE random number generator.
     Java's RNG is based on a classic Knuth-style linear congruential formula,
@@ -41,7 +48,7 @@ class Random(object):
 
     @seed.setter
     def seed(self, seed):
-        self._seed = (seed ^ 0x5deece66d) & ((1 << 48) - 1)
+        self._seed = (seed ^ 0x5deece66d) & 0xFFFFFFFFFFFF  # ((1 << 48) - 1)
 
     def next(self, bits):
         """
@@ -56,15 +63,10 @@ class Random(object):
         elif bits > 32:
             bits = 32
 
-        self._seed = (self._seed * 0x5deece66d + 0xb) & ((1 << 48) - 1)
+        self._seed = (self._seed * 0x5deece66d + 0xb) & 0xFFFFFFFFFFFF  # ((1 << 48) - 1)
         retval = self._seed >> (48 - bits)
 
-        # Python and Java don't really agree on how ints work. This converts
-        # the unsigned generated int into a signed int if necessary.
-        if retval & (1 << 31):
-            retval -= (1 << 32)
-
-        return retval
+        return _signed_int(retval)
 
     def next_bytes(self, l):
         """
@@ -72,7 +74,7 @@ class Random(object):
         """
 
         for i in range(0, len(l)):
-            if not i % 4:
+            if i & 3: # not i % 4
                 n = self.next_int()
             b = n & 0xff
             # Flip signs. Ugh.
@@ -105,7 +107,7 @@ class Random(object):
 
         bits = self.next(31)
         val = bits % n
-        while (bits - val + n - 1) < 0:
+        while _signed_int(bits - val + (n - 1)) < 0:
             bits = self.next(31)
             val = bits % n
 
