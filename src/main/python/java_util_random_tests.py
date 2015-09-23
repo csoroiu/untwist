@@ -28,6 +28,21 @@ class JavaRandomTest(unittest.TestCase):
         standard = 12
         self.assertEqual(self.r.next_int(42), standard)
 
+    def test_get_seed(self):
+        actual = 42523532
+        rnd = JavaRandom(42523532)
+        self.assertEqual(rnd.seed, actual)
+
+    def test_set_seed(self):
+        actual = 42523532
+        rnd = JavaRandom()
+        rnd.set_seed(42523532)
+        self.assertEqual(rnd.seed, actual)
+
+    def test_next_int_pow_2(self):
+        actual = self.r.next_int(2 ** 30)
+        self.assertEqual(actual, 784870680)
+
     def test_nextInt_int_overflow(self):
         rnd = JavaRandom(215660466117472)
         standard = 4224

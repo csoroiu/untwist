@@ -10,10 +10,13 @@ from __future__ import unicode_literals
 import time
 
 
-def _signed_int(x):
-    if x & 0x80000000:
-        x -= 0x100000000
-    return x
+def _signed_int(value):
+    """
+    The method makes sure that our 32bit int is signed so we negate it
+    """
+    if value & 0x80000000:
+        value -= 0x100000000
+    return value
 
 
 class JavaRandom(object):
@@ -35,9 +38,9 @@ class JavaRandom(object):
 
         if seed is None:
             seed = int(time.time() * 1000)
-        self._seed = 0
+        self.__seed = 0
         self.seed = seed
-        self.next_next_gaussian = None
+        self.__next_next_gaussian = None
 
     def set_seed(self, seed):
         """
@@ -48,11 +51,18 @@ class JavaRandom(object):
 
     @property
     def seed(self):
-        return (self._seed ^ 0x5deece66d) & 0xFFFFFFFFFFFF  # ((1 << 48) - 1)
+        """
+        Returns the seed value. The returned value can be used to build a new generator
+        that will return the same values as the current one.
+        """
+        return (self.__seed ^ 0x5deece66d) & 0xFFFFFFFFFFFF  # ((1 << 48) - 1)
 
     @seed.setter
     def seed(self, seed):
-        self._seed = (seed ^ 0x5deece66d) & 0xFFFFFFFFFFFF  # ((1 << 48) - 1)
+        """
+        Sets the seed for the generator
+        """
+        self.__seed = (seed ^ 0x5deece66d) & 0xFFFFFFFFFFFF  # ((1 << 48) - 1)
 
     def next(self, bits):
         """
@@ -67,8 +77,8 @@ class JavaRandom(object):
         elif bits > 32:
             bits = 32
 
-        self._seed = (self._seed * 0x5deece66d + 0xb) & 0xFFFFFFFFFFFF  # ((1 << 48) - 1)
-        retval = self._seed >> (48 - bits)
+        self.__seed = (self.__seed * 0x5deece66d + 0xb) & 0xFFFFFFFFFFFF  # ((1 << 48) - 1)
+        retval = self.__seed >> (48 - bits)
 
         return _signed_int(retval)
 
@@ -96,8 +106,8 @@ class JavaRandom(object):
         if n is None:
             return self.next(32)
 
-        if n <= 0:
-            raise ValueError("Argument must be positive!")
+        if n <= 0 or n > 0x7FFFFFFF:
+            raise ValueError("Argument must be 32 bit signed integer with positive value!")
 
         # This tricky chunk of code comes straight from the Java spec. In
         # essence, the algorithm tends to have much better entropy in the
