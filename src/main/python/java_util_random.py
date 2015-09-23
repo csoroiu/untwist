@@ -3,11 +3,15 @@ This module contains a class that mimics the behaviour of the java.util.Random c
 Inspired from: https://github.com/MostAwesomeDude/java-random
 @author: sixi
 """
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
 import time
 
 
 def _signed_int(x):
-    if x > 0x7FFFFFFF:
+    if x & 0x80000000:
         x -= 0x100000000
     return x
 
@@ -44,7 +48,7 @@ class JavaRandom(object):
 
     @property
     def seed(self):
-        return self._seed
+        return (self._seed ^ 0x5deece66d) & 0xFFFFFFFFFFFF  # ((1 << 48) - 1)
 
     @seed.setter
     def seed(self, seed):
@@ -74,7 +78,7 @@ class JavaRandom(object):
         """
 
         for i in range(0, len(l)):
-            if i & 3: # not i % 4
+            if not i & 3:  # not i % 4
                 n = self.next_int()
             b = n & 0xff
             # Flip signs. Ugh.
