@@ -31,16 +31,29 @@ class JavaRandom(object):
     synchronize all accesses to this class per-instance.
     """
 
+
+    __seed_uniquifier = 8682522807148012;
+
+
+    @staticmethod
+    def __next_seed_uniquifier():
+        val = JavaRandom.__seed_uniquifier
+        JavaRandom.__seed_uniquifier = (val * 181783497276652981) & 0xFFFFFFFFFFFFFFFF
+        return JavaRandom.__seed_uniquifier
+
+
     def __init__(self, seed=None):
         """
         Create a new random number generator.
         """
 
         if seed is None:
-            seed = int(time.time() * 1000)
+            micros = int(time.time() * 1E6)
+            seed = micros ^ JavaRandom.__next_seed_uniquifier()
         self.__seed = 0
         self.seed = seed
         self.__next_next_gaussian = None
+
 
     def set_seed(self, seed):
         """
