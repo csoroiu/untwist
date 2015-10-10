@@ -62,6 +62,7 @@ class JavaRandom(object):
 
         self.seed = seed
 
+
     @property
     def seed(self):
         """
@@ -70,12 +71,14 @@ class JavaRandom(object):
         """
         return (self.__seed ^ 0x5deece66d) & 0xFFFFFFFFFFFF  # ((1 << 48) - 1)
 
+
     @seed.setter
     def seed(self, seed):
         """
         Sets the seed for the generator
         """
         self.__seed = (seed ^ 0x5deece66d) & 0xFFFFFFFFFFFF  # ((1 << 48) - 1)
+
 
     def __next(self, bits):
         """
@@ -89,6 +92,7 @@ class JavaRandom(object):
         retval = self.__seed >> (48 - bits)
 
         return _signed_int(retval)
+
 
     def next_bytes(self, l):
         """
@@ -104,6 +108,7 @@ class JavaRandom(object):
                 b -= 0x100
             l[i] = b
             n >>= 8
+
 
     def next_int(self, n=None):
         """
@@ -135,6 +140,7 @@ class JavaRandom(object):
 
         return val
 
+
     def next_long(self):
         """
         Return a random long.
@@ -144,12 +150,14 @@ class JavaRandom(object):
 
         return (self.__next(32) << 32) + self.__next(32)
 
+
     def next_boolean(self):
         """
         Return a random bool.
         """
 
         return bool(self.__next(1))
+
 
     def next_float(self):
         """
@@ -160,6 +168,7 @@ class JavaRandom(object):
         """
 
         return self.__next(24) / float(1 << 24)
+
 
     def next_double(self):
         """
