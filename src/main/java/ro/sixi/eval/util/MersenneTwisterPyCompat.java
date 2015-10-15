@@ -12,7 +12,7 @@ public class MersenneTwisterPyCompat extends MersenneTwister {
     }
 
     public MersenneTwisterPyCompat(int seed) {
-        super(seed);
+        this(new int[] { seed });
     }
 
     public MersenneTwisterPyCompat(int[] seed) {
@@ -24,8 +24,17 @@ public class MersenneTwisterPyCompat extends MersenneTwister {
     }
 
     @Override
-    // http://svn.python.org/projects/python/trunk/Modules/_randommodule.c #
-    // random_random
+    public void setSeed(long seed) {
+        int high = (int) (seed >>> 32);
+        if (high == 0) {
+            setSeed(new int[] { (int) seed });
+        } else {
+            setSeed(new int[] { (int) (seed & 0xffffffffl), high });
+        }
+    }
+
+    @Override
+    // http://svn.python.org/projects/python/trunk/Modules/_randommodule.c # random_random
     public double nextDouble() {
         return (((long) (next(27)) << 26) + next(26)) * 0x1.0p-53;
     }
@@ -56,8 +65,7 @@ public class MersenneTwisterPyCompat extends MersenneTwister {
     }
 
     @Override
-    // http://svn.python.org/projects/python/trunk/Modules/_randommodule.c #
-    // random_getrandbits
+    // http://svn.python.org/projects/python/trunk/Modules/_randommodule.c # random_getrandbits
     public void nextBytes(byte[] bytes) {
         int i = 0;
         final int iEnd = bytes.length - 4;
@@ -79,8 +87,7 @@ public class MersenneTwisterPyCompat extends MersenneTwister {
     }
 
     @Override
-    // http://svn.python.org/projects/python/trunk/Modules/_randommodule.c #
-    // random_getrandbits
+    // http://svn.python.org/projects/python/trunk/Modules/_randommodule.c # random_getrandbits
     public long nextLong(long n) throws IllegalArgumentException {
         if (n > 0) {
             final int bit_length = Long.SIZE - Long.numberOfLeadingZeros(n);
