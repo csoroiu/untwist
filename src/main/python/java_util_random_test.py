@@ -17,34 +17,48 @@ class JavaRandomTest(unittest.TestCase):
         pass
 
 
-    def test_nextBytes(self):
+    def test_next_bytes(self):
         standard = [96, -76, 32, -69, 56, 81, -39, -44]
-        l = [None] * len(standard)
-        self.r.next_bytes(l)
-        self.assertEqual(l, standard)
+        bytes_count = [None] * len(standard)
+        self.r.next_bytes(bytes_count)
+        self.assertEqual(bytes_count, standard)
 
 
-    def test_nextInt(self):
+    def test_next_int(self):
         standard = -1155484576
         self.assertEqual(self.r.next_int(), standard)
 
 
-    def test_nextInt_lue(self):
+    def test_next_int_lue(self):
         standard = 12
         self.assertEqual(self.r.next_int(42), standard)
+
+
+    def test_randrange_1param(self):
+        standard = 12
+        self.assertEqual(self.r.randrange(42), standard)
+
+
+    def test_randrange_2params(self):
+        standard = 14
+        self.assertEqual(self.r.randrange(2, 44), standard)
+
+    def test_randint_2params(self):
+        standard = 14
+        self.assertEqual(self.r.randint(2, 43), standard)
 
 
     def test_get_seed(self):
         actual = 42523532
         rnd = JavaRandom(42523532)
-        self.assertEqual(rnd.seed, actual)
+        self.assertEqual(rnd.get_seed(), actual)
 
 
     def test_set_seed(self):
         actual = 42523532
         rnd = JavaRandom()
         rnd.set_seed(42523532)
-        self.assertEqual(rnd.seed, actual)
+        self.assertEqual(rnd.get_seed(), actual)
 
 
     def test_next_int_pow_2(self):
@@ -52,30 +66,35 @@ class JavaRandomTest(unittest.TestCase):
         self.assertEqual(actual, 784870680)
 
 
-    def test_nextInt_int_overflow(self):
+    def test_next_int_int_overflow(self):
         rnd = JavaRandom(215660466117472)
         standard = 4224
         self.assertEqual(rnd.next_int(100000), standard)
 
 
-    def test_nextLong(self):
+    def test_next_long(self):
         standard = -4962768465676381896
         self.assertEqual(self.r.next_long(), standard)
 
 
-    def test_nextBoolean(self):
+    def test_next_boolean(self):
         standard = True
         self.assertEqual(self.r.next_boolean(), standard)
 
 
-    def test_nextFloat(self):
+    def test_next_float(self):
         standard = 0.73096776008605960
         self.assertEqual(self.r.next_float(), standard)
 
 
-    def test_nextDouble(self):
+    def test_next_double(self):
         standard = 0.73096778737665700
         self.assertEqual(self.r.next_double(), standard)
+
+
+    def test_random(self):
+        standard = 0.73096778737665700
+        self.assertEqual(self.r.random(), standard)
 
 
 #     def test_nextGaussian(self):

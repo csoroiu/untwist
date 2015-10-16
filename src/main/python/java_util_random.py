@@ -43,28 +43,22 @@ class JavaRandom(object):
 
 
     def __init__(self, seed=None):
-        """
-        Create a new random number generator.
-        """
+        """Create a new random number generator."""
 
         if seed is None:
             micros = int(time.time() * 1E6)
             seed = micros ^ JavaRandom.__next_seed_uniquifier()
         self.__seed = 0
-        self.seed = seed
+        self.set_seed(seed)
         self.__next_next_gaussian = None
 
-
-    def set_seed(self, seed):
-        """
-        Explicit setter for seed, for compatibility with Java.
-        """
-
-        self.seed = seed
+        # method redefinition
+        self.random = self.next_double
+        self._randbelow = self.next_int
+        self.seed = self.set_seed
 
 
-    @property
-    def seed(self):
+    def get_seed(self):
         """
         Returns the seed value. The returned value can be used to build a new generator
         that will return the same values as the current one.
@@ -72,11 +66,8 @@ class JavaRandom(object):
         return (self.__seed ^ 0x5deece66d) & 0xFFFFFFFFFFFF  # ((1 << 48) - 1)
 
 
-    @seed.setter
-    def seed(self, seed):
-        """
-        Sets the seed for the generator
-        """
+    def set_seed(self, seed):
+        """Sets the seed for the generator."""
         self.__seed = (seed ^ 0x5deece66d) & 0xFFFFFFFFFFFF  # ((1 << 48) - 1)
 
 
@@ -95,9 +86,7 @@ class JavaRandom(object):
 
 
     def next_bytes(self, l):
-        """
-        Replace every item in `l` with a random byte.
-        """
+        """Replace every item in `l` with a random byte."""
 
         for i in range(0, len(l)):
             if not i & 3:  # not i % 4
@@ -152,9 +141,7 @@ class JavaRandom(object):
 
 
     def next_boolean(self):
-        """
-        Return a random bool.
-        """
+        """Return a random bool."""
 
         return bool(self.__next(1))
 
@@ -171,8 +158,26 @@ class JavaRandom(object):
 
 
     def next_double(self):
-        """
-        Return a random float in (0, 1).
-        """
+        """Return a random float in (0, 1)."""
 
         return ((self.__next(26) << 27) + self.__next(27)) / float(1 << 53)
+
+
+    def getrandbits(self, k):
+        byte_arr = self.next_bytes((k + 7) // 8)
+        shift = k & 7
+        byte_arr[-1] >>= shift
+        return int.from_bytes(byte_arr, 'little')
+
+
+    def randrange(self, start, stop=None):
+        """Choose a random item from range(start, stop[, step])."""
+        if stop is None:
+            return self._randbelow(start)
+        return start + self._randbelow(stop - start)
+
+
+    def randint(self, start, stop):
+        """Return random integer in range [a, b], including both end points."""
+
+        return self.randrange(start, stop + 1)
