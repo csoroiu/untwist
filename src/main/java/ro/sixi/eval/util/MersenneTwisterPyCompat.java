@@ -25,7 +25,7 @@ public class MersenneTwisterPyCompat extends MersenneTwister {
 
     @Override
     public void setSeed(long seed) {
-        int high = (int) (seed >>> 32);
+        final int high = (int) (seed >>> 32);
         if (high == 0) {
             setSeed(new int[] { (int) seed });
         } else {
@@ -78,7 +78,7 @@ public class MersenneTwisterPyCompat extends MersenneTwister {
             i += 4;
         }
         int random = next(32);
-        int shift = 32 - (bytes.length - i) * 8;
+        final int shift = 32 - (bytes.length - i) * 8;
         random >>>= shift;
         while (i < bytes.length) {
             bytes[i++] = (byte) (random & 0xff);

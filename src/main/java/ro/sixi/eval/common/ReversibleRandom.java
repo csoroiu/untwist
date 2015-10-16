@@ -40,8 +40,8 @@ public final class ReversibleRandom extends Random {
 
     // https://github.com/votadlos/JavaCG/blob/master/JavaCG/JavaCG/JavaLCGMimic.cpp#L15
     protected int prev(int bits) {
+        final AtomicLong seed = this.seedRef;
         long nextSeed, prevSeed;
-        AtomicLong seed = this.seedRef;
         do {
             nextSeed = seed.get();
             prevSeed = (invmultiplier * (nextSeed - addend)) & mask;
