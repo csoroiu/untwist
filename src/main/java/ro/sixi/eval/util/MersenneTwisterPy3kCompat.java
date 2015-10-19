@@ -3,23 +3,23 @@ package ro.sixi.eval.util;
 import org.apache.commons.math3.exception.NotStrictlyPositiveException;
 import org.apache.commons.math3.random.MersenneTwister;
 
-public class MersenneTwisterPyCompat extends MersenneTwister {
+public class MersenneTwisterPy3kCompat extends MersenneTwister {
 
     private static final long serialVersionUID = 1L;
 
-    public MersenneTwisterPyCompat() {
+    public MersenneTwisterPy3kCompat() {
         super();
     }
 
-    public MersenneTwisterPyCompat(int seed) {
+    public MersenneTwisterPy3kCompat(int seed) {
         this(new int[] { seed });
     }
 
-    public MersenneTwisterPyCompat(int[] seed) {
+    public MersenneTwisterPy3kCompat(int[] seed) {
         super(seed);
     }
 
-    public MersenneTwisterPyCompat(long seed) {
+    public MersenneTwisterPy3kCompat(long seed) {
         super(seed);
     }
 
@@ -29,7 +29,7 @@ public class MersenneTwisterPyCompat extends MersenneTwister {
         if (high == 0) {
             setSeed(new int[] { (int) seed });
         } else {
-            setSeed(new int[] { (int) (seed & 0xffffffffl), high });
+            setSeed(new int[] { (int) (seed & 0xffffffffL), high });
         }
     }
 
