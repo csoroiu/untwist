@@ -54,6 +54,7 @@ class JavaRandom(object):
 
         # method redefinition
         self.random = self.next_double
+        self.randbool = self.next_boolean
         self._randbelow = self.next_int
         self.seed = self.set_seed
 
