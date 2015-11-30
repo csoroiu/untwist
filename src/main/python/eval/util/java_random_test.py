@@ -4,17 +4,13 @@ from __future__ import print_function
 from __future__ import unicode_literals
 import unittest
 
-from java_util_random import JavaRandom
+from eval.util.java_random import JavaRandom
 
 
 class JavaRandomTest(unittest.TestCase):
 
     def setUp(self):
         self.r = JavaRandom(0)
-
-
-    def test_trivial(self):
-        pass
 
 
     def test_next_bytes(self):

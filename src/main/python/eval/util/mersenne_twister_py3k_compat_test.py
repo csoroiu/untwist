@@ -2,12 +2,15 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
-import randomex
+from eval.util import randomex
+
 import unittest
 
+
 INT_MAX = (2 ** 31) - 1
-LONG_MAX = (2 ** 63) - 1
 UINT_MAX = 2 ** 32
+LONG_MAX = (2 ** 63) - 1
+
 
 class MersenneTwisterPy3kCompatTest(unittest.TestCase):
 
