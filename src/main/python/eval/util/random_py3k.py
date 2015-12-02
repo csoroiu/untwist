@@ -12,8 +12,13 @@ class RandomPy3k(Random):
     def __init__(self, x=None): 
         super(RandomPy3k, self).__init__(x)
         self.randbool = lambda: bool(self.getrandbits(1))
-        if (sys.version_info[0] == 2):
-            _warn("Python 2.x is being used. Falling back to copy of py3k random implementation.")
+
+#the entire code below this point is needed only for python 2.x or python3 < 3.2
+#it is a backport of issue: http://bugs.python.org/issue9025 fixed in python 3.2
+#and which changed the behaviour of the functions a little bit
+#Also, java version was easy to enhance to match the current version of MT in python.
+        if (sys.version_info[:2] < (3, 2)):
+            _warn("Python <3.2 is being used. Falling back to copy of py3k random implementation.")
             self.randrange = self.__randrange
             self._randbelow = self.__randbelow
             self.choice = self.__choice
