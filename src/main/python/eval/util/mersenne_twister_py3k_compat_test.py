@@ -2,7 +2,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
-from eval.util import randomex
+from eval.util.random_py3k import RandomPy3k
 
 import unittest
 
@@ -15,7 +15,7 @@ LONG_MAX = (2 ** 63) - 1
 class MersenneTwisterPy3kCompatTest(unittest.TestCase):
 
     def setUp(self):
-        self.rand = randomex.RandomEx(1234567890)
+        self.rand = RandomPy3k(1234567890)
 
 
     def test_int_max_value(self):
