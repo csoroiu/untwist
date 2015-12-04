@@ -51,10 +51,9 @@ class JavaRandomTest(unittest.TestCase):
 
 
     def test_set_seed(self):
-        actual = 42523532
-        rnd = JavaRandom()
-        rnd.set_seed(42523532)
-        self.assertEqual(rnd.get_seed(), actual)
+        self.r.set_seed(42523532)
+        expected = -1778905166;
+        self.assertEqual(self.r.next_int(), expected)
 
 
     def test_next_int_pow_2(self):
@@ -63,9 +62,9 @@ class JavaRandomTest(unittest.TestCase):
 
 
     def test_next_int_int_overflow(self):
-        rnd = JavaRandom(215660466117472)
+        self.r.set_seed(215660466117472)
         standard = 4224
-        self.assertEqual(rnd.next_int(100000), standard)
+        self.assertEqual(self.r.next_int(100000), standard)
 
 
     def test_next_long(self):
@@ -79,7 +78,7 @@ class JavaRandomTest(unittest.TestCase):
 
 
     def test_next_float(self):
-        standard = 0.73096776008605960
+        standard = float(0.73096776)
         self.assertEqual(self.r.next_float(), standard)
 
 

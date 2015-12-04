@@ -3,10 +3,17 @@ package ro.sixi.eval.util;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
+import java.util.Arrays;
+
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class MersenneTwisterPy3kCompatTest {
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     private MersenneTwisterPy3kCompat r;
 
@@ -16,6 +23,19 @@ public class MersenneTwisterPy3kCompatTest {
     }
 
     @Test
+    public void testSetSeedByteArray() {
+        int[] largeseed = new int[625];
+        Arrays.fill(largeseed, 0x01010101);
+        largeseed[0] = 0x01010102;
+        r.setSeed(largeseed);
+        int expected[] = { 360, 239, 640, 729, 558, 92, 366, 913, 108, 132 };
+        int actual[] = new int[expected.length];
+        for (int i = 0; i < actual.length; i++) {
+            actual[i] = r.nextInt(1000);
+        }
+        assertThat(actual, equalTo(expected));
+    }
+
     public void testIntMaxValue() {
         int expected[] = { 1977150888, 1252380877, 1363867306, 345016483, 952454400, 470947684, 1732771130, 1286552655,
                 1917026106, 1619555880 };
@@ -104,15 +124,10 @@ public class MersenneTwisterPy3kCompatTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testFloat() {
-        float expected[] = { 0.9206826283274985f, 0.6351002019693018f, 0.4435211436398484f, 0.8068844348124993f,
-                0.8926848452848529f, 0.8081301250035834f, 0.25490020128427027f, 0.08395441205038512f,
-                0.13853413517651525f, 0.4317280885585699f };
-        float actual[] = new float[expected.length];
-        for (int i = 0; i < actual.length; i++) {
-            actual[i] = r.nextFloat();
-        }
-        assertThat(actual, equalTo(expected));
+        expectedException.expect(UnsupportedOperationException.class);
+        r.nextFloat();
     }
 
     @Test
@@ -120,7 +135,6 @@ public class MersenneTwisterPy3kCompatTest {
         boolean expected[] = { true, true, true, false, false, false, true, true, true, true };
         boolean actual[] = new boolean[expected.length];
         for (int i = 0; i < actual.length; i++) {
-            // bool(rndgen.getrandbits(1))
             actual[i] = r.nextBoolean();
         }
         assertThat(actual, equalTo(expected));
