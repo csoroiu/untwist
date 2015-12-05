@@ -12,6 +12,13 @@ UINT_MAX = 2 ** 32
 LONG_MAX = (2 ** 63) - 1
 
 
+def int_from_bytes_list(bytes_list):
+    # python3
+    # return int.from_bytes(bytes_list, 'big')
+    from binascii import hexlify
+    return int(hexlify(bytearray(bytes_list)), 16)
+
+
 class MersenneTwisterPy3kCompatTest(unittest.TestCase):
 
     def setUp(self):
@@ -19,7 +26,7 @@ class MersenneTwisterPy3kCompatTest(unittest.TestCase):
 
 
     def test_set_seed_byte_array(self):
-        large_seed = int.from_bytes([1] * 2498 + [2, 1], 'big')
+        large_seed = int_from_bytes_list([1] * 2499 + [2])
         self.rand.seed(large_seed)
         expected = [360, 239, 640, 729, 558, 92, 366, 913, 108, 132]
         actual = []
