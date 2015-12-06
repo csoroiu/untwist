@@ -52,7 +52,7 @@ class JavaRandomTest(unittest.TestCase):
 
     def test_set_seed(self):
         self.r.set_seed(42523532)
-        expected = -1778905166;
+        expected = -1778905166
         self.assertEqual(self.r.next_int(), expected)
 
 
