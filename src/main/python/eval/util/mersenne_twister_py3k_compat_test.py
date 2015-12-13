@@ -25,7 +25,7 @@ class MersenneTwisterPy3kCompatTest(unittest.TestCase):
         self.rand = RandomPy3k(1234567890)
 
 
-    def test_set_seed_byte_array(self):
+    def test_set_seed_array(self):
         large_seed = int_from_bytes_list([1] * 2499 + [2])
         self.rand.seed(large_seed)
         expected = [360, 239, 640, 729, 558, 92, 366, 913, 108, 132]

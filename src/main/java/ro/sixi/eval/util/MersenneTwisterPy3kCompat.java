@@ -24,6 +24,13 @@ public class MersenneTwisterPy3kCompat extends MersenneTwister {
     }
 
     @Override
+    @Deprecated
+    // Do not use this method directly
+    public void setSeed(int seed) {
+        super.setSeed(seed);
+    }
+
+    @Override
     public void setSeed(long seed) {
         final int high = (int) (seed >>> 32);
         if (high == 0) {

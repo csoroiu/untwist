@@ -23,7 +23,7 @@ public class MersenneTwisterPy3kCompatTest {
     }
 
     @Test
-    public void testSetSeedByteArray() {
+    public void testSetSeedArray() {
         int[] largeseed = new int[625];
         Arrays.fill(largeseed, 0x01010101);
         largeseed[0] = 0x01010102;
@@ -34,6 +34,27 @@ public class MersenneTwisterPy3kCompatTest {
             actual[i] = r.nextInt(1000);
         }
         assertThat(actual, equalTo(expected));
+    }
+
+    @Test
+    public void testSetSeedLongVsSetSeedArray() {
+        final long seedLong = 0x0304050601010102L;
+        final int[] seedArray = { 0x01010102, 0x03040506 };
+        final int expected[] = { 4, 815, 264, 766, 681, 399, 91, 22, 171, 420 };
+
+        r.setSeed(seedLong);
+        int actualLong[] = new int[expected.length];
+        for (int i = 0; i < actualLong.length; i++) {
+            actualLong[i] = r.nextInt(1000);
+        }
+
+        r.setSeed(seedArray);
+        int actualArray[] = new int[expected.length];
+        for (int i = 0; i < actualLong.length; i++) {
+            actualArray[i] = r.nextInt(1000);
+        }
+        assertThat(actualLong, equalTo(expected));
+        assertThat(actualArray, equalTo(expected));
     }
 
     public void testIntMaxValue() {
