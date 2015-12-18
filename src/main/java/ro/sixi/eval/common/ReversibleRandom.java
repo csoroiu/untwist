@@ -51,9 +51,13 @@ public final class ReversibleRandom extends Random {
         return (int) (nextSeed >>> (48 - bits));
     }
 
-    // public void prevBytes(byte[] bytes) {
-    // throw new UnsupportedOperationException();
-    // }
+    public void prevBytes(byte[] bytes) {
+        for (int i = 0, len = bytes.length; i < len;) {
+            for (int rnd = prevInt(), n = Math.min(len - i, Integer.SIZE / Byte.SIZE); n-- > 0; rnd <<= Byte.SIZE) {
+                bytes[i++] = (byte) (rnd >>> 24);
+            }
+        }
+    }
 
     public int prevInt() {
         return prev(32);
