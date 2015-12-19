@@ -59,6 +59,24 @@ public final class ReversibleRandom extends Random {
         }
     }
 
+    /**
+     * Works as a complete reverse of nextBytes. It will drop the first bits of the prevInt, and not the last.
+     */
+    public void prevBytesMirror(byte[] bytes) {
+        final int bytesInInt = Integer.SIZE / Byte.SIZE;
+        final int remainder = bytes.length % bytesInInt;
+        if (remainder > 0) {
+            for (int i = remainder - 1, rnd = prevInt(); i >= 0; i--, rnd >>= Byte.SIZE) {
+                bytes[i] = (byte) (rnd);
+            }
+        }
+        for (int i = remainder, len = bytes.length; i < len;) {
+            for (int rnd = prevInt(), n = bytesInInt; n-- > 0; rnd <<= Byte.SIZE) {
+                bytes[i++] = (byte) (rnd >>> 24);
+            }
+        }
+    }
+
     public int prevInt() {
         return prev(32);
     }
