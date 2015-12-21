@@ -29,9 +29,13 @@ public class ReversibleRandomTest {
         r.setSeed(215660466117472l);
         int expected = r.nextInt(100000);
         int actual = r.prevInt(100000);
+        int actualReverse = r.prevInt(100000);
+        int expectedReverse = r.nextInt(100000);
 
         assertThat(expected, equalTo(4224));
         assertThat(actual, equalTo(expected));
+        assertThat(actualReverse, equalTo(65354));
+        assertThat(actualReverse, equalTo(expectedReverse));
     }
 
     @Test
