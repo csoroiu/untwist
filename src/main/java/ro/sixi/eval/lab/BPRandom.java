@@ -6,6 +6,8 @@ package ro.sixi.eval.lab;
  * http://people.cs.nctu.edu.tw/~tsaiwn/sisc/runtime_error_200_div_by_0/www.merlyn.demon.co.uk/#pas
  * http://forum.lazarus.freepascal.org/index.php?topic=2665.0
  * http://virtualschool.edu/mon/Crypto/RandomNumberMath
+ * gnu pascal
+ * http://latel.upf.edu/morgana/altres/pub/gpc/list2html/1997/mail0911.htm
  */
 public class BPRandom {
     long seed;
@@ -22,28 +24,23 @@ public class BPRandom {
         seed = ((seed - 1) * 0xD94FA8CDL) & 0xFFFFFFFFL;
     }
 
+    final boolean coprocEnabled = true;
+
     // RandSeed = -1498392781 precedes 0
     // http://www.efg2.com/Lab/Library/Delphi/MathFunctions/random.txt - _randExt
     public double nextDouble() {
         nextSeed();
-        double value = seed / (double) (1L << 32);
-        // hack to adjust the value to match the stuff from pascal
-        // TODO figure out how borland pascal works for generating floats
-        // there is a difference when using $N+ or $N-
-        if (value >= .5f)
-            value -= .5f;
-        else
-            value += .5f;
-        return value;
+        if (coprocEnabled) {
+            //in turbo pascal the seed was 32 bit signed integer
+            return (int) seed / (double) (1L << 32) + 0.5;
+        } else {
+            return seed / (double) (1L << 32);
+        }
     }
 
     public int nextInt(int n) {
         nextSeed();
-        int result = (int) ((seed * n) >>> 32);
-        // if (result < 0) {
-        // result += n;
-        // }
-        return result;
+        return (int) ((seed * n) >>> 32);
     }
 
     public static void main(String[] args) {
