@@ -1,6 +1,8 @@
 package ro.sixi.eval.util;
 
+import org.apache.commons.math3.random.BitsStreamGenerator;
 import org.apache.commons.math3.random.RandomGenerator;
+import org.apache.commons.math3.util.FastMath;
 
 /*
  * http://stackoverflow.com/questions/3946869/how-reliable-is-the-random-function-in-delphi#3953956
@@ -13,7 +15,13 @@ import org.apache.commons.math3.random.RandomGenerator;
  * http://latel.upf.edu/morgana/altres/pub/gpc/list2html/1997/mail0911.htm
  */
 public class TurboPascalRandom implements RandomGenerator {
-    long seed;
+    private final static long multiplier = 0x08088405L;
+    private final static long invmultiplier = 0xD94FA8CDL;
+    private final static long addend = 0x1L;
+    private final static long mask = (1L << 32) - 1;
+
+    private double nextGaussian = Double.NaN;
+    private long seed;
 
     public TurboPascalRandom(int seed) {
         setSeed(seed);
@@ -21,41 +29,6 @@ public class TurboPascalRandom implements RandomGenerator {
 
     public TurboPascalRandom(long seed) {
         setSeed(seed);
-    }
-
-    private void nextSeed() {
-        seed = (seed * 0x08088405L + 1) & 0xFFFFFFFFL;
-    }
-
-    private void prevSeed() {
-        seed = ((seed - 1) * 0xD94FA8CDL) & 0xFFFFFFFFL;
-    }
-
-    private final boolean coprocEnabled = true;
-
-    // RandSeed = -1498392781 precedes 0
-    // http://www.efg2.com/Lab/Library/Delphi/MathFunctions/random.txt - _randExt
-    @Override
-    public double nextDouble() {
-        nextSeed();
-        if (coprocEnabled) {
-            // in turbo pascal the seed was 32 bit signed integer
-            return (int) seed / (double) (1L << 32) + 0.5;
-        } else {
-            return seed / (double) (1L << 32);
-        }
-    }
-
-    @Override
-    public int nextInt(int n) {
-        nextSeed();
-        return (int) ((seed * n) >>> 32);
-    }
-
-    @Override
-    public int nextInt() {
-        nextSeed();
-        return (int) seed;
     }
 
     @Override
@@ -88,6 +61,32 @@ public class TurboPascalRandom implements RandomGenerator {
         return combined;
     }
 
+    private void prevSeed() {
+        seed = ((seed - addend) * invmultiplier) & mask;
+    }
+
+    private void nextSeed() {
+        seed = (seed * multiplier + addend) & mask;
+    }
+
+    @Override
+    public int nextInt(int n) {
+        nextSeed();
+        return (int) ((seed * n) >>> 32);
+    }
+
+    @Override
+    public int nextInt() {
+        nextSeed();
+        return (int) seed;
+    }
+
+    public int prevInt() {
+        int result = (int) seed;
+        prevSeed();
+        return result;
+    }
+
     @Override
     public long nextLong() {
         return ((long) (nextInt()) << 32) + nextInt();
@@ -98,6 +97,21 @@ public class TurboPascalRandom implements RandomGenerator {
         return nextInt(2) == 0;
     }
 
+    private final boolean coprocEnabled = true;
+
+    // RandSeed = -1498392781 precedes 0
+    // http://www.efg2.com/Lab/Library/Delphi/MathFunctions/random.txt - _randExt
+    @Override
+    public double nextDouble() {
+        nextSeed();
+        if (coprocEnabled) {
+            // in turbo pascal the seed was 32 bit signed integer
+            return (int) seed / (double) (1L << 32) + 0.5;
+        } else {
+            return seed / (double) (1L << 32);
+        }
+    }
+
     @Override
     @Deprecated
     public float nextFloat() {
@@ -105,14 +119,49 @@ public class TurboPascalRandom implements RandomGenerator {
                 "nextFloat - python supports only double precision floating point numbers");
     }
 
+    /**
+     * {@link MersenneTwisterPy3kCompat#nextBytes(byte[])}
+     */
     @Override
     public void nextBytes(byte[] bytes) {
-        // TODO Auto-generated method stub
+        int i = 0;
+        final int iEnd = bytes.length - 4;
+        while (i < iEnd) {
+            final int random = nextInt();
+            bytes[i] = (byte) (random & 0xff);
+            bytes[i + 1] = (byte) ((random >> 8) & 0xff);
+            bytes[i + 2] = (byte) ((random >> 16) & 0xff);
+            bytes[i + 3] = (byte) ((random >> 24) & 0xff);
+            i += 4;
+        }
+        int random = nextInt();
+        final int shift = 32 - (bytes.length - i) * 8;
+        random >>>= shift;
+        while (i < bytes.length) {
+            bytes[i++] = (byte) (random & 0xff);
+            random >>= 8;
+        }
     }
 
+    /**
+     * {@link BitsStreamGenerator#nextGaussian}
+     */
     @Override
     public double nextGaussian() {
-        // TODO Auto-generated method stub
-        return 0;
+        final double random;
+        if (Double.isNaN(nextGaussian)) {
+            // generate a new pair of gaussian numbers
+            final double x = nextDouble();
+            final double y = nextDouble();
+            final double alpha = 2 * FastMath.PI * x;
+            final double r = FastMath.sqrt(-2 * FastMath.log(y));
+            random = r * FastMath.cos(alpha);
+            nextGaussian = r * FastMath.sin(alpha);
+        } else {
+            // use the second element of the pair already generated
+            random = nextGaussian;
+            nextGaussian = Double.NaN;
+        }
+        return random;
     }
 }
