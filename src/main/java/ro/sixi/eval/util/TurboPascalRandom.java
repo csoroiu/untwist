@@ -7,7 +7,6 @@ import org.apache.commons.math3.util.FastMath;
 /*
  * http://stackoverflow.com/questions/3946869/how-reliable-is-the-random-function-in-delphi#3953956
  * http://labs.icb.ufmg.br/lbcd/prodabi5/homepages/hugo/Hugo/TPB/RTL/SYS/RAND.ASM
- * https://github.com/rofl0r/KOL/blob/master/system/system.pas
  * http://people.cs.nctu.edu.tw/~tsaiwn/sisc/runtime_error_200_div_by_0/www.merlyn.demon.co.uk/#pas
  * http://forum.lazarus.freepascal.org/index.php?topic=2665.0
  * http://virtualschool.edu/mon/Crypto/RandomNumberMath
@@ -23,17 +22,40 @@ public class TurboPascalRandom implements RandomGenerator {
     private double nextGaussian = Double.NaN;
     private long seed;
 
+    /**
+     * when enabling coprocessor $N+, in Turbo Pascal 7, the values returned by random function are offset-ed by 0.5
+     * from the usual ones. If value is >=0.5 then it is decreased by 0.5 else value is increased by 0.5
+     * 
+     * Delphi maintains compatibility with the $N- version.
+     */
+    private final boolean coprocEnabled;
+
     public TurboPascalRandom(int seed) {
-        setSeed(seed);
+        this(seed, true);
     }
 
     public TurboPascalRandom(long seed) {
+        this(seed, true);
+    }
+
+    protected TurboPascalRandom(int seed, boolean coprocEnabled) {
         setSeed(seed);
+        this.coprocEnabled = coprocEnabled;
+    }
+
+    protected TurboPascalRandom(long seed, boolean coprocEnabled) {
+        setSeed(seed);
+        this.coprocEnabled = coprocEnabled;
     }
 
     @Override
+    @Deprecated
     public void setSeed(int seed) {
         this.seed = seed;
+    }
+
+    public int getSeed() {
+        return (int) this.seed;
     }
 
     @Override
@@ -97,10 +119,9 @@ public class TurboPascalRandom implements RandomGenerator {
         return nextInt(2) == 0;
     }
 
-    private final boolean coprocEnabled = true;
-
     // RandSeed = -1498392781 precedes 0
     // http://www.efg2.com/Lab/Library/Delphi/MathFunctions/random.txt - _randExt
+    // https://github.com/rofl0r/KOL/blob/master/system/system.pas
     @Override
     public double nextDouble() {
         nextSeed();
