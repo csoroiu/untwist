@@ -1,9 +1,8 @@
-package ro.sixi.eval.util;
+package ro.sixi.eval.random;
 
 import java.util.Random;
 
 import org.apache.commons.math3.random.RandomGenerator;
-import org.apache.commons.math3.random.RandomGeneratorFactory;
 
 public class JDKRandomPy3kCompat extends Random implements RandomGenerator {
 
@@ -18,13 +17,14 @@ public class JDKRandomPy3kCompat extends Random implements RandomGenerator {
     }
 
     @Override
+    @Deprecated
     public void setSeed(int seed) {
         setSeed((long) seed);
     }
 
     @Override
     public void setSeed(int[] seed) {
-        setSeed(RandomGeneratorFactory.convertToLong(seed));
+        setSeed(RandomUtils.convertToLong(seed));
     }
 
     @Override

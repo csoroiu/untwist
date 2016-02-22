@@ -1,4 +1,4 @@
-package ro.sixi.eval.util;
+package ro.sixi.eval.random;
 
 import org.apache.commons.math3.exception.NotStrictlyPositiveException;
 import org.apache.commons.math3.random.MersenneTwister;

@@ -1,4 +1,4 @@
-package ro.sixi.eval.util;
+package ro.sixi.eval.random;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -9,6 +9,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import ro.sixi.eval.random.MersenneTwisterPy3kCompat;
 
 public class MersenneTwisterPy3kCompatTest {
 

@@ -1,4 +1,4 @@
-package ro.sixi.eval.util;
+package ro.sixi.eval.random;
 
 import org.apache.commons.math3.random.BitsStreamGenerator;
 import org.apache.commons.math3.random.RandomGenerator;
@@ -60,27 +60,14 @@ public class TurboPascalRandom implements RandomGenerator {
 
     @Override
     public void setSeed(int[] seed) {
-        setSeed(convertToInt(seed));
+        setSeed(RandomUtils.convertToInt(seed));
     }
 
     @Override
     public void setSeed(long seed) {
         final int high = (int) (seed >>> 32);
         final int low = (int) (seed & 0xffffffffL);
-        setSeed(convertToInt(high, low));
-    }
-
-    private static int convertToInt(int... seed) {
-        // The following number is the largest prime that fits
-        // in 16 bits (i.e. 2^32 - 5).
-        final int prime = 65521;
-
-        int combined = 0;
-        for (int s : seed) {
-            combined = combined * prime + s;
-        }
-
-        return combined;
+        setSeed(RandomUtils.convertToInt(high, low));
     }
 
     private void prevSeed() {

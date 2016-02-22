@@ -18,9 +18,10 @@ def _signed_int(value):
         value -= 0x100000000
     return value
 
-
 class JavaRandom(object):
     """
+    https://github.com/MostAwesomeDude/java-random
+
     An implementation of the Java SE random number generator.
     Java's RNG is based on a classic Knuth-style linear congruential formula,
     as described in
