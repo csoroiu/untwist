@@ -1,10 +1,10 @@
-package ro.sixi.eval.common;
+package ro.sixi.eval.random;
 
 import java.lang.reflect.Field;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
-public final class ReversibleRandom extends Random {
+public final class ReversibleJdkRandom extends Random implements ReverseRandomGenerator {
     private static final long serialVersionUID = 5566331316770172904L;
 
     private final static long multiplier = 0x5DEECE66DL;
@@ -15,8 +15,13 @@ public final class ReversibleRandom extends Random {
 
     private AtomicLong seedRef;
 
-    public ReversibleRandom(long seed) {
+    public ReversibleJdkRandom(long seed) {
         super(seed);
+        setReferenceToSeed();
+    }
+
+    public ReversibleJdkRandom() {
+        super();
         setReferenceToSeed();
     }
 
@@ -33,11 +38,6 @@ public final class ReversibleRandom extends Random {
         return (seedRef.get() ^ multiplier) & mask;
     }
 
-    public ReversibleRandom() {
-        super();
-        setReferenceToSeed();
-    }
-
     // https://github.com/votadlos/JavaCG/blob/master/JavaCG/JavaCG/JavaLCGMimic.cpp#L15
     protected int prev(int bits) {
         final AtomicLong seed = this.seedRef;
@@ -51,6 +51,7 @@ public final class ReversibleRandom extends Random {
         return (int) (nextSeed >>> (48 - bits));
     }
 
+    @Override
     public void prevBytes(byte[] bytes) {
         for (int i = 0, len = bytes.length; i < len;) {
             for (int rnd = prevInt(), n = Math.min(len - i, Integer.SIZE / Byte.SIZE); n-- > 0; rnd <<= Byte.SIZE) {
@@ -62,6 +63,7 @@ public final class ReversibleRandom extends Random {
     /**
      * Works as a complete reverse of nextBytes. It will drop the first bits of the prevInt, and not the last.
      */
+    @Override
     public void prevBytesMirror(byte[] bytes) {
         final int bytesInInt = Integer.SIZE / Byte.SIZE;
         final int remainder = bytes.length % bytesInInt;
@@ -77,10 +79,12 @@ public final class ReversibleRandom extends Random {
         }
     }
 
+    @Override
     public int prevInt() {
         return prev(32);
     }
 
+    @Override
     public int prevInt(int bound) {
         if (bound <= 0)
             return bound;
@@ -96,23 +100,28 @@ public final class ReversibleRandom extends Random {
         return k;
     }
 
+    @Override
     public long prevLong() {
         return prev(32) + ((long) (prev(32)) << 32);
     }
 
+    @Override
     public boolean prevBoolean() {
         return prev(1) != 0;
     }
 
+    @Override
     public float prevFloat() {
         return prev(24) / ((float) (1 << 24));
     }
 
+    @Override
     public double prevDouble() {
         return (prev(27) + ((long) (prev(26)) << 27)) * DOUBLE_UNIT;
     }
 
-    // public synchronized double prevGaussian() {
-    // throw new UnsupportedOperationException();
-    // }
+    @Override
+    public double prevGaussian() {
+        throw new UnsupportedOperationException();
+    }
 }

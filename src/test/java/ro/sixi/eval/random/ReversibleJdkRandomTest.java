@@ -1,18 +1,19 @@
-package ro.sixi.eval.lab;
+package ro.sixi.eval.random;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import ro.sixi.eval.random.ReversibleJdkRandom;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-public class ReversibleRandomTest {
+public class ReversibleJdkRandomTest {
 
-    private ReversibleRandom r;
+    private ReversibleJdkRandom r;
 
     @Before
     public void setup() {
-        r = new ReversibleRandom(0);
+        r = new ReversibleJdkRandom(0);
     }
 
     @Test
