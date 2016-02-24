@@ -11,8 +11,8 @@ import org.junit.rules.ExpectedException;
 import ro.sixi.eval.random.JDKRandomPy3kCompat;
 
 public class JDKRandomPy3kCompatTest {
-    //openjdk random tests.
-    //http://hg.openjdk.java.net/jdk8/jdk8/jdk/file/687fd7c7986d/test/java/util/Random
+    // openjdk random tests.
+    // http://hg.openjdk.java.net/jdk8/jdk8/jdk/file/687fd7c7986d/test/java/util/Random
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -22,7 +22,7 @@ public class JDKRandomPy3kCompatTest {
     @Before
     public void setup() {
         r = new JDKRandomPy3kCompat();
-        r.setSeed(0);
+        r.setSeed(0L);
     }
 
     @Test
@@ -58,7 +58,7 @@ public class JDKRandomPy3kCompatTest {
     @Test
     public void testNextIntPow2() {
         int expected = 784870680;
-        int actual = r.nextInt(1<<30);
+        int actual = r.nextInt(1 << 30);
         assertThat(actual, equalTo(expected));
     }
 
