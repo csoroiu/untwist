@@ -12,6 +12,7 @@ import org.apache.commons.math3.util.FastMath;
  * http://virtualschool.edu/mon/Crypto/RandomNumberMath
  * gnu pascal
  * http://latel.upf.edu/morgana/altres/pub/gpc/list2html/1997/mail0911.htm
+ * http://answers.unity3d.com/questions/393825/systemrandom-with-seed-not-matching-net-or-mono.html
  */
 public class TurboPascalRandom implements RandomGenerator {
     private final static long multiplier = 0x08088405L;

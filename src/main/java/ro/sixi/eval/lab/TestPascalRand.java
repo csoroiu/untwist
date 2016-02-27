@@ -1,7 +1,6 @@
 package ro.sixi.eval.lab;
 
-import ro.sixi.eval.random.DotNetRandom;
-import ro.sixi.eval.random.MersenneTwisterPy3kCompat;
+import ro.sixi.eval.random.FreePascalRandom;
 import ro.sixi.eval.random.TurboPascalRandom;
 
 public class TestPascalRand {
@@ -36,27 +35,10 @@ public class TestPascalRand {
         // random := mtwist_u32rand * (extended(1.0)/(int64(1) shl 32));
         // but with different precision
         // Also seed is used similar to setSeed(int) which is deprecated
-        MersenneTwisterPy3kCompat r = new MersenneTwisterPy3kCompat(0);
-        r.setSeed(1234567890);
+        FreePascalRandom r = new FreePascalRandom();
+        r.setSeed(1234567890L);
         for (int i = 0; i < 20; i++) {
-            System.out.printf("%.16f\n", r.nextDouble());
-        }
-    }
-
-    private static void testDotNetInt() {
-        DotNetRandom r = new DotNetRandom(1234567890);
-        for (int i = 0; i < 10; i++) {
-            System.out.printf("%d\n", r.nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE));
-        }
-    }
-
-    private static void testDotNetDouble() {
-        DotNetRandom r = new DotNetRandom(1234567890);
-        for (int i = 0; i < 1000; i++) {
-            r.nextDouble();
-        }
-        for (int i = 0; i < 10; i++) {
-            System.out.printf("%.17f\n", r.nextDouble());
+            System.out.printf("%.19f\n", r.nextDouble());
         }
     }
 
@@ -64,13 +46,10 @@ public class TestPascalRand {
         // Mono.net random - https://github.com/mono/mono/blob/master/mcs/class/Mono.C5/C5/Random.cs
         // Mscorlib.net random - http://referencesource.microsoft.com/#mscorlib/system/random.cs
 
-        // freepascal https://github.com/graemeg/freepascal/blob/master/rtl/inc/system.inc
-        // https://github.com/graemeg/freepascal/blob/master/rtl/inc/systemh.inc
-
         // randDoubleInterval(9974, 10000);
         // randDoubleSingle(0);
-//        testNextDoubleFreePascal();
-        testDotNetDouble();
+        testNextDoubleFreePascal();
+//        testDotNetDouble();
     }
 
 }
