@@ -42,6 +42,16 @@ public class FreePascalRandomTest {
     }
 
     @Test
+    public void testIntNegativeValue() {
+        int expected[] = { -10, -6, -9, -3, -14, -4, -14, -7, -7, -13, -12, -3, -5, -3, -15 };
+        int actual[] = new int[expected.length];
+        for (int i = 0; i < actual.length; i++) {
+            actual[i] = r.nextInt(-16);
+        }
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Test
     public void testIntMaxValue() {
         int expected[] = { 1328851648, 731237375, 1270502066, 320041495, 1908433477, 499156889, 1914814095, 927307221,
                 982618676, 1814042781 };
@@ -130,10 +140,14 @@ public class FreePascalRandomTest {
     }
 
     @Test
-    @SuppressWarnings("deprecation")
     public void testFloat() {
-        expectedException.expect(UnsupportedOperationException.class);
-        r.nextFloat();
+        float expected[] = { 0.6187947989f, 0.3405089378f, 0.5916236043f, 0.1490309387f, 0.8886836171f, 0.2324380428f,
+                0.8916547894f, 0.4318110645f, 0.4575674832f, 0.8447294831f };
+        float actual[] = new float[expected.length];
+        for (int i = 0; i < actual.length; i++) {
+            actual[i] = r.nextFloat();
+        }
+        assertThat(actual, equalTo(expected));
     }
 
     @Test
