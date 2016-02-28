@@ -12,6 +12,14 @@ public class FreePascalRandom extends MersenneTwisterPy3kCompat {
 
     private static final long serialVersionUID = 1L;
 
+    public FreePascalRandom(long l) {
+        super(l);
+    }
+
+    public FreePascalRandom() {
+        super();
+    }
+
     @SuppressWarnings("deprecation")
     @Override
     public void setSeed(long seed) {
@@ -26,5 +34,28 @@ public class FreePascalRandom extends MersenneTwisterPy3kCompat {
     @Override
     public double nextDouble() {
         return ((long) next(32) & 0xffffffffL) * 0x1.0p-32d;
+    }
+
+    @Override
+    // https://github.com/graemeg/freepascal/blob/master/rtl/inc/system.inc#L632
+    public int nextInt(int n) throws IllegalArgumentException {
+        if (n < 0) {
+            n++;
+        }
+        long urand = ((long) next(32)) & 0xffffffffL;
+        return (int) ((urand * n) >>> 32);
+    }
+
+    @Override
+    // https://github.com/graemeg/freepascal/blob/master/rtl/inc/system.inc#L640
+    public long nextLong(long n) throws IllegalArgumentException {
+        long urandLo = ((long) next(32)) & 0xffffffffL;
+        long urandHi = ((long) next(32)) & 0x7fffffffL; // drop highest one bit
+        long value = urandLo + (urandHi << 32);
+        if (n != 0) {
+            return value % n;
+        } else {
+            return 0;
+        }
     }
 }
