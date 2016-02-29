@@ -54,6 +54,7 @@ public class MersenneTwisterPy3kCompatTest {
         assertThat(actualArray, equalTo(expected));
     }
 
+    @Test
     public void testIntMaxValue() {
         int[] expected = { 1977150888, 1252380877, 1363867306, 345016483, 952454400, 470947684, 1732771130, 1286552655,
                 1917026106, 1619555880 };

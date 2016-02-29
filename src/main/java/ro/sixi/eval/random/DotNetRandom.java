@@ -17,6 +17,10 @@ public class DotNetRandom implements RandomGenerator {
     private int[] seedArray = new int[56];
     private double nextGaussian = Double.NaN;
 
+    public DotNetRandom() {
+        setSeed(System.currentTimeMillis() + System.identityHashCode(this));
+    }
+
     public DotNetRandom(int seed) {
         setSeed(seed);
     }
