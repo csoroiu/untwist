@@ -81,8 +81,11 @@ public class TurboPascalRandom implements RandomGenerator {
 
     @Override
     public int nextInt(int n) {
-        nextSeed();
-        return (int) ((seed * n) >>> 32);
+        if (n > 0) {
+            nextSeed();
+            return (int) ((seed * n) >>> 32);
+        }
+        throw new IllegalArgumentException("n must be strictly positive");
     }
 
     @Override
@@ -99,7 +102,7 @@ public class TurboPascalRandom implements RandomGenerator {
 
     @Override
     public long nextLong() {
-        return ((long) (nextInt()) << 32) + nextInt();
+        return ((long) (nextInt()) << 32) | nextInt();
     }
 
     @Override

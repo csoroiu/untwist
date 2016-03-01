@@ -3,10 +3,14 @@ package ro.sixi.eval.util;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 import java.util.function.IntFunction;
+import java.util.function.IntSupplier;
 import java.util.function.IntToDoubleFunction;
 import java.util.function.IntToLongFunction;
 import java.util.function.IntUnaryOperator;
+import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 
 public class ArrayUtils {
@@ -63,65 +67,65 @@ public class ArrayUtils {
         v[i] = tmp;
     }
 
-    public static double[] generateDoubleArray(int limit, Supplier<Double> supplier) {
+    public static double[] generateDoubleArray(int size, DoubleSupplier supplier) {
         Objects.requireNonNull(supplier);
-        return generateDoubleArray(limit, (i) -> supplier.get().doubleValue());
+        return generateDoubleArray(size, (i) -> supplier.getAsDouble());
     }
 
-    public static double[] generateDoubleArray(int limit, IntToDoubleFunction generator) {
-        double[] result = new double[limit];
+    public static double[] generateDoubleArray(int size, IntToDoubleFunction generator) {
+        double[] result = new double[size];
         Arrays.setAll(result, generator);
         return result;
     }
 
-    public static float[] generateFloatArray(int limit, Supplier<Float> supplier) {
+    public static float[] generateFloatArray(int size, Supplier<Float> supplier) {
         Objects.requireNonNull(supplier);
-        float[] result = new float[limit];
+        float[] result = new float[size];
         for (int i = 0; i < result.length; i++) {
             result[i] = supplier.get().floatValue();
         }
         return result;
     }
 
-    public static long[] generateLongArray(int limit, Supplier<Long> supplier) {
+    public static long[] generateLongArray(int size, LongSupplier supplier) {
         Objects.requireNonNull(supplier);
-        return generateLongArray(limit, (i) -> supplier.get().longValue());
+        return generateLongArray(size, (i) -> supplier.getAsLong());
     }
 
-    public static long[] generateLongArray(int limit, IntToLongFunction generator) {
-        long[] result = new long[limit];
+    public static long[] generateLongArray(int size, IntToLongFunction generator) {
+        long[] result = new long[size];
         Arrays.setAll(result, generator);
         return result;
     }
 
-    public static int[] generateIntArray(int limit, Supplier<Integer> supplier) {
+    public static int[] generateIntArray(int size, IntSupplier supplier) {
         Objects.requireNonNull(supplier);
-        return generateIntArray(limit, (i) -> supplier.get().intValue());
+        return generateIntArray(size, (i) -> supplier.getAsInt());
     }
 
-    public static int[] generateIntArray(int limit, IntUnaryOperator generator) {
-        int[] result = new int[limit];
+    public static int[] generateIntArray(int size, IntUnaryOperator generator) {
+        int[] result = new int[size];
         Arrays.setAll(result, generator);
         return result;
     }
 
-    public static boolean[] generateBooleanArray(int limit, Supplier<Boolean> supplier) {
+    public static boolean[] generateBooleanArray(int size, BooleanSupplier supplier) {
         Objects.requireNonNull(supplier);
-        boolean[] result = new boolean[limit];
+        boolean[] result = new boolean[size];
         for (int i = 0; i < result.length; i++) {
-            result[i] = supplier.get().booleanValue();
+            result[i] = supplier.getAsBoolean();
         }
         return result;
     }
 
-    public static <A> A[] generateArray(IntFunction<A[]> ctor, int limit, Supplier<A> supplier) {
+    public static <A> A[] generateArray(IntFunction<A[]> ctor, int size, Supplier<A> supplier) {
         Objects.requireNonNull(supplier);
-        return generateArray(ctor, limit, (i) -> supplier.get());
+        return generateArray(ctor, size, (i) -> supplier.get());
     }
 
-    public static <A> A[] generateArray(IntFunction<A[]> ctor, int limit, IntFunction<A> generator) {
+    public static <A> A[] generateArray(IntFunction<A[]> ctor, int size, IntFunction<A> generator) {
         Objects.requireNonNull(ctor);
-        A[] result = ctor.apply(limit);
+        A[] result = ctor.apply(size);
         Arrays.setAll(result, generator);
         return result;
     }

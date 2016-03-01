@@ -1,6 +1,5 @@
 package ro.sixi.eval.random;
 
-import org.apache.commons.math3.exception.NotStrictlyPositiveException;
 import org.apache.commons.math3.random.MersenneTwister;
 
 public class MersenneTwisterPy3kCompat extends MersenneTwister {
@@ -63,7 +62,7 @@ public class MersenneTwisterPy3kCompat extends MersenneTwister {
             } while (bits >= n);
             return bits;
         }
-        throw new NotStrictlyPositiveException(n);
+        throw new IllegalArgumentException("n must be strictly positive");
     }
 
     @Override
@@ -109,6 +108,6 @@ public class MersenneTwisterPy3kCompat extends MersenneTwister {
             } while (bits >= n);
             return bits;
         }
-        throw new NotStrictlyPositiveException(n);
+        throw new IllegalArgumentException("n must be strictly positive");
     }
 }

@@ -2,12 +2,15 @@ package ro.sixi.eval.random;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static ro.sixi.eval.random.Utils.between;
+import static ro.sixi.eval.random.Utils.createStream;
 import static ro.sixi.eval.util.ArrayUtils.generateBooleanArray;
 import static ro.sixi.eval.util.ArrayUtils.generateDoubleArray;
 import static ro.sixi.eval.util.ArrayUtils.generateFloatArray;
 import static ro.sixi.eval.util.ArrayUtils.generateIntArray;
 import static ro.sixi.eval.util.ArrayUtils.generateLongArray;
 
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -136,5 +139,17 @@ public class FreePascalRandomTest {
         boolean[] actual = generateBooleanArray(expected.length, () -> r.nextBoolean());
 
         assertThat(actual, equalTo(expected));
+    }
+
+    @Test
+    public void testIntStream() {
+        final Matcher<Integer> betweenMatcher = between(0, 1000);
+        createStream(100000, () -> r.nextInt(1000)).forEach((t) -> assertThat(t, betweenMatcher));
+    }
+
+    @Test
+    public void testDoubleStream() {
+        final Matcher<Double> betweenMatcher = between(0d, 1d);
+        createStream(100000, () -> r.nextDouble()).forEach((t) -> assertThat(t, betweenMatcher));
     }
 }

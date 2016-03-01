@@ -1,23 +1,22 @@
 package ro.sixi.eval.random;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.lessThan;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.everyItem;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.notNullValue;
+import static ro.sixi.eval.random.Utils.between;
+import static ro.sixi.eval.random.Utils.betweenPredicate;
+import static ro.sixi.eval.random.Utils.createStream;
+import static ro.sixi.eval.random.Utils.toByteList;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.function.IntPredicate;
 import java.util.function.Predicate;
 
 import org.hamcrest.Matcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import ro.sixi.eval.util.ArrayUtils;
 
 public class DotNetRandomTest {
 
@@ -260,12 +259,40 @@ public class DotNetRandomTest {
         assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
     }
 
-    private static List<Byte> toByteList(byte[] b) {
-        return Arrays.asList(ArrayUtils.generateArray(Byte[]::new, b.length, (i) -> Byte.valueOf(b[i])));
+    @Test
+    public void testIntNegativeValue() {
+        expectedException.expect(IllegalArgumentException.class);
+
+        new DotNetRandom(1234567890).nextInt(-16);
     }
 
-    public <T extends java.lang.Comparable<T>> Matcher<T> between(T minValue, T maxValue) {
-        return allOf(greaterThanOrEqualTo(minValue), lessThan(maxValue));
+    @Test
+    public void testIntNoLimitStream() {
+        DotNetRandom r = new DotNetRandom(1234567890);
+        IntPredicate betweenPredicate = betweenPredicate(0, Integer.MAX_VALUE);
+        boolean result = createStream(1_000_000_000L, () -> r.nextInt()).allMatch(betweenPredicate);
+        assertThat(result, equalTo(true));
+    }
+
+    @Test
+    public void testIntStream() {
+        DotNetRandom r = new DotNetRandom(rand.nextInt());
+        final Matcher<Integer> betweenMatcher = between(0, 1000);
+        createStream(100000, () -> r.nextInt(1000)).forEach((t) -> assertThat(t, betweenMatcher));
+    }
+
+    @Test
+    public void testRangeIntStream() {
+        DotNetRandom r = new DotNetRandom(rand.nextInt());
+        final Matcher<Integer> betweenMatcher = between(-1000, 3000);
+        createStream(100000, () -> r.nextInt(-1000, 3000)).forEach((t) -> assertThat(t, betweenMatcher));
+    }
+
+    @Test
+    public void testDoubleStream() {
+        DotNetRandom r = new DotNetRandom(rand.nextInt());
+        final Matcher<Double> betweenMatcher = between(0d, 1d);
+        createStream(100000, () -> r.nextDouble()).forEach((t) -> assertThat(t, betweenMatcher));
     }
 
     private static Integer seed = null;
