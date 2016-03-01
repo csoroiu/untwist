@@ -33,7 +33,7 @@ public class MersenneTwisterPy3kCompatTest {
     public void testSetSeedArray() {
         int[] largeseed = new int[625];
         Arrays.fill(largeseed, 0x01010101);
-        largeseed[0] = 0x01010102;
+        largeseed[largeseed.length - 1] = 0x01010102;
         r.setSeed(largeseed);
         int[] expected = { 360, 239, 640, 729, 558, 92, 366, 913, 108, 132 };
         int[] actual = generateIntArray(expected.length, () -> r.nextInt(1000));
@@ -44,7 +44,7 @@ public class MersenneTwisterPy3kCompatTest {
     @Test
     public void testSetSeedLongVsSetSeedArray() {
         final long seedLong = 0x0304050601010102L;
-        final int[] seedArray = { 0x01010102, 0x03040506 };
+        final int[] seedArray = { 0x03040506, 0x01010102 };
         final int[] expected = { 4, 815, 264, 766, 681, 399, 91, 22, 171, 420 };
 
         r.setSeed(seedLong);
@@ -75,8 +75,8 @@ public class MersenneTwisterPy3kCompatTest {
 
     @Test
     public void testLongIntMaxValue() {
-        long[] expected = { 1977150888, 1252380877, 1363867306, 345016483, 952454400, 470947684, 1732771130,
-                1286552655, 1917026106, 1619555880 };
+        long[] expected = { 1977150888, 1252380877, 1363867306, 345016483, 952454400, 470947684, 1732771130, 1286552655,
+                1917026106, 1619555880 };
         long[] actual = generateLongArray(expected.length, () -> r.nextLong(Integer.MAX_VALUE));
         assertThat(actual, equalTo(expected));
     }

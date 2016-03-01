@@ -35,8 +35,20 @@ public class MersenneTwisterPy3kCompat extends MersenneTwister {
         if (high == 0) {
             setSeed(new int[] { (int) seed });
         } else {
-            setSeed(new int[] { (int) (seed & 0xffffffffL), high });
+            setSeed(new int[] { high, (int) (seed & 0xffffffffL) });
         }
+    }
+
+    @Override
+    public void setSeed(int[] seed) {
+        // for python compatibility where the seed is a number (big integer)
+        // and it is big endian
+        int[] seedSwapped = new int[seed.length];
+        int j = seed.length;
+        for (int i = 0; i < seedSwapped.length; i++) {
+            seedSwapped[i] = seed[--j];
+        }
+        super.setSeed(seedSwapped);
     }
 
     @Override

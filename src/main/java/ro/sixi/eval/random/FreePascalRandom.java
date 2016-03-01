@@ -1,14 +1,12 @@
 package ro.sixi.eval.random;
 
-import org.apache.commons.math3.random.MersenneTwister;
-
 /**
  * FreePascal uses Mersenne Twister, but it must be initialized with a 32bit seed. Initialization with a 32 bit seed is
  * identical to freepascal one.
  * 
  * Also, another difference is the nextDouble function which is using only 32 random bits to get a number.
  */
-public class FreePascalRandom extends MersenneTwister {
+public class FreePascalRandom extends MersenneTwisterPy3kCompat {
     // freepascal https://github.com/graemeg/freepascal/blob/master/rtl/inc/system.inc
     // http://svn.freepascal.org/svn/fpc/trunk/rtl/inc/system.inc
     // https://github.com/graemeg/freepascal/blob/master/rtl/inc/systemh.inc
@@ -31,6 +29,7 @@ public class FreePascalRandom extends MersenneTwister {
         super();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void setSeed(int seed) {
         super.setSeed(seed);
@@ -42,7 +41,7 @@ public class FreePascalRandom extends MersenneTwister {
         if (high == 0) {
             setSeed((int) seed);
         } else {
-            setSeed(new int[] { (int) (seed & 0xffffffffL), high });
+            setSeed(new int[] { high, (int) (seed & 0xffffffffL) });
         }
     }
 

@@ -31,7 +31,7 @@ public class FreePascalRandomTest {
     @Test
     public void testSetSeedLongVsSetSeedArray() {
         final long seedLong = 0x0304050601010102L;
-        final int[] seedArray = { 0x01010102, 0x03040506 };
+        final int[] seedArray = { 0x03040506, 0x01010102 };
         final int[] expected = { 4, 796, 258, 748, 665, 390, 89, 21, 167, 410 };
 
         r.setSeed(seedLong);
