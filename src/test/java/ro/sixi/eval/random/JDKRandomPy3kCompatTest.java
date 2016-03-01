@@ -8,8 +8,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import ro.sixi.eval.random.JDKRandomPy3kCompat;
-
 public class JDKRandomPy3kCompatTest {
     // openjdk random tests.
     // http://hg.openjdk.java.net/jdk8/jdk8/jdk/file/687fd7c7986d/test/java/util/Random
