@@ -213,7 +213,8 @@ public class DotNetRandom implements RandomGenerator {
 
     @Override
     public long nextLong() {
-        return ((long) (nextInt()) << 32) | nextInt();
+        return ((long) (nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE)) << 32)
+                | nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
     @Override
