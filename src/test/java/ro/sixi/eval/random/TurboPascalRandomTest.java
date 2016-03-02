@@ -6,6 +6,7 @@ import static ro.sixi.eval.random.Utils.between;
 import static ro.sixi.eval.random.Utils.createStream;
 import static ro.sixi.eval.util.ArrayUtils.generateBooleanArray;
 import static ro.sixi.eval.util.ArrayUtils.generateDoubleArray;
+import static ro.sixi.eval.util.ArrayUtils.generateFloatArray;
 import static ro.sixi.eval.util.ArrayUtils.generateIntArray;
 import static ro.sixi.eval.util.ArrayUtils.generateLongArray;
 
@@ -44,15 +45,6 @@ public class TurboPascalRandomTest {
     }
 
     @Test
-    public void testLongValue() {
-        long[] expected = { -1392928120L, -2076845234L, -6588343460521763164L, 6311277235765912074L,
-                3606207044135511808L, -464022778L, -51589220L, -735761854L, -498207624L, 95602918877569982L };
-        long[] actual = generateLongArray(expected.length, () -> r.nextLong());
-
-        assertThat(actual, equalTo(expected));
-    }
-
-    @Test
     public void test16() {
         int[] expected = { 6, 10, 2, 8, 10, 7, 5, 1, 3, 3 };
         int[] actual = generateIntArray(expected.length, () -> r.nextInt(16));
@@ -69,6 +61,15 @@ public class TurboPascalRandomTest {
     }
 
     @Test
+    public void testLong() {
+        long[] expected = { -1392928120L, -2076845234L, -6588343460521763164L, 6311277235765912074L,
+                3606207044135511808L, -464022778L, -51589220L, -735761854L, -498207624L, 95602918877569982L };
+        long[] actual = generateLongArray(expected.length, () -> r.nextLong());
+
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Test
     public void testDouble() {
         double[] expected = { 0.937291509239003062, 0.175683649256825447, 0.659395495662465692, 0.016446787398308516,
                 0.142845185240730643, 0.973955073393881321, 0.842135024489834905, 0.5813924097456038,
@@ -79,22 +80,35 @@ public class TurboPascalRandomTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
+    public void testFloat() {
+        float[] expected = { 0.9372915F, 0.17568365F, 0.6593955F, 0.016446788F, 0.14284518F, 0.9739551F, 0.842135F,
+                0.5813924F, 0.69549286F, 0.73518986F };
+        float[] actual = generateFloatArray(expected.length, () -> r.nextFloat());
+
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Test
     public void testDoubleCoprocDisabled() {
+        TurboPascalRandom r = new TurboPascalRandom(1234567890, false);
         double[] expected = { 0.43729150923900306, 0.67568364925682545, 0.15939549566246569, 0.51644678739830852,
                 0.64284518524073064, 0.47395507339388132, 0.3421350244898349, 0.0813924097456038, 0.19549287552945316,
                 0.23518985509872437 };
-        TurboPascalRandom r = new TurboPascalRandom(1234567890, false);
         double[] actual = generateDoubleArray(expected.length, () -> r.nextDouble());
 
         assertThat(actual, equalTo(expected));
     }
 
-    @SuppressWarnings("deprecation")
     @Test
-    public void testFloat() {
-        expectedException.expect(UnsupportedOperationException.class);
+    @SuppressWarnings("deprecation")
+    public void testFloatCoprocDisabled() {
+        TurboPascalRandom r = new TurboPascalRandom(1234567890, false);
+        float[] expected = { 0.4372915F, 0.6756837F, 0.1593955F, 0.51644677F, 0.6428452F, 0.47395507F, 0.342135F,
+                0.08139241F, 0.19549288F, 0.23518986F };
+        float[] actual = generateFloatArray(expected.length, () -> r.nextFloat());
 
-        r.nextFloat();
+        assertThat(actual, equalTo(expected));
     }
 
     @Test

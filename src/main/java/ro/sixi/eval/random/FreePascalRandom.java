@@ -60,6 +60,7 @@ public class FreePascalRandom extends MersenneTwisterPy3kCompat {
     }
 
     @Override
+    @Deprecated
     public float nextFloat() {
         return (float) nextDouble();
     }

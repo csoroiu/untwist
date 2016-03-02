@@ -4,11 +4,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static ro.sixi.eval.random.Utils.between;
 import static ro.sixi.eval.random.Utils.createStream;
+import static ro.sixi.eval.util.ArrayUtils.generateArray;
 import static ro.sixi.eval.util.ArrayUtils.generateBooleanArray;
 import static ro.sixi.eval.util.ArrayUtils.generateDoubleArray;
+import static ro.sixi.eval.util.ArrayUtils.generateFloatArray;
 import static ro.sixi.eval.util.ArrayUtils.generateIntArray;
 import static ro.sixi.eval.util.ArrayUtils.generateLongArray;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 
 import org.hamcrest.Matcher;
@@ -42,6 +45,22 @@ public class MersenneTwisterPy3kCompatTest {
     }
 
     @Test
+    public void testSet32BitSeedLongVsArray() {
+        final long seedLong = 0x12345678L;
+        final int[] seedArray = { 0x12345678 };
+        final int[] expected = { 881, 986, 223, 648, 848, 779, 753, 702, 302, 131 };
+
+        MersenneTwisterPy3kCompat rLong = new MersenneTwisterPy3kCompat(seedLong);
+        int[] actualLong = generateIntArray(expected.length, () -> rLong.nextInt(1000));
+
+        MersenneTwisterPy3kCompat rArray = new MersenneTwisterPy3kCompat(seedArray);
+        int[] actualArray = generateIntArray(expected.length, () -> rArray.nextInt(1000));
+
+        assertThat(actualLong, equalTo(expected));
+        assertThat(actualArray, equalTo(expected));
+    }
+
+    @Test
     public void testSetSeedLongVsSetSeedArray() {
         final long seedLong = 0x0304050601010102L;
         final int[] seedArray = { 0x03040506, 0x01010102 };
@@ -71,6 +90,13 @@ public class MersenneTwisterPy3kCompatTest {
         int[] actual = generateIntArray(expected.length, () -> r.nextInt(Integer.MAX_VALUE));
 
         assertThat(actual, equalTo(expected));
+    }
+
+    @Test
+    public void testLongNegativeValue() {
+        expectedException.expect(IllegalArgumentException.class);
+
+        r.nextLong(-16);
     }
 
     @Test
@@ -126,6 +152,37 @@ public class MersenneTwisterPy3kCompatTest {
     }
 
     @Test
+    public void testLong() {
+        long[] expected = { -7688874252053652656L, 2963669024859614549L, 4045409808013761025L, -7395340914630067596L,
+                -4534864988291531148L, 5650919505956806073L, -2156102495217048671L, 8134617799277283652L,
+                -2327300871387940599L, 2953583019140954985L };
+        long[] actual = generateLongArray(expected.length, () -> r.nextLong());
+
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Test
+    public void testNextBytes() {
+        long[] expected = { -7688874252053652656L, 2963669024859614549L, 4045409808013761025L, -7395340914630067596L,
+                -4534864988291531148L, 5650919505956806073L, -2156102495217048671L, 8134617799277283652L,
+                -2327300871387940599L, 2953583019140954985L };
+
+        final byte[] b = new byte[8];
+
+        // The generated BigInteger's are compatible with the python numbers
+        // returned by getrandbits function
+        BigInteger[] bigInts = generateArray(BigInteger[]::new, expected.length, () -> {
+            r.nextBytes(b);
+            reverseArray(b);
+            return new BigInteger(1, b);
+        });
+
+        long[] actual = generateLongArray(expected.length, (i) -> bigInts[i].longValue());
+
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Test
     public void testDouble() {
         double[] expected = { 0.9206826283274985, 0.6351002019693018, 0.4435211436398484, 0.8068844348124993,
                 0.8926848452848529, 0.8081301250035834, 0.25490020128427027, 0.08395441205038512, 0.13853413517651525,
@@ -138,8 +195,11 @@ public class MersenneTwisterPy3kCompatTest {
     @Test
     @SuppressWarnings("deprecation")
     public void testFloat() {
-        expectedException.expect(UnsupportedOperationException.class);
-        r.nextFloat();
+        float[] expected = { 0.9206826F, 0.6351002F, 0.44352114F, 0.8068844F, 0.8926848F, 0.80813015F, 0.2549002F,
+                0.08395441F, 0.13853413F, 0.4317281F };
+        float[] actual = generateFloatArray(expected.length, () -> r.nextFloat());
+
+        assertThat(actual, equalTo(expected));
     }
 
     @Test
@@ -160,5 +220,14 @@ public class MersenneTwisterPy3kCompatTest {
     public void testDoubleStream() {
         final Matcher<Double> betweenMatcher = between(0d, 1d);
         createStream(100000, () -> r.nextDouble()).forEach((t) -> assertThat(t, betweenMatcher));
+    }
+
+    private static void reverseArray(byte b[]) {
+        int j = b.length - 1;
+        for (int i = 0; i < b.length / 2; i++) {
+            final byte tmp = b[i];
+            b[i] = b[j];
+            b[j--] = tmp;
+        }
     }
 }

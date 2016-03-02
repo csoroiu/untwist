@@ -2,6 +2,8 @@ package ro.sixi.eval.random;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static ro.sixi.eval.util.ArrayUtils.generateDoubleArray;
+import static ro.sixi.eval.util.ArrayUtils.generateFloatArray;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -76,10 +78,23 @@ public class JDKRandomPy3kCompatTest {
     }
 
     @Test
+    public void testDouble() {
+        double[] expected = { 0.730967787376657, 0.24053641567148587, 0.6374174253501083, 0.5504370051176339,
+                0.5975452777972018, 0.3332183994766498, 0.3851891847407185, 0.984841540199809, 0.8791825178724801,
+                0.9412491794821144 };
+        double[] actual = generateDoubleArray(expected.length, () -> r.nextDouble());
+
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Test
     @SuppressWarnings("deprecation")
     public void testFloat() {
-        expectedException.expect(UnsupportedOperationException.class);
-        r.nextFloat();
+        float[] expected = { 0.73096776F, 0.24053642F, 0.63741744F, 0.55043703F, 0.59754527F, 0.3332184F, 0.38518918F,
+                0.9848415F, 0.8791825F, 0.9412492F };
+        float[] actual = generateFloatArray(expected.length, () -> r.nextFloat());
+
+        assertThat(actual, equalTo(expected));
     }
 
     @Test

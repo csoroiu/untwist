@@ -60,8 +60,7 @@ public class MersenneTwisterPy3kCompat extends MersenneTwister {
     @Override
     @Deprecated
     public float nextFloat() {
-        throw new UnsupportedOperationException(
-                "nextFloat - python supports only double precision floating point numbers");
+        return (float) nextDouble();
     }
 
     @Override

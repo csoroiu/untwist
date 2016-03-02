@@ -89,6 +89,17 @@ class MersenneTwisterPy3kCompatTest(unittest.TestCase):
         self.assertListEqual(actual, expected)
 
 
+    def test_long(self):
+        expected = [10757869821655898960, 2963669024859614549, 4045409808013761025, 
+                    11051403159079484020, 13911879085418020468, 5650919505956806073, 
+                    16290641578492502945, 8134617799277283652, 16119443202321611017, 
+                    2953583019140954985]
+        actual = []
+        for _ in range(10):
+            actual.append(self.rand.genrandbits(64)) # bit compatible with nextLong from Java
+        self.assertListEqual(actual, expected)
+
+
     def test_double(self):
         expected = [0.9206826283274985, 0.6351002019693018, 0.4435211436398484,
                     0.8068844348124993, 0.8926848452848529, 0.8081301250035834,

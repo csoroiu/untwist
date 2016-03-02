@@ -127,8 +127,7 @@ public class TurboPascalRandom implements RandomGenerator {
     @Override
     @Deprecated
     public float nextFloat() {
-        throw new UnsupportedOperationException(
-                "nextFloat - python supports only double precision floating point numbers");
+        return (float) nextDouble();
     }
 
     /**

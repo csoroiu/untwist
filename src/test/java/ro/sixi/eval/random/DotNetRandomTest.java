@@ -11,6 +11,7 @@ import static ro.sixi.eval.random.Utils.createStream;
 import static ro.sixi.eval.random.Utils.toByteList;
 import static ro.sixi.eval.util.ArrayUtils.generateBooleanArray;
 import static ro.sixi.eval.util.ArrayUtils.generateDoubleArray;
+import static ro.sixi.eval.util.ArrayUtils.generateFloatArray;
 import static ro.sixi.eval.util.ArrayUtils.generateIntArray;
 import static ro.sixi.eval.util.ArrayUtils.generateLongArray;
 
@@ -269,7 +270,7 @@ public class DotNetRandomTest {
     public void testIntNegativeValue() {
         expectedException.expect(IllegalArgumentException.class);
 
-        new DotNetRandom(1234567890).nextInt(-16);
+        r.nextInt(-16);
     }
 
     @Test
@@ -301,8 +302,7 @@ public class DotNetRandomTest {
     @Test
     public void testLong() {
         long[] expected = { -659861015L, -2890171289807960499L, -1441396374L, 7740928225207699870L,
-                1208723606135141233L, 7682170035453475444L, -375136752L, -1532912740L, 602691552480251525L,
-                -517781486L };
+                1208723606135141233L, 7682170035453475444L, -375136752L, -1532912740L, 602691552480251525L, -517781486L };
         long[] actual = generateLongArray(expected.length, () -> r.nextLong());
 
         assertThat(actual, equalTo(expected));
@@ -321,8 +321,11 @@ public class DotNetRandomTest {
     @Test
     @SuppressWarnings("deprecation")
     public void testFloat() {
-        expectedException.expect(UnsupportedOperationException.class);
-        new DotNetRandom(1234567890).nextFloat();
+        float[] expected = { 0.54730815F, 0.42220238F, 0.30727172F, 0.0064509073F, 0.313353F, 0.83062094F, 0.648156F,
+                0.071302876F, 0.7655026F, 0.8250625F };
+        float[] actual = generateFloatArray(expected.length, () -> r.nextFloat());
+
+        assertThat(actual, equalTo(expected));
     }
 
     @Test
@@ -337,7 +340,6 @@ public class DotNetRandomTest {
     @Test
     @Ignore
     public void testIntNoLimitStream() {
-        DotNetRandom r = new DotNetRandom(1234567890);
         IntPredicate betweenPredicate = betweenPredicate(0, Integer.MAX_VALUE);
         boolean result = createStream(1_000_000_000L, () -> r.nextInt()).allMatch(betweenPredicate);
         assertThat(result, equalTo(true));
