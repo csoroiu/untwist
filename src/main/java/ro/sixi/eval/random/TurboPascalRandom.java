@@ -35,11 +35,20 @@ public class TurboPascalRandom implements RandomGenerator {
         this(seed, true);
     }
 
+    public TurboPascalRandom(int[] seed) {
+        this(seed, true);
+    }
+
     public TurboPascalRandom(long seed) {
         this(seed, true);
     }
 
     protected TurboPascalRandom(int seed, boolean coprocEnabled) {
+        setSeed(seed);
+        this.coprocEnabled = coprocEnabled;
+    }
+
+    protected TurboPascalRandom(int[] seed, boolean coprocEnabled) {
         setSeed(seed);
         this.coprocEnabled = coprocEnabled;
     }
@@ -95,9 +104,18 @@ public class TurboPascalRandom implements RandomGenerator {
     }
 
     public int prevInt() {
-        int result = (int) seed;
+        long result = (int) seed;
         prevSeed();
-        return result;
+        return (int) result;
+    }
+
+    public int prevInt(int n) {
+        if (n > 0) {
+            long result = seed;
+            prevSeed();
+            return (int) ((result * n) >>> 32);
+        }
+        throw new IllegalArgumentException("n must be strictly positive");
     }
 
     @Override

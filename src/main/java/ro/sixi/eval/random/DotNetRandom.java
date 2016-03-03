@@ -25,6 +25,10 @@ public class DotNetRandom implements RandomGenerator {
         setSeed(seed);
     }
 
+    public DotNetRandom(int[] seed) {
+        setSeed(seed);
+    }
+
     public DotNetRandom(long seed) {
         setSeed(seed);
     }

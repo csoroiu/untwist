@@ -4,9 +4,14 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class ReversibleJdkRandomTest {
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     private ReversibleJdkRandom r;
 
@@ -21,6 +26,22 @@ public class ReversibleJdkRandomTest {
         int actual = r.prevInt(100);
 
         assertThat(expected, equalTo(60));
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Test
+    public void testPrevInt_NegativeValue() {
+        expectedException.expect(IllegalArgumentException.class);
+
+        r.prevInt(-16);
+    }
+
+    @Test
+    public void testPrevInt_NoBound() {
+        int expected = r.nextInt();
+        int actual = r.prevInt();
+
+        assertThat(expected, equalTo(-1155484576));
         assertThat(actual, equalTo(expected));
     }
 

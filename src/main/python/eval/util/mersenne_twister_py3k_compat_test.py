@@ -96,7 +96,7 @@ class MersenneTwisterPy3kCompatTest(unittest.TestCase):
                     2953583019140954985]
         actual = []
         for _ in range(10):
-            actual.append(self.rand.genrandbits(64)) # bit compatible with nextLong from Java
+            actual.append(self.rand.getrandbits(64)) # bit compatible with nextLong from Java
         self.assertListEqual(actual, expected)
 
 

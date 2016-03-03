@@ -87,7 +87,7 @@ public final class ReversibleJdkRandom extends Random implements ReverseRandomGe
     @Override
     public int prevInt(int bound) {
         if (bound <= 0)
-            return bound;
+            throw new IllegalArgumentException("bound must be positive");
 
         if ((bound & -bound) == bound) // limit is power of 2
             return (int) (((long) bound * prev(31)) >> 31); // output limit*(seed >> 17) >> 31

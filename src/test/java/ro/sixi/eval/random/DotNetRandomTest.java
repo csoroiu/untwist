@@ -267,14 +267,35 @@ public class DotNetRandomTest {
     }
 
     @Test
-    public void testIntNegativeValue() {
+    public void testSet32BitSeedIntVsLongVsArray() {
+        final int seedInt = 0x12345678;
+        final long seedLong = 0x12345678L;
+        final int[] seedArray = { seedInt };
+        final int[] expected = { 853, 486, 124, 219, 890, 790, 885, 574, 751, 165 };
+
+        DotNetRandom rInt = new DotNetRandom(seedInt);
+        int[] actualInt = generateIntArray(expected.length, () -> rInt.nextInt(1000));
+
+        DotNetRandom rLong = new DotNetRandom(seedLong);
+        int[] actualLong = generateIntArray(expected.length, () -> rLong.nextInt(1000));
+
+        DotNetRandom rArray = new DotNetRandom(seedArray);
+        int[] actualArray = generateIntArray(expected.length, () -> rArray.nextInt(1000));
+
+        assertThat(actualInt, equalTo(expected));
+        assertThat(actualLong, equalTo(expected));
+        assertThat(actualArray, equalTo(expected));
+    }
+
+    @Test
+    public void testNextInt_NegativeValue() {
         expectedException.expect(IllegalArgumentException.class);
 
         r.nextInt(-16);
     }
 
     @Test
-    public void test16() {
+    public void testNextInt_16() {
         int[] expected = { 8, 6, 4, 0, 5, 13, 10, 1, 12, 13 };
         int[] actual = generateIntArray(expected.length, () -> r.nextInt(16));
 
@@ -282,7 +303,7 @@ public class DotNetRandomTest {
     }
 
     @Test
-    public void testInt32bitRange() {
+    public void testNextInt_32bit() {
         int[] expected = { -287579909, 90175452, 80605103, 1593771972, 1778445194, -482557609, 1894541034, 1056929146,
                 779980809, 1253822814, 1884515393, 614983788, -358924531, 298830117, 903849615, -549623606, 676576329,
                 853008319, 370052958, 194295684 };
@@ -292,7 +313,7 @@ public class DotNetRandomTest {
     }
 
     @Test
-    public void test9() {
+    public void testNextInt_9() {
         int[] expected = { 4, 3, 2, 0, 2, 7, 5, 0, 6, 7, 6, 6, 7, 4, 2, 2, 1, 8, 3, 8 };
         int[] actual = generateIntArray(expected.length, () -> r.nextInt(9));
 
@@ -300,7 +321,7 @@ public class DotNetRandomTest {
     }
 
     @Test
-    public void testLong() {
+    public void testNextLong() {
         long[] expected = { -659861015L, -2890171289807960499L, -1441396374L, 7740928225207699870L,
                 1208723606135141233L, 7682170035453475444L, -375136752L, -1532912740L, 602691552480251525L, -517781486L };
         long[] actual = generateLongArray(expected.length, () -> r.nextLong());
@@ -309,7 +330,7 @@ public class DotNetRandomTest {
     }
 
     @Test
-    public void testDouble() {
+    public void testNextDouble() {
         double[] expected = { 0.547308153727701, 0.42220238895258044, 0.3072717289008534, 0.006450907330238682,
                 0.31335299849200665, 0.8306209607192413, 0.6481559642814826, 0.07130287451264582, 0.7655025449420803,
                 0.8250625430723012 };
@@ -320,7 +341,7 @@ public class DotNetRandomTest {
 
     @Test
     @SuppressWarnings("deprecation")
-    public void testFloat() {
+    public void testNextFloat() {
         float[] expected = { 0.54730815F, 0.42220238F, 0.30727172F, 0.0064509073F, 0.313353F, 0.83062094F, 0.648156F,
                 0.071302876F, 0.7655026F, 0.8250625F };
         float[] actual = generateFloatArray(expected.length, () -> r.nextFloat());
@@ -329,7 +350,7 @@ public class DotNetRandomTest {
     }
 
     @Test
-    public void testBoolean() {
+    public void testNextBoolean() {
         boolean[] expected = { true, false, false, false, false, true, true, false, true, true, true, true, true, true,
                 false, false, false, true, false, true };
         boolean[] actual = generateBooleanArray(expected.length, () -> r.nextBoolean());
@@ -339,31 +360,45 @@ public class DotNetRandomTest {
 
     @Test
     @Ignore
-    public void testIntNoLimitStream() {
+    public void testNextInt_NoBoundStream() {
         IntPredicate betweenPredicate = betweenPredicate(0, Integer.MAX_VALUE);
         boolean result = createStream(1_000_000_000L, () -> r.nextInt()).allMatch(betweenPredicate);
         assertThat(result, equalTo(true));
     }
 
     @Test
-    public void testIntStream() {
+    public void testNextIntStream() {
         DotNetRandom r = new DotNetRandom(rand.nextInt());
         final Matcher<Integer> betweenMatcher = between(0, 1000);
         createStream(100000, () -> r.nextInt(1000)).forEach((t) -> assertThat(t, betweenMatcher));
     }
 
     @Test
-    public void testRangeIntStream() {
+    public void testNextInt_RangeStream() {
         DotNetRandom r = new DotNetRandom(rand.nextInt());
         final Matcher<Integer> betweenMatcher = between(-1000, 3000);
         createStream(100000, () -> r.nextInt(-1000, 3000)).forEach((t) -> assertThat(t, betweenMatcher));
     }
 
     @Test
-    public void testDoubleStream() {
+    public void testNextInt_InvalidRange() {
+        expectedException.expect(IllegalArgumentException.class);
+
+        r.nextInt(200, 100);
+    }
+
+    @Test
+    public void testNextDoubleStream() {
         DotNetRandom r = new DotNetRandom(rand.nextInt());
         final Matcher<Double> betweenMatcher = between(0d, 1d);
         createStream(100000, () -> r.nextDouble()).forEach((t) -> assertThat(t, betweenMatcher));
+    }
+
+    @Test
+    public void testNextBytes_NullBuffer() {
+        expectedException.expect(NullPointerException.class);
+
+        r.nextBytes(null);
     }
 
     private static Integer seed = null;
