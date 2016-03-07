@@ -20,9 +20,6 @@ public class TurboPascalRandom implements RandomGenerator {
     private final static long addend = 0x1L;
     private final static long mask = (1L << 32) - 1;
 
-    private double nextGaussian = Double.NaN;
-    private long seed;
-
     /**
      * when enabling coprocessor $N+, in Turbo Pascal 7, the values returned by random function are offset-ed by 0.5
      * from the usual ones. If value is >=0.5 then it is decreased by 0.5 else value is increased by 0.5
@@ -30,6 +27,9 @@ public class TurboPascalRandom implements RandomGenerator {
      * Delphi maintains compatibility with the $N- version.
      */
     private final boolean coprocEnabled;
+
+    private long seed;
+    private double nextGaussian = Double.NaN;
 
     public TurboPascalRandom(int seed) {
         this(seed, true);

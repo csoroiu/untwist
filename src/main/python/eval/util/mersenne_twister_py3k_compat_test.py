@@ -89,14 +89,14 @@ class MersenneTwisterPy3kCompatTest(unittest.TestCase):
         self.assertListEqual(actual, expected)
 
 
-    def test_long(self):
-        expected = [10757869821655898960, 2963669024859614549, 4045409808013761025, 
-                    11051403159079484020, 13911879085418020468, 5650919505956806073, 
-                    16290641578492502945, 8134617799277283652, 16119443202321611017, 
+    def test_next_bytes_asLongArray(self):
+        expected = [10757869821655898960, 2963669024859614549, 4045409808013761025,
+                    11051403159079484020, 13911879085418020468, 5650919505956806073,
+                    16290641578492502945, 8134617799277283652, 16119443202321611017,
                     2953583019140954985]
         actual = []
         for _ in range(10):
-            actual.append(self.rand.getrandbits(64)) # bit compatible with nextLong from Java
+            actual.append(self.rand.getrandbits(64))  # bit compatible with nextLong from Java
         self.assertListEqual(actual, expected)
 
 
@@ -108,6 +108,15 @@ class MersenneTwisterPy3kCompatTest(unittest.TestCase):
         actual = []
         for _ in range(10):
             actual.append(self.rand.random())
+        self.assertListEqual(actual, expected)
+
+    def test_next_bytes(self):
+        expected = [0x954ba19aebb1db50, 0x954ba1ebb1db50, 0x954bebb1db50, 0x95ebb1db50]
+        bitsizes = [64, 56, 48, 40]
+        actual = []
+        for bitsize in bitsizes:
+            self.rand = RandomPy3k(1234567890)
+            actual.append(self.rand.getrandbits(bitsize))  # bit compatible with nextLong from Java
         self.assertListEqual(actual, expected)
 
 

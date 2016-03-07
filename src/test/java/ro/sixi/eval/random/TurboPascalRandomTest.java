@@ -181,6 +181,17 @@ public class TurboPascalRandomTest {
     }
 
     @Test
+    public void testPrevInt_16() {
+        int[] expected = { 3, 3, 1, 5, 7, 10, 8, 2, 10, 6 };
+        for (int i = 0; i < 10; i++) {
+            r.nextInt(16);
+        }
+        int[] actual = generateIntArray(expected.length, () -> r.prevInt(16));
+
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Test
     public void testPrevInt_NegativeValue() {
         expectedException.expect(IllegalArgumentException.class);
 

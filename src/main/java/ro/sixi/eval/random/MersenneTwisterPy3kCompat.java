@@ -1,5 +1,6 @@
 package ro.sixi.eval.random;
 
+import org.apache.commons.math3.exception.OutOfRangeException;
 import org.apache.commons.math3.random.MersenneTwister;
 
 public class MersenneTwisterPy3kCompat extends MersenneTwister {
@@ -84,10 +85,27 @@ public class MersenneTwisterPy3kCompat extends MersenneTwister {
     }
 
     @Override
-    // http://svn.python.org/projects/python/trunk/Modules/_randommodule.c # random_getrandbits
+    public void nextBytes(byte[] bytes, int start, int len) {
+        if (start < 0 || start >= bytes.length) {
+            throw new OutOfRangeException(start, 0, bytes.length);
+        }
+        if (len < 0 || len > bytes.length - start) {
+            throw new OutOfRangeException(len, 0, bytes.length - start);
+        }
+
+        nextBytesFill(bytes, start, len);
+    }
+
+    @Override
     public void nextBytes(byte[] bytes) {
-        int i = 0;
-        final int iEnd = bytes.length - 4;
+        nextBytesFill(bytes, 0, bytes.length);
+    }
+
+    // http://svn.python.org/projects/python/trunk/Modules/_randommodule.c # random_getrandbits
+    private void nextBytesFill(byte[] bytes, int start, int len) {
+        int i = start;
+        final int endIndex = start + len;
+        final int iEnd = endIndex - 4;
         while (i < iEnd) {
             final int random = next(32);
             bytes[i] = (byte) (random & 0xff);
@@ -97,9 +115,9 @@ public class MersenneTwisterPy3kCompat extends MersenneTwister {
             i += 4;
         }
         int random = next(32);
-        final int shift = 32 - (bytes.length - i) * 8;
-        random >>>= shift;
-        while (i < bytes.length) {
+        final int k = (endIndex - i) * 8;
+        random >>>= 32 - k;
+        while (i < endIndex) {
             bytes[i++] = (byte) (random & 0xff);
             random >>= 8;
         }

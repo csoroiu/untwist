@@ -19,7 +19,13 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
 
+import com.tngtech.java.junit.dataprovider.DataProvider;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import com.tngtech.java.junit.dataprovider.UseDataProvider;
+
+@RunWith(DataProviderRunner.class)
 public class MersenneTwisterPy3kCompatTest {
 
     @Rule
@@ -162,7 +168,7 @@ public class MersenneTwisterPy3kCompatTest {
     }
 
     @Test
-    public void testNextBytes() {
+    public void testNextBytes_asLongArray() {
         long[] expected = { -7688874252053652656L, 2963669024859614549L, 4045409808013761025L, -7395340914630067596L,
                 -4534864988291531148L, 5650919505956806073L, -2156102495217048671L, 8134617799277283652L,
                 -2327300871387940599L, 2953583019140954985L };
@@ -173,13 +179,63 @@ public class MersenneTwisterPy3kCompatTest {
         // returned by getrandbits function
         BigInteger[] bigInts = generateArray(BigInteger[]::new, expected.length, () -> {
             r.nextBytes(b);
-            reverseArray(b);
-            return new BigInteger(1, b);
+            return toBigInteger(b);
         });
 
         long[] actual = generateLongArray(expected.length, (i) -> bigInts[i].longValue());
 
         assertThat(actual, equalTo(expected));
+    }
+
+    @DataProvider(format = "%m %i")
+    public static Object[][] dataProviderTestNextBytes() {
+    //@formatter:off
+        return new Object[][] {
+                { new byte[] { 80, -37, -79, -21, -102, -95, 75, -107 } },
+                { new byte[] { 80, -37, -79, -21, -95, 75, -107 } },
+                { new byte[] { 80, -37, -79, -21, 75, -107 } },
+                { new byte[] { 80, -37, -79, -21, -107 } },
+        };
+        //@formatter:on
+    }
+
+    @Test
+    @UseDataProvider("dataProviderTestNextBytes")
+    public void testNextBytes(byte[] expected) {
+        byte[] actual = new byte[expected.length];
+
+        r.nextBytes(actual);
+
+        assertThat(actual, equalTo(expected));
+    }
+
+    @DataProvider(format = "%m %i")
+    public static Object[][] dataProviderTestNextBytesRange() {
+        //@formatter:off
+        return new Object[][] {
+                { new byte[] { 0, 0, 80, -37, -79, -21, -102, -95, 75, -107, 0 } },
+                { new byte[] { 0, 0, 80, -37, -79, -21, -95, 75, -107, 0 } },
+                { new byte[] { 0, 0, 80, -37, -79, -21, 75, -107, 0 } },
+                { new byte[] { 0, 0, 80, -37, -79, -21, -107, 0 } },
+        };
+        //@formatter:on
+    }
+
+    @Test
+    @UseDataProvider("dataProviderTestNextBytesRange")
+    public void testNextBytesRange(byte[] expected) {
+        byte[] actual = new byte[expected.length];
+
+        r.nextBytes(actual, 2, expected.length - 3);
+
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Test
+    public void testNextBytes_NullBuffer() {
+        expectedException.expect(NullPointerException.class);
+
+        r.nextBytes(null);
     }
 
     @Test
@@ -222,12 +278,18 @@ public class MersenneTwisterPy3kCompatTest {
         createStream(100000, () -> r.nextDouble()).forEach((t) -> assertThat(t, betweenMatcher));
     }
 
-    private static void reverseArray(byte b[]) {
+    private static void reverseArray(byte[] b) {
         int j = b.length - 1;
         for (int i = 0; i < b.length / 2; i++) {
             final byte tmp = b[i];
             b[i] = b[j];
             b[j--] = tmp;
         }
+    }
+
+    private static BigInteger toBigInteger(byte[] littleEndian) {
+        byte[] bigEndian = Arrays.copyOf(littleEndian, littleEndian.length);
+        reverseArray(bigEndian);
+        return new BigInteger(1, bigEndian);
     }
 }
