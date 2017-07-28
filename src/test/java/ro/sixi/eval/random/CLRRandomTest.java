@@ -15,60 +15,60 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.notNullValue;
+import static ro.sixi.eval.random.ArrayUtils.*;
 import static ro.sixi.eval.random.Utils.between;
 import static ro.sixi.eval.random.Utils.betweenPredicate;
 import static ro.sixi.eval.random.Utils.createStream;
 import static ro.sixi.eval.random.Utils.toByteList;
-import static ro.sixi.eval.util.ArrayUtils.*;
 
-public class DotNetRandomTest {
+public class CLRRandomTest {
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
-    private DotNetRandom r;
+    private CLRRandom r;
 
     @Before
     public void setup() {
-        r = new DotNetRandom(1234567890L);
+        r = new CLRRandom(1234567890L);
     }
 
     @Test
     public void testRandomCtor1_PosTest1() {
-        DotNetRandom r = new DotNetRandom();
+        CLRRandom r = new CLRRandom();
         assertThat(r, notNullValue());
     }
 
     @Test
     public void testRandomCtor2_int_PosTest1() {
         int randValue = newInt32WithCondition(-55, (v) -> v == Integer.MIN_VALUE);
-        DotNetRandom r = new DotNetRandom(randValue);
+        CLRRandom r = new CLRRandom(randValue);
         assertThat(r, notNullValue());
     }
 
     @Test
     public void testRandomCtor2_int_PosTest2() {
-        DotNetRandom r = new DotNetRandom(Integer.MIN_VALUE);
+        CLRRandom r = new CLRRandom(Integer.MIN_VALUE);
         assertThat(r, notNullValue());
     }
 
     @Test
     public void testRandomNext1_PosTest1() {
-        DotNetRandom r = new DotNetRandom(-55);
+        CLRRandom r = new CLRRandom(-55);
         int value = r.nextInt();
         assertThat(value, between(0, Integer.MAX_VALUE));
     }
 
     @Test
     public void testRandomNext1_PosTest2() {
-        DotNetRandom r = new DotNetRandom(Integer.MAX_VALUE);
+        CLRRandom r = new CLRRandom(Integer.MAX_VALUE);
         int value = r.nextInt();
         assertThat(value, between(0, Integer.MAX_VALUE));
     }
 
     @Test
     public void testRandomNext1_PosTest3() {
-        DotNetRandom r = new DotNetRandom(0);
+        CLRRandom r = new CLRRandom(0);
         int value = r.nextInt();
         assertThat(value, between(0, Integer.MAX_VALUE));
     }
@@ -79,7 +79,7 @@ public class DotNetRandomTest {
         if (randValue > 0) {
             randValue *= -1;
         }
-        DotNetRandom r = new DotNetRandom(randValue);
+        CLRRandom r = new CLRRandom(randValue);
         int value = r.nextInt();
         assertThat(value, between(0, Integer.MAX_VALUE));
     }
@@ -87,7 +87,7 @@ public class DotNetRandomTest {
     @Test
     public void testRandomNext2_int_PosTest1() {
         int maxValue = newInt32WithCondition(-55, (v) -> v <= 0 || v == Integer.MAX_VALUE);
-        DotNetRandom random = new DotNetRandom(-55);
+        CLRRandom random = new CLRRandom(-55);
         int value = random.nextInt(maxValue);
         assertThat(value, between(0, maxValue));
     }
@@ -95,7 +95,7 @@ public class DotNetRandomTest {
     @Test
     public void testRandomNext2_int_PosTest2() {
         int maxValue = newInt32WithCondition(-55, (v) -> v <= 0 || v == Integer.MAX_VALUE);
-        DotNetRandom random = new DotNetRandom(Integer.MAX_VALUE);
+        CLRRandom random = new CLRRandom(Integer.MAX_VALUE);
         int value = random.nextInt(maxValue);
         assertThat(value, between(0, maxValue));
     }
@@ -103,7 +103,7 @@ public class DotNetRandomTest {
     @Test
     public void testRandomNext2_int_PosTest3() {
         int maxValue = newInt32WithCondition(-55, (v) -> v <= 0 || v == Integer.MAX_VALUE);
-        DotNetRandom random = new DotNetRandom(0);
+        CLRRandom random = new CLRRandom(0);
         int value = random.nextInt(maxValue);
         assertThat(value, between(0, maxValue));
     }
@@ -115,7 +115,7 @@ public class DotNetRandomTest {
             randValue *= -1;
         }
         int maxValue = newInt32WithCondition(-55, (v) -> v <= 0 || v == Integer.MAX_VALUE);
-        DotNetRandom random = new DotNetRandom(randValue);
+        CLRRandom random = new CLRRandom(randValue);
         int value = random.nextInt(maxValue);
         assertThat(value, between(0, maxValue));
     }
@@ -123,14 +123,14 @@ public class DotNetRandomTest {
     @Test
     public void testRandomNext2_int_PosTest5() {
         int maxValue = newInt32WithCondition(-55, (v) -> v <= 0 || v == Integer.MAX_VALUE);
-        DotNetRandom random = new DotNetRandom(maxValue);
+        CLRRandom random = new CLRRandom(maxValue);
         int value = random.nextInt(maxValue);
         assertThat(value, between(0, maxValue));
     }
 
     @Test
     public void testRandomNext2_int_PosTest6() {
-        DotNetRandom random = new DotNetRandom(0);
+        CLRRandom random = new CLRRandom(0);
         int value = random.nextInt(0);
         assertThat(value, equalTo(0));
     }
@@ -138,7 +138,7 @@ public class DotNetRandomTest {
     @Test
     public void testRandomNext2_int_NegTest1() {
         expectedException.expect(IllegalArgumentException.class);
-        DotNetRandom random = new DotNetRandom(-55);
+        CLRRandom random = new CLRRandom(-55);
         random.nextInt(-1);
     }
 
@@ -146,7 +146,7 @@ public class DotNetRandomTest {
     public void testRandomNext3_int_int_PosTest1() {
         int maxValue = newInt32WithCondition(-55, (v) -> v == Integer.MAX_VALUE);
         int minValue = newInt32WithCondition(-55, (v) -> v >= maxValue);
-        DotNetRandom random = new DotNetRandom();
+        CLRRandom random = new CLRRandom();
         int value = random.nextInt(minValue, maxValue);
         assertThat(value, between(minValue, maxValue));
     }
@@ -155,7 +155,7 @@ public class DotNetRandomTest {
     public void testRandomNext3_int_int_PosTest2() {
         int maxValue = newInt32WithCondition(-55, (v) -> v == Integer.MAX_VALUE);
         int minValue = newInt32WithCondition(-55, (v) -> v >= maxValue);
-        DotNetRandom random = new DotNetRandom(Integer.MAX_VALUE);
+        CLRRandom random = new CLRRandom(Integer.MAX_VALUE);
         int value = random.nextInt(minValue, maxValue);
         assertThat(value, between(minValue, maxValue));
     }
@@ -164,7 +164,7 @@ public class DotNetRandomTest {
     public void testRandomNext3_int_int_PosTest3() {
         int maxValue = newInt32WithCondition(-55, (v) -> v == Integer.MAX_VALUE);
         int minValue = newInt32WithCondition(-55, (v) -> v >= maxValue);
-        DotNetRandom random = new DotNetRandom(0);
+        CLRRandom random = new CLRRandom(0);
         int value = random.nextInt(minValue, maxValue);
         assertThat(value, between(minValue, maxValue));
     }
@@ -177,7 +177,7 @@ public class DotNetRandomTest {
         }
         int maxValue = newInt32WithCondition(-55, (v) -> v == Integer.MAX_VALUE);
         int minValue = newInt32WithCondition(-55, (v) -> v >= maxValue);
-        DotNetRandom random = new DotNetRandom(randValue);
+        CLRRandom random = new CLRRandom(randValue);
         int value = random.nextInt(minValue, maxValue);
         assertThat(value, between(minValue, maxValue));
     }
@@ -186,19 +186,19 @@ public class DotNetRandomTest {
     public void testRandomNext3_int_int_PosTest5() {
         int maxValue = newInt32WithCondition(-55, (v) -> v == Integer.MAX_VALUE);
         int minValue = newInt32WithCondition(-55, (v) -> v >= maxValue);
-        DotNetRandom random = new DotNetRandom(maxValue);
+        CLRRandom random = new CLRRandom(maxValue);
         int value = random.nextInt(minValue, maxValue);
         assertThat(value, between(minValue, maxValue));
     }
 
     @Test
     public void testRandomNext3_int_int_PosTest6() {
-        assertThat(new DotNetRandom(0).nextInt(0, 0), equalTo(0));
-        assertThat(new DotNetRandom(0).nextInt(Integer.MAX_VALUE, Integer.MAX_VALUE), equalTo(Integer.MAX_VALUE));
-        assertThat(new DotNetRandom(0).nextInt(Integer.MIN_VALUE, Integer.MIN_VALUE), equalTo(Integer.MIN_VALUE));
-        assertThat(new DotNetRandom(0).nextInt(Integer.MAX_VALUE - 1, Integer.MAX_VALUE),
+        assertThat(new CLRRandom(0).nextInt(0, 0), equalTo(0));
+        assertThat(new CLRRandom(0).nextInt(Integer.MAX_VALUE, Integer.MAX_VALUE), equalTo(Integer.MAX_VALUE));
+        assertThat(new CLRRandom(0).nextInt(Integer.MIN_VALUE, Integer.MIN_VALUE), equalTo(Integer.MIN_VALUE));
+        assertThat(new CLRRandom(0).nextInt(Integer.MAX_VALUE - 1, Integer.MAX_VALUE),
                 equalTo(Integer.MAX_VALUE - 1));
-        assertThat(new DotNetRandom(Integer.MAX_VALUE).nextInt(Integer.MAX_VALUE - 1, Integer.MAX_VALUE),
+        assertThat(new CLRRandom(Integer.MAX_VALUE).nextInt(Integer.MAX_VALUE - 1, Integer.MAX_VALUE),
                 equalTo(Integer.MAX_VALUE - 1));
     }
 
@@ -206,7 +206,7 @@ public class DotNetRandomTest {
     public void testRandomNext3_int_int_PosTest7() {
         int maxValue = newInt32WithCondition(-55, (v) -> v == Integer.MAX_VALUE);
         int minValue = newInt32WithCondition(-55, (v) -> v >= maxValue);
-        DotNetRandom random = new DotNetRandom(maxValue);
+        CLRRandom random = new CLRRandom(maxValue);
         int value = random.nextInt(minValue, minValue);
         assertThat(value, between(minValue, maxValue));
     }
@@ -214,23 +214,23 @@ public class DotNetRandomTest {
     @Test
     public void testRandomNext3_int_int_NegTest1() {
         expectedException.expect(IllegalArgumentException.class);
-        DotNetRandom random = new DotNetRandom(-55);
+        CLRRandom random = new CLRRandom(-55);
         random.nextInt(1, 0);
     }
 
     @Test
     public void testRandomNextDouble_PosTest1() {
-        assertThat(new DotNetRandom(-55).nextDouble(), between(0d, 1d));
+        assertThat(new CLRRandom(-55).nextDouble(), between(0d, 1d));
     }
 
     @Test
     public void testRandomNextDouble_PosTest2() {
-        assertThat(new DotNetRandom(Integer.MAX_VALUE).nextDouble(), between(0d, 1d));
+        assertThat(new CLRRandom(Integer.MAX_VALUE).nextDouble(), between(0d, 1d));
     }
 
     @Test
     public void testRandomNextDouble_PosTest3() {
-        assertThat(new DotNetRandom(0).nextDouble(), between(0d, 1d));
+        assertThat(new CLRRandom(0).nextDouble(), between(0d, 1d));
     }
 
     @Test
@@ -239,47 +239,47 @@ public class DotNetRandomTest {
         if (randValue > 0) {
             randValue *= -1;
         }
-        assertThat(new DotNetRandom(randValue).nextDouble(), between(0d, 1d));
+        assertThat(new CLRRandom(randValue).nextDouble(), between(0d, 1d));
     }
 
     @Test
     public void testRandomNextBytes_PosTest1() {
-        byte b[] = new byte[1024];
-        new DotNetRandom(-55).nextBytes(b);
+        byte[] b = new byte[1024];
+        new CLRRandom(-55).nextBytes(b);
         assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
-        new DotNetRandom(0).nextBytes(b);
+        new CLRRandom(0).nextBytes(b);
         assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
-        new DotNetRandom(Integer.MAX_VALUE).nextBytes(b);
+        new CLRRandom(Integer.MAX_VALUE).nextBytes(b);
         assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
-        new DotNetRandom(-1).nextBytes(b);
+        new CLRRandom(-1).nextBytes(b);
         assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
-        new DotNetRandom(Byte.MAX_VALUE).nextBytes(b);
+        new CLRRandom(Byte.MAX_VALUE).nextBytes(b);
         assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
-        new DotNetRandom(Byte.MIN_VALUE).nextBytes(b);
+        new CLRRandom(Byte.MIN_VALUE).nextBytes(b);
         assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
     }
 
     @Test
     public void testRandomNextBytes_PosTest2() {
-        byte b[] = new byte[1];
-        new DotNetRandom(-55).nextBytes(b);
+        byte[] b = new byte[1];
+        new CLRRandom(-55).nextBytes(b);
         assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
-        new DotNetRandom(0).nextBytes(b);
+        new CLRRandom(0).nextBytes(b);
         assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
-        new DotNetRandom(Integer.MAX_VALUE).nextBytes(b);
+        new CLRRandom(Integer.MAX_VALUE).nextBytes(b);
         assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
-        new DotNetRandom(-1).nextBytes(b);
+        new CLRRandom(-1).nextBytes(b);
         assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
-        new DotNetRandom(Byte.MAX_VALUE).nextBytes(b);
+        new CLRRandom(Byte.MAX_VALUE).nextBytes(b);
         assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
-        new DotNetRandom(Byte.MIN_VALUE).nextBytes(b);
+        new CLRRandom(Byte.MIN_VALUE).nextBytes(b);
         assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
     }
 
     @Test
     public void testRandomNextBytes_NegTest1() {
         expectedException.expect(NullPointerException.class);
-        DotNetRandom random = new DotNetRandom(-55);
+        CLRRandom random = new CLRRandom(-55);
         random.nextBytes(null);
     }
 
@@ -290,13 +290,13 @@ public class DotNetRandomTest {
         final int[] seedArray = {seedInt};
         final int[] expected = {853, 486, 124, 219, 890, 790, 885, 574, 751, 165};
 
-        DotNetRandom rInt = new DotNetRandom(seedInt);
+        CLRRandom rInt = new CLRRandom(seedInt);
         int[] actualInt = generateIntArray(expected.length, () -> rInt.nextInt(1000));
 
-        DotNetRandom rLong = new DotNetRandom(seedLong);
+        CLRRandom rLong = new CLRRandom(seedLong);
         int[] actualLong = generateIntArray(expected.length, () -> rLong.nextInt(1000));
 
-        DotNetRandom rArray = new DotNetRandom(seedArray);
+        CLRRandom rArray = new CLRRandom(seedArray);
         int[] actualArray = generateIntArray(expected.length, () -> rArray.nextInt(1000));
 
         assertThat(actualInt, equalTo(expected));
@@ -385,14 +385,14 @@ public class DotNetRandomTest {
 
     @Test
     public void testNextIntStream() {
-        DotNetRandom r = new DotNetRandom(rand.nextInt());
+        CLRRandom r = new CLRRandom(rand.nextInt());
         final Matcher<Integer> betweenMatcher = between(0, 1000);
         createStream(100000, () -> r.nextInt(1000)).forEach((t) -> assertThat(t, betweenMatcher));
     }
 
     @Test
     public void testNextInt_RangeStream() {
-        DotNetRandom r = new DotNetRandom(rand.nextInt());
+        CLRRandom r = new CLRRandom(rand.nextInt());
         final Matcher<Integer> betweenMatcher = between(-1000, 3000);
         createStream(100000, () -> r.nextInt(-1000, 3000)).forEach((t) -> assertThat(t, betweenMatcher));
     }
@@ -406,7 +406,7 @@ public class DotNetRandomTest {
 
     @Test
     public void testNextDoubleStream() {
-        DotNetRandom r = new DotNetRandom(rand.nextInt());
+        CLRRandom r = new CLRRandom(rand.nextInt());
         final Matcher<Double> betweenMatcher = between(0d, 1d);
         createStream(100000, () -> r.nextDouble()).forEach((t) -> assertThat(t, betweenMatcher));
     }
@@ -419,13 +419,13 @@ public class DotNetRandomTest {
     }
 
     private static Integer seed = null;
-    private static DotNetRandom rand;
+    private static CLRRandom rand;
 
     private void setSeed(Integer seed) {
-        if (DotNetRandomTest.seed == null) {
-            DotNetRandomTest.seed = seed;
+        if (CLRRandomTest.seed == null) {
+            CLRRandomTest.seed = seed;
             if (seed != null) {
-                rand = new DotNetRandom(DotNetRandomTest.seed);
+                rand = new CLRRandom(CLRRandomTest.seed);
             }
         }
     }

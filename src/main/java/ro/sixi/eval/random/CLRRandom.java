@@ -4,9 +4,9 @@ import org.apache.commons.math3.random.BitsStreamGenerator;
 import org.apache.commons.math3.random.RandomGenerator;
 import org.apache.commons.math3.util.FastMath;
 
-public class DotNetRandom implements RandomGenerator {
+public class CLRRandom implements RandomGenerator {
     // http://referencesource.microsoft.com/#mscorlib/system/random.cs
-
+    // https://github.com/dotnet/coreclr/blob/master/src/mscorlib/shared/System/Random.cs
     // tests
     // https://github.com/dotnet/coreclr/tree/master/tests/src/CoreMangLib/cti/system/random
     private static final int MBIG = Integer.MAX_VALUE;
@@ -17,24 +17,24 @@ public class DotNetRandom implements RandomGenerator {
     private int[] seedArray = new int[56];
     private double nextGaussian = Double.NaN;
 
-    public DotNetRandom() {
+    public CLRRandom() {
         setSeed(System.currentTimeMillis() + System.identityHashCode(this));
     }
 
-    public DotNetRandom(int seed) {
+    public CLRRandom(int seed) {
         setSeed(seed);
     }
 
-    public DotNetRandom(int[] seed) {
+    public CLRRandom(int[] seed) {
         setSeed(seed);
     }
 
-    public DotNetRandom(long seed) {
+    public CLRRandom(long seed) {
         setSeed(seed);
     }
 
     private void initialize(int seed) {
-        int ii;
+        int ii = 0;
         int mj, mk;
 
         // Initialize our seed array.
@@ -43,20 +43,26 @@ public class DotNetRandom implements RandomGenerator {
         mj = MSEED - subtraction;
         seedArray[55] = mj;
         mk = 1;
-        for (int i = 1; i < 55; i++) { // Apparently the range [1..55] is special (Knuth) and so we're wasting the 0'th
-            // position.
-            ii = (21 * i) % 55;
+        for (int i = 1; i < 55; i++) {
+            // Apparently the range [1..55] is special (Knuth) and so we're wasting the 0'th position.
+            if ((ii += 21) >= 55) ii -= 55;
             seedArray[ii] = mk;
             mk = mj - mk;
-            if (mk < 0)
+            if (mk < 0) {
                 mk += MBIG;
+            }
             mj = seedArray[ii];
         }
         for (int k = 1; k < 5; k++) {
             for (int i = 1; i < 56; i++) {
-                seedArray[i] -= seedArray[1 + (i + 30) % 55];
-                if (seedArray[i] < 0)
+                int n = i + 30;
+                if (n >= 55) {
+                    n -= 55;
+                }
+                seedArray[i] -= seedArray[1 + n];
+                if (seedArray[i] < 0) {
                     seedArray[i] += MBIG;
+                }
             }
         }
         inext = 0;
@@ -72,7 +78,8 @@ public class DotNetRandom implements RandomGenerator {
      *
      * @return a double [0..1)
      */
-    protected double sample() {
+
+    private double sample() {
         // Including this division at the end gives us significantly improved
         // random number distribution.
         return internalSample() * (1.0 / MBIG);
@@ -83,17 +90,21 @@ public class DotNetRandom implements RandomGenerator {
         int locINext = inext;
         int locINextp = inextp;
 
-        if (++locINext >= 56)
+        if (++locINext >= 56) {
             locINext = 1;
-        if (++locINextp >= 56)
+        }
+        if (++locINextp >= 56) {
             locINextp = 1;
+        }
 
         retVal = seedArray[locINext] - seedArray[locINextp];
 
-        if (retVal == MBIG)
+        if (retVal == MBIG) {
             retVal--;
-        if (retVal < 0)
+        }
+        if (retVal < 0) {
             retVal += MBIG;
+        }
 
         seedArray[locINext] = retVal;
 
@@ -111,7 +122,7 @@ public class DotNetRandom implements RandomGenerator {
 
         int result = internalSample();
         // Note we can't use addition here. The distribution will be bad if we do that.
-        boolean negative = (internalSample() % 2 == 0) ? true : false; // decide the sign based on second sample
+        boolean negative = internalSample() % 2 == 0; // decide the sign based on second sample
         if (negative) {
             result = -result;
         }
@@ -152,11 +163,9 @@ public class DotNetRandom implements RandomGenerator {
     }
 
     /**
+     * @param minValue the least legal value for the Random number.
+     * @param maxValue one greater than the greatest legal return value.
      * @return an int [minvalue..maxvalue)
-     * @param minValue
-     *            the least legal value for the Random number.
-     * @param maxValue
-     *            one greater than the greatest legal return value.
      */
     public int nextInt(int minValue, int maxValue) {
         if (minValue > maxValue) {
@@ -172,9 +181,8 @@ public class DotNetRandom implements RandomGenerator {
     }
 
     /**
+     * @param maxValue one more than the greatest legal return value.
      * @return an int [0..maxValue)
-     * @param maxValue
-     *            one more than the greatest legal return value.
      */
     @Override
     public int nextInt(int maxValue) {
@@ -201,13 +209,13 @@ public class DotNetRandom implements RandomGenerator {
     /**
      * Fills the byte array with random bytes [0..0x7f]. The entire array is filled.
      *
-     * @param buffer
-     *            the array to be filled.
+     * @param buffer the array to be filled.
      */
     @Override
     public void nextBytes(byte[] buffer) {
-        if (buffer == null)
+        if (buffer == null) {
             throw new NullPointerException("buffer");
+        }
 
         for (int i = 0; i < buffer.length; i++) {
             buffer[i] = (byte) (internalSample() % (1 << 8));

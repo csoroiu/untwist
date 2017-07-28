@@ -3,23 +3,23 @@ package ro.sixi.eval.random;
 import org.apache.commons.math3.exception.OutOfRangeException;
 import org.apache.commons.math3.random.MersenneTwister;
 
-public class MersenneTwisterPy3kCompat extends MersenneTwister {
+public class MersenneTwisterPy3k extends MersenneTwister {
 
     private static final long serialVersionUID = 1L;
 
-    public MersenneTwisterPy3kCompat() {
+    public MersenneTwisterPy3k() {
         super();
     }
 
-    public MersenneTwisterPy3kCompat(int seed) {
-        this(new int[] { seed });
+    public MersenneTwisterPy3k(int seed) {
+        this(new int[]{seed});
     }
 
-    public MersenneTwisterPy3kCompat(int[] seed) {
+    public MersenneTwisterPy3k(int[] seed) {
         super(seed);
     }
 
-    public MersenneTwisterPy3kCompat(long seed) {
+    public MersenneTwisterPy3k(long seed) {
         super(seed);
     }
 
@@ -34,9 +34,9 @@ public class MersenneTwisterPy3kCompat extends MersenneTwister {
     public void setSeed(long seed) {
         final int high = (int) (seed >>> 32);
         if (high == 0) {
-            setSeed(new int[] { (int) seed });
+            setSeed(new int[]{(int) seed});
         } else {
-            setSeed(new int[] { high, (int) (seed & 0xffffffffL) });
+            setSeed(new int[]{high, (int) (seed & 0xffffffffL)});
         }
     }
 
@@ -44,12 +44,7 @@ public class MersenneTwisterPy3kCompat extends MersenneTwister {
     public void setSeed(int[] seed) {
         // for python compatibility where the seed is a number (big integer)
         // and it is big endian
-        int[] seedSwapped = new int[seed.length];
-        int j = seed.length;
-        for (int i = 0; i < seedSwapped.length; i++) {
-            seedSwapped[i] = seed[--j];
-        }
-        super.setSeed(seedSwapped);
+        super.setSeed(reversedArray(seed));
     }
 
     @Override
@@ -138,5 +133,14 @@ public class MersenneTwisterPy3kCompat extends MersenneTwister {
             return bits;
         }
         throw new IllegalArgumentException("n must be strictly positive");
+    }
+
+    private static int[] reversedArray(int[] seed) {
+        int[] seedReversed = new int[seed.length];
+        int j = seed.length;
+        for (int i = 0; i < seedReversed.length; i++) {
+            seedReversed[i] = seed[--j];
+        }
+        return seedReversed;
     }
 }

@@ -1,8 +1,8 @@
 package ro.sixi.eval.random;
 
-import java.util.Random;
-
 import org.apache.commons.math3.random.RandomGenerator;
+
+import java.util.Random;
 
 public class JDKRandomPy3kCompat extends Random implements RandomGenerator {
 

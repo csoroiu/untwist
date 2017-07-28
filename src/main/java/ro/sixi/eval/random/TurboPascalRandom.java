@@ -23,7 +23,7 @@ public class TurboPascalRandom implements RandomGenerator {
     /**
      * when enabling coprocessor $N+, in Turbo Pascal 7, the values returned by random function are offset-ed by 0.5
      * from the usual ones. If value is >=0.5 then it is decreased by 0.5 else value is increased by 0.5
-     * 
+     * <p>
      * Delphi maintains compatibility with the $N- version.
      */
     private final boolean coprocEnabled;
@@ -62,10 +62,6 @@ public class TurboPascalRandom implements RandomGenerator {
     @Deprecated
     public void setSeed(int seed) {
         this.seed = seed;
-    }
-
-    public int getSeed() {
-        return (int) this.seed;
     }
 
     @Override
@@ -149,7 +145,7 @@ public class TurboPascalRandom implements RandomGenerator {
     }
 
     /**
-     * {@link MersenneTwisterPy3kCompat#nextBytes(byte[])}
+     * {@link MersenneTwisterPy3k#nextBytes(byte[])}
      */
     @Override
     public void nextBytes(byte[] bytes) {

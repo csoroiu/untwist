@@ -1,15 +1,15 @@
 package ro.sixi.eval.random;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static ro.sixi.eval.util.ArrayUtils.generateDoubleArray;
-import static ro.sixi.eval.util.ArrayUtils.generateFloatArray;
-import static ro.sixi.eval.util.ArrayUtils.generateIntArray;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static ro.sixi.eval.random.ArrayUtils.generateDoubleArray;
+import static ro.sixi.eval.random.ArrayUtils.generateFloatArray;
+import static ro.sixi.eval.random.ArrayUtils.generateIntArray;
 
 public class JDKRandomPy3kCompatTest {
     // openjdk random tests.
@@ -31,8 +31,8 @@ public class JDKRandomPy3kCompatTest {
     public void testSet32BitSeedIntVsLongVsArray() {
         final int seedInt = 0x12345678;
         final long seedLong = 0x12345678L;
-        final int[] seedArray = { seedInt };
-        final int[] expected = { 880, 671, 970, 214, 37, 891, 670, 23, 301, 904 };
+        final int[] seedArray = {seedInt};
+        final int[] expected = {880, 671, 970, 214, 37, 891, 670, 23, 301, 904};
 
         JDKRandomPy3kCompat rInt = new JDKRandomPy3kCompat();
         rInt.setSeed(seedInt);
@@ -60,7 +60,7 @@ public class JDKRandomPy3kCompatTest {
 
     @Test
     public void testNextBytes() {
-        byte[] expected = new byte[] { 96, -76, 32, -69, 56, 81, -39, -44 };
+        byte[] expected = new byte[]{96, -76, 32, -69, 56, 81, -39, -44};
         byte[] actual = new byte[expected.length];
         r.nextBytes(actual);
         assertThat(actual, equalTo(expected));
@@ -104,9 +104,9 @@ public class JDKRandomPy3kCompatTest {
 
     @Test
     public void testNextDoubleStream() {
-        double[] expected = { 0.730967787376657, 0.24053641567148587, 0.6374174253501083, 0.5504370051176339,
+        double[] expected = {0.730967787376657, 0.24053641567148587, 0.6374174253501083, 0.5504370051176339,
                 0.5975452777972018, 0.3332183994766498, 0.3851891847407185, 0.984841540199809, 0.8791825178724801,
-                0.9412491794821144 };
+                0.9412491794821144};
         double[] actual = generateDoubleArray(expected.length, () -> r.nextDouble());
 
         assertThat(actual, equalTo(expected));
@@ -115,8 +115,8 @@ public class JDKRandomPy3kCompatTest {
     @Test
     @SuppressWarnings("deprecation")
     public void testNextFloatStream() {
-        float[] expected = { 0.73096776F, 0.24053642F, 0.63741744F, 0.55043703F, 0.59754527F, 0.3332184F, 0.38518918F,
-                0.9848415F, 0.8791825F, 0.9412492F };
+        float[] expected = {0.73096776F, 0.24053642F, 0.63741744F, 0.55043703F, 0.59754527F, 0.3332184F, 0.38518918F,
+                0.9848415F, 0.8791825F, 0.9412492F};
         float[] actual = generateFloatArray(expected.length, () -> r.nextFloat());
 
         assertThat(actual, equalTo(expected));

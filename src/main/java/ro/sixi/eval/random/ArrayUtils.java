@@ -1,17 +1,9 @@
-package ro.sixi.eval.util;
+package ro.sixi.eval.random;
 
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-import java.util.function.IntFunction;
-import java.util.function.IntSupplier;
-import java.util.function.IntToDoubleFunction;
-import java.util.function.IntToLongFunction;
-import java.util.function.IntUnaryOperator;
-import java.util.function.LongSupplier;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 public class ArrayUtils {
 
@@ -31,6 +23,19 @@ public class ArrayUtils {
             }
         }
         return perm;
+    }
+
+    public static int[] getTree(int n, Random randomizer) {
+        // http://algs4.cs.princeton.edu/41graph/GraphGenerator.java.html
+        // https://en.wikipedia.org/wiki/Pr%C3%BCfer_sequence
+        int[] perm = getPermutation(n, randomizer);
+        int[] tree = new int[n];
+        tree[perm[0]] = -1;
+        for (int i = 1; i < n; i++) {
+            int value = randomizer.nextInt(i);
+            tree[perm[i]] = perm[value];
+        }
+        return tree;
     }
 
     public static int[] getPermutation(int n, Random randomizer) {
@@ -82,7 +87,7 @@ public class ArrayUtils {
         Objects.requireNonNull(supplier);
         float[] result = new float[size];
         for (int i = 0; i < result.length; i++) {
-            result[i] = supplier.get().floatValue();
+            result[i] = supplier.get();
         }
         return result;
     }

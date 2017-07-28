@@ -53,7 +53,7 @@ public final class ReversibleJdkRandom extends Random implements ReverseRandomGe
 
     @Override
     public void prevBytes(byte[] bytes) {
-        for (int i = 0, len = bytes.length; i < len;) {
+        for (int i = 0, len = bytes.length; i < len; ) {
             for (int rnd = prevInt(), n = Math.min(len - i, Integer.SIZE / Byte.SIZE); n-- > 0; rnd <<= Byte.SIZE) {
                 bytes[i++] = (byte) (rnd >>> 24);
             }
@@ -72,7 +72,7 @@ public final class ReversibleJdkRandom extends Random implements ReverseRandomGe
                 bytes[i] = (byte) (rnd);
             }
         }
-        for (int i = remainder, len = bytes.length; i < len;) {
+        for (int i = remainder, len = bytes.length; i < len; ) {
             for (int rnd = prevInt(), n = bytesInInt; n-- > 0; rnd <<= Byte.SIZE) {
                 bytes[i++] = (byte) (rnd >>> 24);
             }
@@ -122,6 +122,7 @@ public final class ReversibleJdkRandom extends Random implements ReverseRandomGe
 
     @Override
     public double prevGaussian() {
+        //FIXME
         throw new UnsupportedOperationException();
     }
 }

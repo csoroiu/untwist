@@ -1,8 +1,7 @@
 package ro.sixi.eval.random;
 
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.lessThan;
+import org.hamcrest.Matcher;
+import org.junit.Ignore;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,14 +11,10 @@ import java.util.function.IntSupplier;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
-import lombok.experimental.UtilityClass;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.lessThan;
 
-import org.hamcrest.Matcher;
-import org.junit.Ignore;
-
-import ro.sixi.eval.util.ArrayUtils;
-
-@UtilityClass
 @Ignore
 public class Utils {
 

@@ -9,7 +9,7 @@ public class MersenneTwisterPy3kRandomGeneratorTest extends MersenneTwisterTest 
 
     @Override
     protected RandomGenerator makeGenerator() {
-        return new MersenneTwisterPy3kCompat(1234567890123L);
+        return new MersenneTwisterPy3k(123456789013L);
     }
 
     @Override
