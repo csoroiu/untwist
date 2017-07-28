@@ -54,7 +54,9 @@ public final class ReversibleJdkRandom extends Random implements ReverseRandomGe
     @Override
     public void prevBytes(byte[] bytes) {
         for (int i = 0, len = bytes.length; i < len; ) {
-            for (int rnd = prevInt(), n = Math.min(len - i, Integer.SIZE / Byte.SIZE); n-- > 0; rnd <<= Byte.SIZE) {
+            for (int rnd = prevInt(),
+                 n = Math.min(len - i, Integer.SIZE / Byte.SIZE);
+                 n-- > 0; rnd <<= Byte.SIZE) {
                 bytes[i++] = (byte) (rnd >>> 24);
             }
         }
@@ -68,12 +70,16 @@ public final class ReversibleJdkRandom extends Random implements ReverseRandomGe
         final int bytesInInt = Integer.SIZE / Byte.SIZE;
         final int remainder = bytes.length % bytesInInt;
         if (remainder > 0) {
-            for (int i = remainder - 1, rnd = prevInt(); i >= 0; i--, rnd >>= Byte.SIZE) {
+            for (int i = remainder - 1,
+                 rnd = prevInt();
+                 i >= 0; i--, rnd >>= Byte.SIZE) {
                 bytes[i] = (byte) (rnd);
             }
         }
         for (int i = remainder, len = bytes.length; i < len; ) {
-            for (int rnd = prevInt(), n = bytesInInt; n-- > 0; rnd <<= Byte.SIZE) {
+            for (int rnd = prevInt(),
+                 n = bytesInInt;
+                 n-- > 0; rnd <<= Byte.SIZE) {
                 bytes[i++] = (byte) (rnd >>> 24);
             }
         }

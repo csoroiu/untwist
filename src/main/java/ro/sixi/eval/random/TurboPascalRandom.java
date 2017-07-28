@@ -1,8 +1,6 @@
 package ro.sixi.eval.random;
 
 import org.apache.commons.math3.random.BitsStreamGenerator;
-import org.apache.commons.math3.random.RandomGenerator;
-import org.apache.commons.math3.util.FastMath;
 
 /*
  * http://stackoverflow.com/questions/3946869/how-reliable-is-the-random-function-in-delphi#3953956
@@ -14,7 +12,7 @@ import org.apache.commons.math3.util.FastMath;
  * http://latel.upf.edu/morgana/altres/pub/gpc/list2html/1997/mail0911.htm
  * http://answers.unity3d.com/questions/393825/systemrandom-with-seed-not-matching-net-or-mono.html
  */
-public class TurboPascalRandom implements RandomGenerator {
+public class TurboPascalRandom extends BitsStreamGenerator implements ReverseRandomGenerator {
     private final static long multiplier = 0x08088405L;
     private final static long invmultiplier = 0xD94FA8CDL;
     private final static long addend = 0x1L;
@@ -76,6 +74,18 @@ public class TurboPascalRandom implements RandomGenerator {
         setSeed(RandomUtils.convertToInt(high, low));
     }
 
+    @Override
+    protected int next(int bits) {
+        nextSeed();
+        return (int) (seed >>> 32 - bits);
+    }
+
+    protected int prev(int bits) {
+        int result = (int) (seed >>> 32 - bits);
+        prevSeed();
+        return result;
+    }
+
     private void prevSeed() {
         seed = ((seed - addend) * invmultiplier) & mask;
     }
@@ -87,29 +97,22 @@ public class TurboPascalRandom implements RandomGenerator {
     @Override
     public int nextInt(int n) {
         if (n > 0) {
-            nextSeed();
-            return (int) ((seed * n) >>> 32);
+            long nextInt = next(32) & 0xFFFFFFFFL;
+            return (int) ((nextInt * n) >>> 32);
         }
         throw new IllegalArgumentException("n must be strictly positive");
     }
 
     @Override
-    public int nextInt() {
-        nextSeed();
-        return (int) seed;
-    }
-
     public int prevInt() {
-        long result = (int) seed;
-        prevSeed();
-        return (int) result;
+        return prev(32);
     }
 
+    @Override
     public int prevInt(int n) {
         if (n > 0) {
-            long result = seed;
-            prevSeed();
-            return (int) ((result * n) >>> 32);
+            long prevInt = prev(32) & 0xFFFFFFFFL;
+            return (int) ((prevInt * n) >>> 32);
         }
         throw new IllegalArgumentException("n must be strictly positive");
     }
@@ -120,8 +123,13 @@ public class TurboPascalRandom implements RandomGenerator {
     }
 
     @Override
-    public boolean nextBoolean() {
-        return nextInt(2) == 0;
+    public long prevLong() {
+        return prevInt() | ((long) (prevInt()) << 32);
+    }
+
+    @Override
+    public boolean prevBoolean() {
+        return prev(1) != 0;
     }
 
     // RandSeed = -1498392781 precedes 0
@@ -129,12 +137,23 @@ public class TurboPascalRandom implements RandomGenerator {
     // https://github.com/rofl0r/KOL/blob/master/system/system.pas
     @Override
     public double nextDouble() {
-        nextSeed();
+        long nextInt = next(32) & 0xFFFFFFFFL;
         if (coprocEnabled) {
             // in turbo pascal the seed was 32 bit signed integer
-            return (int) seed / (double) (1L << 32) + 0.5;
+            return (int) nextInt / (double) (1L << 32) + 0.5;
         } else {
-            return seed / (double) (1L << 32);
+            return nextInt / (double) (1L << 32);
+        }
+    }
+
+    @Override
+    public double prevDouble() {
+        long prevInt = prev(32) & 0xFFFFFFFFL;
+        if (coprocEnabled) {
+            // in turbo pascal the seed was 32 bit signed integer
+            return (int) prevInt / (double) (1L << 32) + 0.5;
+        } else {
+            return prevInt / (double) (1L << 32);
         }
     }
 
@@ -144,49 +163,46 @@ public class TurboPascalRandom implements RandomGenerator {
         return (float) nextDouble();
     }
 
-    /**
-     * {@link MersenneTwisterPy3k#nextBytes(byte[])}
-     */
     @Override
-    public void nextBytes(byte[] bytes) {
-        int i = 0;
-        final int iEnd = bytes.length - 4;
-        while (i < iEnd) {
-            final int random = nextInt();
-            bytes[i] = (byte) (random & 0xff);
-            bytes[i + 1] = (byte) ((random >> 8) & 0xff);
-            bytes[i + 2] = (byte) ((random >> 16) & 0xff);
-            bytes[i + 3] = (byte) ((random >> 24) & 0xff);
-            i += 4;
-        }
-        int random = nextInt();
-        final int shift = 32 - (bytes.length - i) * 8;
-        random >>>= shift;
-        while (i < bytes.length) {
-            bytes[i++] = (byte) (random & 0xff);
-            random >>= 8;
+    @Deprecated
+    public float prevFloat() {
+        return (float) prevDouble();
+    }
+
+    @Override
+    public void prevBytes(byte[] bytes) {
+        for (int i = 0, len = bytes.length; i < len; ) {
+            for (int rnd = prevInt(),
+                 n = Math.min(len - i, Integer.SIZE / Byte.SIZE);
+                 n-- > 0; rnd <<= Byte.SIZE) {
+                bytes[i++] = (byte) (rnd >>> 24);
+            }
         }
     }
 
-    /**
-     * {@link BitsStreamGenerator#nextGaussian}
-     */
     @Override
-    public double nextGaussian() {
-        final double random;
-        if (Double.isNaN(nextGaussian)) {
-            // generate a new pair of gaussian numbers
-            final double x = nextDouble();
-            final double y = nextDouble();
-            final double alpha = 2 * FastMath.PI * x;
-            final double r = FastMath.sqrt(-2 * FastMath.log(y));
-            random = r * FastMath.cos(alpha);
-            nextGaussian = r * FastMath.sin(alpha);
-        } else {
-            // use the second element of the pair already generated
-            random = nextGaussian;
-            nextGaussian = Double.NaN;
+    public void prevBytesMirror(byte[] bytes) {
+        final int bytesInInt = Integer.SIZE / Byte.SIZE;
+        final int remainder = bytes.length % bytesInInt;
+        if (remainder > 0) {
+            for (int i = remainder - 1,
+                 rnd = prevInt();
+                 i >= 0; i--, rnd >>= Byte.SIZE) {
+                bytes[i] = (byte) (rnd);
+            }
         }
-        return random;
+        for (int i = remainder, len = bytes.length; i < len; ) {
+            for (int rnd = prevInt(),
+                 n = bytesInInt;
+                 n-- > 0; rnd <<= Byte.SIZE) {
+                bytes[i++] = (byte) (rnd >>> 24);
+            }
+        }
+    }
+
+    @Override
+    public double prevGaussian() {
+        //FIXME
+        throw new UnsupportedOperationException();
     }
 }

@@ -89,7 +89,7 @@ public class JDKRandomPy3kCompatTest {
 
     @Test
     public void testNextInt_IntOverflow() {
-        r.setSeed(215660466117472l);
+        r.setSeed(215660466117472L);
         int expected = 4224;
         int actual = r.nextInt(100000);
         assertThat(actual, equalTo(expected));
@@ -97,7 +97,7 @@ public class JDKRandomPy3kCompatTest {
 
     @Test
     public void testNextLong() {
-        long expected = -4962768465676381896l;
+        long expected = -4962768465676381896L;
         long actual = r.nextLong();
         assertThat(actual, equalTo(expected));
     }

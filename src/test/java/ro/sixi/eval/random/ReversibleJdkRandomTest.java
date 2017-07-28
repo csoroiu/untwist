@@ -47,7 +47,7 @@ public class ReversibleJdkRandomTest {
 
     @Test
     public void testPrevInt_overflow() {
-        r.setSeed(215660466117472l);
+        r.setSeed(215660466117472L);
         int expected = r.nextInt(100000);
         int actual = r.prevInt(100000);
         int actualReverse = r.prevInt(100000);
