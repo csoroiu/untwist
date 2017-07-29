@@ -10,7 +10,8 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
-import java.math.BigInteger;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.Arrays;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -171,12 +172,10 @@ public class MersenneTwisterPy3KTest {
 
         // The generated BigInteger's are compatible with the python numbers
         // returned by getrandbits function
-        BigInteger[] bigInts = generateArray(BigInteger[]::new, expected.length, () -> {
+        long[] actual = generateLongArray(expected.length, () -> {
             r.nextBytes(b);
-            return toBigInteger(b);
+            return bytesToLong(b);
         });
-
-        long[] actual = generateLongArray(expected.length, (i) -> bigInts[i].longValue());
 
         assertThat(actual, equalTo(expected));
     }
@@ -272,18 +271,8 @@ public class MersenneTwisterPy3KTest {
         createStream(100000, () -> r.nextDouble()).forEach((t) -> assertThat(t, betweenMatcher));
     }
 
-    private static void reverseArray(byte[] b) {
-        int j = b.length - 1;
-        for (int i = 0; i < b.length / 2; i++) {
-            final byte tmp = b[i];
-            b[i] = b[j];
-            b[j--] = tmp;
-        }
-    }
-
-    private static BigInteger toBigInteger(byte[] littleEndian) {
-        byte[] bigEndian = Arrays.copyOf(littleEndian, littleEndian.length);
-        reverseArray(bigEndian);
-        return new BigInteger(1, bigEndian);
+    private static long bytesToLong(byte[] littleEndian) {
+        ByteBuffer buffer = ByteBuffer.wrap(littleEndian).order(ByteOrder.LITTLE_ENDIAN);
+        return buffer.getLong();
     }
 }

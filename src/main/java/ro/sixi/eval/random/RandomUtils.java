@@ -2,7 +2,11 @@ package ro.sixi.eval.random;
 
 import org.apache.commons.math3.random.RandomGeneratorFactory;
 
-class RandomUtils {
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+import java.security.SecureRandom;
+
+public class RandomUtils {
     static long convertToLong(int... seed) {
         return RandomGeneratorFactory.convertToLong(seed);
     }
@@ -23,5 +27,20 @@ class RandomUtils {
         }
 
         return combined;
+    }
+
+    public static long generateSecureRandomLongSeed() {
+        byte[] bytes = SecureRandom.getSeed(Long.BYTES);
+        ByteBuffer buffer = ByteBuffer.wrap(bytes);
+        return buffer.getLong();
+    }
+
+    public static int[] generateSecureRandomIntArraySeed(int size) {
+        byte[] bytes = SecureRandom.getSeed(Integer.BYTES * size);
+        ByteBuffer buffer = ByteBuffer.wrap(bytes);
+        IntBuffer intbuffer = buffer.asIntBuffer();
+        int[] result = new int[size];
+        intbuffer.get(result);
+        return result;
     }
 }

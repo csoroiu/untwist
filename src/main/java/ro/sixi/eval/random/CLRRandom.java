@@ -5,6 +5,8 @@ import org.apache.commons.math3.random.RandomGenerator;
 import org.apache.commons.math3.util.FastMath;
 
 public class CLRRandom implements RandomGenerator {
+    private static final long serialVersionUID = 1L;
+
     // http://referencesource.microsoft.com/#mscorlib/system/random.cs
     // https://github.com/dotnet/coreclr/blob/master/src/mscorlib/shared/System/Random.cs
     // tests

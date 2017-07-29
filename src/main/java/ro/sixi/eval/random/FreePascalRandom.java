@@ -1,14 +1,12 @@
 package ro.sixi.eval.random;
 
-import org.apache.commons.math3.random.MersenneTwister;
-
 /**
  * FreePascal uses Mersenne Twister, but it must be initialized with a 32bit seed. Initialization with a 32 bit seed is
  * identical to freepascal one.
  * <p>
  * Also, another difference is the nextDouble function which is using only 32 random bits to get a number.
  */
-public class FreePascalRandom extends MersenneTwister {
+public class FreePascalRandom extends ReversibleMersenneTwister {
     // freepascal https://github.com/graemeg/freepascal/blob/master/rtl/inc/system.inc
     // http://svn.freepascal.org/svn/fpc/trunk/rtl/inc/system.inc
     // https://github.com/graemeg/freepascal/blob/master/rtl/inc/systemh.inc
@@ -62,9 +60,20 @@ public class FreePascalRandom extends MersenneTwister {
     }
 
     @Override
+    public double prevDouble() {
+        return ((long) prev(32) & 0xffffffffL) * 0x1.0p-32d;
+    }
+
+    @Override
     @Deprecated
     public float nextFloat() {
         return (float) nextDouble();
+    }
+
+    @Override
+    @Deprecated
+    public float prevFloat() {
+        return (float) prevDouble();
     }
 
     @Override
@@ -78,9 +87,25 @@ public class FreePascalRandom extends MersenneTwister {
     }
 
     @Override
+    public int prevInt(int n) throws IllegalArgumentException {
+        if (n < 0) {
+            n++;
+        }
+        long urand = ((long) prev(32)) & 0xffffffffL;
+        return (int) ((urand * n) >>> 32);
+    }
+
+    @Override
     public long nextLong() {
         final long low = ((long) next(32)) & 0xffffffffL;
         final long high = ((long) next(32)) << 32;
+        return high | low;
+    }
+
+    @Override
+    public long prevLong() {
+        final long high = ((long) prev(32)) << 32;
+        final long low = ((long) prev(32)) & 0xffffffffL;
         return high | low;
     }
 
@@ -89,6 +114,18 @@ public class FreePascalRandom extends MersenneTwister {
     public long nextLong(long n) throws IllegalArgumentException {
         long low = ((long) next(32)) & 0xffffffffL;
         long high = ((long) next(32)) & 0x7fffffffL; // drop highest one bit
+        long value = low | (high << 32);
+        if (n != 0) {
+            return value % n;
+        } else {
+            return 0;
+        }
+    }
+
+    @Override
+    public long prevLong(long n) throws IllegalArgumentException {
+        long high = ((long) prev(32)) & 0x7fffffffL; // drop highest one bit
+        long low = ((long) prev(32)) & 0xffffffffL;
         long value = low | (high << 32);
         if (n != 0) {
             return value % n;

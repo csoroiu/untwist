@@ -5,7 +5,7 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
 public final class ReversibleJdkRandom extends Random implements ReverseRandomGenerator {
-    private static final long serialVersionUID = 5566331316770172904L;
+    private static final long serialVersionUID = 1L;
 
     private final static long multiplier = 0x5DEECE66DL;
     private final static long invmultiplier = 0xDFE05BCB1365L;
@@ -15,13 +15,13 @@ public final class ReversibleJdkRandom extends Random implements ReverseRandomGe
 
     private AtomicLong seedRef;
 
-    public ReversibleJdkRandom(long seed) {
-        super(seed);
+    public ReversibleJdkRandom() {
+        super();
         setReferenceToSeed();
     }
 
-    public ReversibleJdkRandom() {
-        super();
+    public ReversibleJdkRandom(long seed) {
+        super(seed);
         setReferenceToSeed();
     }
 
@@ -32,6 +32,16 @@ public final class ReversibleJdkRandom extends Random implements ReverseRandomGe
             seedRef = (AtomicLong) f.get(this);
         } catch (Exception e) {
         }
+    }
+
+    @Override
+    public void setSeed(int seed) {
+        setSeed(seed);
+    }
+
+    @Override
+    public void setSeed(int[] seed) {
+        setSeed(RandomUtils.convertToLong(seed));
     }
 
     public long getSeed() {

@@ -1,9 +1,8 @@
 package ro.sixi.eval.random;
 
 import org.apache.commons.math3.exception.OutOfRangeException;
-import org.apache.commons.math3.random.MersenneTwister;
 
-public class MersenneTwisterPy3k extends MersenneTwister {
+public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
 
     private static final long serialVersionUID = 1L;
 
@@ -54,9 +53,20 @@ public class MersenneTwisterPy3k extends MersenneTwister {
     }
 
     @Override
+    public double prevDouble() {
+        return (prev(26) + ((long) (prev(27)) << 26)) * 0x1.0p-53;
+    }
+
+    @Override
     @Deprecated
     public float nextFloat() {
         return (float) nextDouble();
+    }
+
+    @Override
+    @Deprecated
+    public float prevFloat() {
+        return (float) prevDouble();
     }
 
     @Override
@@ -76,6 +86,13 @@ public class MersenneTwisterPy3k extends MersenneTwister {
     public long nextLong() {
         final long low = ((long) next(32)) & 0xffffffffL;
         final long high = ((long) next(32)) << 32;
+        return high | low;
+    }
+
+    @Override
+    public long prevLong() {
+        final long high = ((long) prev(32)) << 32;
+        final long low = ((long) prev(32)) & 0xffffffffL;
         return high | low;
     }
 

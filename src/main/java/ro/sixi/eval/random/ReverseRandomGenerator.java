@@ -1,6 +1,8 @@
 package ro.sixi.eval.random;
 
-public interface ReverseRandomGenerator {
+import org.apache.commons.math3.random.RandomGenerator;
+
+public interface ReverseRandomGenerator extends RandomGenerator {
     void prevBytes(byte[] bytes);
 
     void prevBytesMirror(byte[] bytes);

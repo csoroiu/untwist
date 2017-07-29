@@ -1,7 +1,5 @@
 package ro.sixi.eval.random;
 
-import org.apache.commons.math3.random.BitsStreamGenerator;
-
 /*
  * http://stackoverflow.com/questions/3946869/how-reliable-is-the-random-function-in-delphi#3953956
  * http://labs.icb.ufmg.br/lbcd/prodabi5/homepages/hugo/Hugo/TPB/RTL/SYS/RAND.ASM
@@ -12,7 +10,9 @@ import org.apache.commons.math3.random.BitsStreamGenerator;
  * http://latel.upf.edu/morgana/altres/pub/gpc/list2html/1997/mail0911.htm
  * http://answers.unity3d.com/questions/393825/systemrandom-with-seed-not-matching-net-or-mono.html
  */
-public class TurboPascalRandom extends BitsStreamGenerator implements ReverseRandomGenerator {
+public class TurboPascalRandom extends ReverseBitsStreamGenerator {
+    private static final long serialVersionUID = 1L;
+
     private final static long multiplier = 0x08088405L;
     private final static long invmultiplier = 0xD94FA8CDL;
     private final static long addend = 0x1L;
@@ -27,7 +27,6 @@ public class TurboPascalRandom extends BitsStreamGenerator implements ReverseRan
     private final boolean coprocEnabled;
 
     private long seed;
-    private double nextGaussian = Double.NaN;
 
     public TurboPascalRandom(int seed) {
         this(seed, true);
@@ -104,11 +103,6 @@ public class TurboPascalRandom extends BitsStreamGenerator implements ReverseRan
     }
 
     @Override
-    public int prevInt() {
-        return prev(32);
-    }
-
-    @Override
     public int prevInt(int n) {
         if (n > 0) {
             long prevInt = prev(32) & 0xFFFFFFFFL;
@@ -125,11 +119,6 @@ public class TurboPascalRandom extends BitsStreamGenerator implements ReverseRan
     @Override
     public long prevLong() {
         return prevInt() | ((long) (prevInt()) << 32);
-    }
-
-    @Override
-    public boolean prevBoolean() {
-        return prev(1) != 0;
     }
 
     // RandSeed = -1498392781 precedes 0
@@ -167,42 +156,5 @@ public class TurboPascalRandom extends BitsStreamGenerator implements ReverseRan
     @Deprecated
     public float prevFloat() {
         return (float) prevDouble();
-    }
-
-    @Override
-    public void prevBytes(byte[] bytes) {
-        for (int i = 0, len = bytes.length; i < len; ) {
-            for (int rnd = prevInt(),
-                 n = Math.min(len - i, Integer.SIZE / Byte.SIZE);
-                 n-- > 0; rnd <<= Byte.SIZE) {
-                bytes[i++] = (byte) (rnd >>> 24);
-            }
-        }
-    }
-
-    @Override
-    public void prevBytesMirror(byte[] bytes) {
-        final int bytesInInt = Integer.SIZE / Byte.SIZE;
-        final int remainder = bytes.length % bytesInInt;
-        if (remainder > 0) {
-            for (int i = remainder - 1,
-                 rnd = prevInt();
-                 i >= 0; i--, rnd >>= Byte.SIZE) {
-                bytes[i] = (byte) (rnd);
-            }
-        }
-        for (int i = remainder, len = bytes.length; i < len; ) {
-            for (int rnd = prevInt(),
-                 n = bytesInInt;
-                 n-- > 0; rnd <<= Byte.SIZE) {
-                bytes[i++] = (byte) (rnd >>> 24);
-            }
-        }
-    }
-
-    @Override
-    public double prevGaussian() {
-        //FIXME
-        throw new UnsupportedOperationException();
     }
 }
