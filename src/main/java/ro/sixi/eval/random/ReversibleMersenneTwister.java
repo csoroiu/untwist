@@ -58,8 +58,6 @@ import java.util.Arrays;
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.</strong></td></tr>
  * </table>
- *
- * @since 2.0
  */
 public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implements Serializable {
 

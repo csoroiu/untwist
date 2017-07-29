@@ -309,40 +309,12 @@ public class TurboPascalRandomTest {
     @Test
     public void testPrevBytes_not32bitmultiple() {
         byte[] nextBytes = new byte[]{27, 86, -14, 111, -120, -102, -7};
-        byte[] prevBytes = new byte[]{-84, -7, -102, -120, 111, -14, 86};
-        byte[] expected = new byte[nextBytes.length];
-        byte[] actual = new byte[prevBytes.length];
-
-        r.nextBytes(expected);
-        r.prevBytes(actual);
-
-        assertThat(expected, equalTo(nextBytes));
-        assertThat(actual, equalTo(prevBytes));
-    }
-
-    @Test
-    public void testPrevBytesMirror() {
-        byte[] nextBytes = new byte[]{27, 86, -14, 111, -120, -102, -7, -84};
-        byte[] prevBytes = new byte[]{-84, -7, -102, -120, 111, -14, 86, 27};
-        byte[] expected = new byte[nextBytes.length];
-        byte[] actual = new byte[prevBytes.length];
-
-        r.nextBytes(expected);
-        r.prevBytesMirror(actual);
-
-        assertThat(expected, equalTo(nextBytes));
-        assertThat(actual, equalTo(prevBytes));
-    }
-
-    @Test
-    public void testPrevBytesMirror_not32bitmultiple() {
-        byte[] nextBytes = new byte[]{27, 86, -14, 111, -120, -102, -7};
         byte[] prevBytes = new byte[]{-7, -102, -120, 111, -14, 86, 27};
         byte[] expected = new byte[nextBytes.length];
         byte[] actual = new byte[prevBytes.length];
 
         r.nextBytes(expected);
-        r.prevBytesMirror(actual);
+        r.prevBytes(actual);
 
         assertThat(expected, equalTo(nextBytes));
         assertThat(actual, equalTo(prevBytes));

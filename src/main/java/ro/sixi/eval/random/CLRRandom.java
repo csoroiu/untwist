@@ -2,7 +2,6 @@ package ro.sixi.eval.random;
 
 import org.apache.commons.math3.random.BitsStreamGenerator;
 import org.apache.commons.math3.random.RandomGenerator;
-import org.apache.commons.math3.util.FastMath;
 
 public class CLRRandom implements RandomGenerator {
     private static final long serialVersionUID = 1L;
@@ -245,10 +244,10 @@ public class CLRRandom implements RandomGenerator {
             // generate a new pair of gaussian numbers
             final double x = nextDouble();
             final double y = nextDouble();
-            final double alpha = 2 * FastMath.PI * x;
-            final double r = FastMath.sqrt(-2 * FastMath.log(y));
-            random = r * FastMath.cos(alpha);
-            nextGaussian = r * FastMath.sin(alpha);
+            final double alpha = 2 * Math.PI * x;
+            final double r = Math.sqrt(-2 * Math.log(y));
+            random = r * Math.cos(alpha);
+            nextGaussian = r * Math.sin(alpha);
         } else {
             // use the second element of the pair already generated
             random = nextGaussian;

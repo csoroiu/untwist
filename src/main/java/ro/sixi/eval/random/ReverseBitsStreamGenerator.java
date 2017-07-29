@@ -10,17 +10,6 @@ public abstract class ReverseBitsStreamGenerator extends BitsStreamGenerator imp
 
     @Override
     public void prevBytes(byte[] bytes) {
-        for (int i = 0, len = bytes.length; i < len; ) {
-            for (int rnd = prevInt(),
-                 n = Math.min(len - i, Integer.SIZE / Byte.SIZE);
-                 n-- > 0; rnd <<= Byte.SIZE) {
-                bytes[i++] = (byte) (rnd >>> 24);
-            }
-        }
-    }
-
-    @Override
-    public void prevBytesMirror(byte[] bytes) {
         final int bytesInInt = Integer.SIZE / Byte.SIZE;
         final int remainder = bytes.length % bytesInInt;
         if (remainder > 0) {
@@ -46,8 +35,20 @@ public abstract class ReverseBitsStreamGenerator extends BitsStreamGenerator imp
 
     @Override
     public int prevInt(int bound) {
-        //FIXME
-        throw new UnsupportedOperationException();
+        if (bound <= 0) {
+            throw new IllegalArgumentException("bound must be positive");
+        }
+
+        if ((bound & -bound) == bound) {
+            return (int) (((long) bound * prev(31)) >> 31);
+        }
+
+        int bits, val;
+        do {
+            bits = prev(31);
+            val = bits % bound;
+        } while (bits - val + (bound - 1) < 0);
+        return val;
     }
 
     @Override
@@ -57,9 +58,18 @@ public abstract class ReverseBitsStreamGenerator extends BitsStreamGenerator imp
         return low | high;
     }
 
-    public long prevLong(long n) throws IllegalArgumentException {
-        //FIXME
-        throw new UnsupportedOperationException();
+    public long prevLong(long bound) throws IllegalArgumentException {
+        if (bound <= 0) {
+            throw new IllegalArgumentException("bound must be positive");
+        }
+
+        long bits, val;
+        do {
+            bits = ((long) prev(32)) & 0xffffffffL;
+            bits |= ((long) prev(31)) << 32;
+            val = bits % bound;
+        } while ((bits - val) + (bound - 1) < 0);
+        return val;
     }
 
     @Override

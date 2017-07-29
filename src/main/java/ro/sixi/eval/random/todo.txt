@@ -1,3 +1,6 @@
-1. reversible MersenneTwisterPy3k
+#1. reversible MersenneTwisterPy3k
   prevInt(int), prevLong(long), prevBytes(byte[])
-2. generic reversible random generator tests
+
+#2. generic reversible random generator tests
+
+#3. fix serialization for all generators

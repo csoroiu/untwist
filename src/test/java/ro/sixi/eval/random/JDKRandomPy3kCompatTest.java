@@ -131,8 +131,7 @@ public class JDKRandomPy3kCompatTest {
 
     @Test
     public void testNextBoolean() {
-        boolean expected = true;
         boolean actual = r.nextBoolean();
-        assertThat(actual, equalTo(expected));
+        assertThat(actual, equalTo(true));
     }
 }

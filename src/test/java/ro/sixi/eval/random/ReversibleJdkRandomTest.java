@@ -17,7 +17,7 @@ public class ReversibleJdkRandomTest {
 
     @Before
     public void setup() {
-        r = new ReversibleJdkRandom(0);
+        r = new ReversibleJdkRandom(1000);
     }
 
     @Test
@@ -25,7 +25,7 @@ public class ReversibleJdkRandomTest {
         int expected = r.nextInt(100);
         int actual = r.prevInt(100);
 
-        assertThat(expected, equalTo(60));
+        assertThat(expected, equalTo(87));
         assertThat(actual, equalTo(expected));
     }
 
@@ -41,7 +41,7 @@ public class ReversibleJdkRandomTest {
         int expected = r.nextInt();
         int actual = r.prevInt();
 
-        assertThat(expected, equalTo(-1155484576));
+        assertThat(expected, equalTo(-1244746321));
         assertThat(actual, equalTo(expected));
     }
 
@@ -60,9 +60,18 @@ public class ReversibleJdkRandomTest {
     }
 
     @Test
+    public void testPrevLong_NoBound() {
+        long expected = r.nextLong();
+        long actual = r.prevLong();
+
+        assertThat(expected, equalTo(-5346144739450824145L));
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Test
     public void testPrevBytes() {
-        byte[] nextBytes = new byte[]{96, -76, 32, -69, 56, 81, -39, -44};
-        byte[] prevBytes = new byte[]{-44, -39, 81, 56, -69, 32, -76, 96};
+        byte[] nextBytes = new byte[]{-81, -83, -50, -75, 47, -38, 53, 63};
+        byte[] prevBytes = new byte[]{63, 53, -38, 47, -75, -50, -83, -81};
         byte[] expected = new byte[nextBytes.length];
         byte[] actual = new byte[prevBytes.length];
 
@@ -75,41 +84,13 @@ public class ReversibleJdkRandomTest {
 
     @Test
     public void testPrevBytes_not32bitmultiple() {
-        byte[] nextBytes = new byte[]{96, -76, 32, -69, 56, 81, -39};
-        byte[] prevBytes = new byte[]{-44, -39, 81, 56, -69, 32, -76};
+        byte[] nextBytes = new byte[]{-81, -83, -50, -75, 47, -38, 53};
+        byte[] prevBytes = new byte[]{53, -38, 47, -75, -50, -83, -81};
         byte[] expected = new byte[nextBytes.length];
         byte[] actual = new byte[prevBytes.length];
 
         r.nextBytes(expected);
         r.prevBytes(actual);
-
-        assertThat(expected, equalTo(nextBytes));
-        assertThat(actual, equalTo(prevBytes));
-    }
-
-    @Test
-    public void testPrevBytesMirror() {
-        byte[] nextBytes = new byte[]{96, -76, 32, -69, 56, 81, -39, -44};
-        byte[] prevBytes = new byte[]{-44, -39, 81, 56, -69, 32, -76, 96};
-        byte[] expected = new byte[nextBytes.length];
-        byte[] actual = new byte[prevBytes.length];
-
-        r.nextBytes(expected);
-        r.prevBytesMirror(actual);
-
-        assertThat(expected, equalTo(nextBytes));
-        assertThat(actual, equalTo(prevBytes));
-    }
-
-    @Test
-    public void testPrevBytesMirror_not32bitmultiple() {
-        byte[] nextBytes = new byte[]{96, -76, 32, -69, 56, 81, -39};
-        byte[] prevBytes = new byte[]{-39, 81, 56, -69, 32, -76, 96};
-        byte[] expected = new byte[nextBytes.length];
-        byte[] actual = new byte[prevBytes.length];
-
-        r.nextBytes(expected);
-        r.prevBytesMirror(actual);
 
         assertThat(expected, equalTo(nextBytes));
         assertThat(actual, equalTo(prevBytes));

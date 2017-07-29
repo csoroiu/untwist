@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
-public final class ReversibleJdkRandom extends Random implements ReverseRandomGenerator {
+public class ReversibleJdkRandom extends Random implements ReverseRandomGenerator {
     private static final long serialVersionUID = 1L;
 
     private final static long multiplier = 0x5DEECE66DL;
@@ -61,22 +61,11 @@ public final class ReversibleJdkRandom extends Random implements ReverseRandomGe
         return (int) (nextSeed >>> (48 - bits));
     }
 
-    @Override
-    public void prevBytes(byte[] bytes) {
-        for (int i = 0, len = bytes.length; i < len; ) {
-            for (int rnd = prevInt(),
-                 n = Math.min(len - i, Integer.SIZE / Byte.SIZE);
-                 n-- > 0; rnd <<= Byte.SIZE) {
-                bytes[i++] = (byte) (rnd >>> 24);
-            }
-        }
-    }
-
     /**
      * Works as a complete reverse of nextBytes. It will drop the first bits of the prevInt, and not the last.
      */
     @Override
-    public void prevBytesMirror(byte[] bytes) {
+    public void prevBytes(byte[] bytes) {
         final int bytesInInt = Integer.SIZE / Byte.SIZE;
         final int remainder = bytes.length % bytesInInt;
         if (remainder > 0) {
@@ -102,11 +91,13 @@ public final class ReversibleJdkRandom extends Random implements ReverseRandomGe
 
     @Override
     public int prevInt(int bound) {
-        if (bound <= 0)
+        if (bound <= 0) {
             throw new IllegalArgumentException("bound must be positive");
+        }
 
-        if ((bound & -bound) == bound) // limit is power of 2
-            return (int) (((long) bound * prev(31)) >> 31); // output limit*(seed >> 17) >> 31
+        if ((bound & -bound) == bound) {
+            return (int) (((long) bound * prev(31)) >> 31);
+        }
 
         int j, k;
         do {// limit is not power of 2

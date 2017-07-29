@@ -5,8 +5,6 @@ import org.apache.commons.math3.random.RandomGenerator;
 public interface ReverseRandomGenerator extends RandomGenerator {
     void prevBytes(byte[] bytes);
 
-    void prevBytesMirror(byte[] bytes);
-
     int prevInt();
 
     int prevInt(int bound);
