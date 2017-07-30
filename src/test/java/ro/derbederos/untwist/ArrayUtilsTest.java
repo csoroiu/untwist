@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import java.util.Random;
 
+import static ro.derbederos.untwist.ArrayUtils.getTree;
+
 public class ArrayUtilsTest {
 
     @Test
@@ -11,7 +13,7 @@ public class ArrayUtilsTest {
         Random r = new Random(123456789013L);
         int maxDepth = 0;
         for (int i = 0; i < 1000; i++) {
-            int[] tree = ArrayUtils.getTree(10000, r);
+            int[] tree = getTree(10000, r);
             maxDepth = Math.max(maxDepth, assertTree(tree));
         }
         System.out.println("maxDepth = " + maxDepth);

@@ -14,12 +14,13 @@ import java.util.stream.IntStream;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.lessThan;
+import static ro.derbederos.untwist.ArrayUtils.generateArray;
 
 @Ignore
-public class Utils {
+class Utils {
 
     static List<Byte> toByteList(byte[] b) {
-        return Arrays.asList(ArrayUtils.generateArray(Byte[]::new, b.length, (i) -> (b[i])));
+        return Arrays.asList(generateArray(Byte[]::new, b.length, (i) -> (b[i])));
     }
 
     static IntPredicate betweenPredicate(int minValue, int maxValue) {

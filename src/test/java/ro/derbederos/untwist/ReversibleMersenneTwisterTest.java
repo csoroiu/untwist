@@ -7,6 +7,8 @@ import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static ro.derbederos.untwist.ArrayUtils.generateIntArray;
+import static ro.derbederos.untwist.Utils.reverseArray;
 
 public class ReversibleMersenneTwisterTest extends MersenneTwisterTest {
 
@@ -22,24 +24,24 @@ public class ReversibleMersenneTwisterTest extends MersenneTwisterTest {
     @Test
     public void testNextPrev() {
         ReversibleMersenneTwister mt = new ReversibleMersenneTwister(new int[]{291, 564, 837, 1110});
-        int[] expected = Utils.reverseArray(ArrayUtils.generateIntArray(10000, () -> mt.next(32)));
-        int[] actual = ArrayUtils.generateIntArray(10000, () -> mt.prev(32));
+        int[] expected = reverseArray(generateIntArray(10000, () -> mt.next(32)));
+        int[] actual = generateIntArray(10000, () -> mt.prev(32));
 
         assertThat(actual, equalTo(expected));
 
-        expected = ArrayUtils.generateIntArray(10000, () -> mt.next(32));
-        actual = ArrayUtils.generateIntArray(10000, () -> mt.prev(32));
+        expected = generateIntArray(10000, () -> mt.next(32));
+        actual = generateIntArray(10000, () -> mt.prev(32));
 
-        MatcherAssert.assertThat(actual, equalTo(Utils.reverseArray(expected)));
+        MatcherAssert.assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testPrevNextBits() {
         ReversibleMersenneTwister mt = new ReversibleMersenneTwister(new int[]{291, 564, 837, 1110});
-        int[] expected = ArrayUtils.generateIntArray(626, () -> mt.prev(32));
-        int[] actual = ArrayUtils.generateIntArray(626, () -> mt.next(32));
+        int[] expected = generateIntArray(626, () -> mt.prev(32));
+        int[] actual = generateIntArray(626, () -> mt.next(32));
 
-        MatcherAssert.assertThat(actual, equalTo(Utils.reverseArray(expected)));
+        MatcherAssert.assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test

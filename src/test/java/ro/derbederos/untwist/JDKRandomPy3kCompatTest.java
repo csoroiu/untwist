@@ -8,6 +8,7 @@ import org.junit.rules.ExpectedException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static ro.derbederos.untwist.ArrayUtils.generateDoubleArray;
+import static ro.derbederos.untwist.ArrayUtils.generateFloatArray;
 import static ro.derbederos.untwist.ArrayUtils.generateIntArray;
 
 public class JDKRandomPy3kCompatTest {
@@ -35,14 +36,14 @@ public class JDKRandomPy3kCompatTest {
 
         JDKRandomPy3kCompat rInt = new JDKRandomPy3kCompat();
         rInt.setSeed(seedInt);
-        int[] actualInt = ArrayUtils.generateIntArray(expected.length, () -> rInt.nextInt(1000));
+        int[] actualInt = generateIntArray(expected.length, () -> rInt.nextInt(1000));
 
         JDKRandomPy3kCompat rLong = new JDKRandomPy3kCompat(seedLong);
-        int[] actualLong = ArrayUtils.generateIntArray(expected.length, () -> rLong.nextInt(1000));
+        int[] actualLong = generateIntArray(expected.length, () -> rLong.nextInt(1000));
 
         JDKRandomPy3kCompat rArray = new JDKRandomPy3kCompat();
         rArray.setSeed(seedArray);
-        int[] actualArray = ArrayUtils.generateIntArray(expected.length, () -> rArray.nextInt(1000));
+        int[] actualArray = generateIntArray(expected.length, () -> rArray.nextInt(1000));
 
         assertThat(actualInt, equalTo(expected));
         assertThat(actualLong, equalTo(expected));
@@ -106,7 +107,7 @@ public class JDKRandomPy3kCompatTest {
         double[] expected = {0.730967787376657, 0.24053641567148587, 0.6374174253501083, 0.5504370051176339,
                 0.5975452777972018, 0.3332183994766498, 0.3851891847407185, 0.984841540199809, 0.8791825178724801,
                 0.9412491794821144};
-        double[] actual = ArrayUtils.generateDoubleArray(expected.length, () -> r.nextDouble());
+        double[] actual = generateDoubleArray(expected.length, () -> r.nextDouble());
 
         assertThat(actual, equalTo(expected));
     }
@@ -116,7 +117,7 @@ public class JDKRandomPy3kCompatTest {
     public void testNextFloatStream() {
         float[] expected = {0.73096776F, 0.24053642F, 0.63741744F, 0.55043703F, 0.59754527F, 0.3332184F, 0.38518918F,
                 0.9848415F, 0.8791825F, 0.9412492F};
-        float[] actual = ArrayUtils.generateFloatArray(expected.length, () -> r.nextFloat());
+        float[] actual = generateFloatArray(expected.length, () -> r.nextFloat());
 
         assertThat(actual, equalTo(expected));
     }

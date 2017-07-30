@@ -16,6 +16,8 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.notNullValue;
+import static ro.derbederos.untwist.ArrayUtils.*;
+import static ro.derbederos.untwist.Utils.*;
 import static ro.derbederos.untwist.Utils.createStream;
 
 public class CLRRandomTest {
@@ -53,21 +55,21 @@ public class CLRRandomTest {
     public void testRandomNext1_PosTest1() {
         CLRRandom r = new CLRRandom(-55);
         int value = r.nextInt();
-        MatcherAssert.assertThat(value, Utils.between(0, Integer.MAX_VALUE));
+        MatcherAssert.assertThat(value, between(0, Integer.MAX_VALUE));
     }
 
     @Test
     public void testRandomNext1_PosTest2() {
         CLRRandom r = new CLRRandom(Integer.MAX_VALUE);
         int value = r.nextInt();
-        MatcherAssert.assertThat(value, Utils.between(0, Integer.MAX_VALUE));
+        MatcherAssert.assertThat(value, between(0, Integer.MAX_VALUE));
     }
 
     @Test
     public void testRandomNext1_PosTest3() {
         CLRRandom r = new CLRRandom(0);
         int value = r.nextInt();
-        MatcherAssert.assertThat(value, Utils.between(0, Integer.MAX_VALUE));
+        MatcherAssert.assertThat(value, between(0, Integer.MAX_VALUE));
     }
 
     @Test
@@ -78,7 +80,7 @@ public class CLRRandomTest {
         }
         CLRRandom r = new CLRRandom(randValue);
         int value = r.nextInt();
-        MatcherAssert.assertThat(value, Utils.between(0, Integer.MAX_VALUE));
+        MatcherAssert.assertThat(value, between(0, Integer.MAX_VALUE));
     }
 
     @Test
@@ -86,7 +88,7 @@ public class CLRRandomTest {
         int maxValue = newInt32WithCondition(-55, (v) -> v <= 0 || v == Integer.MAX_VALUE);
         CLRRandom random = new CLRRandom(-55);
         int value = random.nextInt(maxValue);
-        MatcherAssert.assertThat(value, Utils.between(0, maxValue));
+        MatcherAssert.assertThat(value, between(0, maxValue));
     }
 
     @Test
@@ -94,7 +96,7 @@ public class CLRRandomTest {
         int maxValue = newInt32WithCondition(-55, (v) -> v <= 0 || v == Integer.MAX_VALUE);
         CLRRandom random = new CLRRandom(Integer.MAX_VALUE);
         int value = random.nextInt(maxValue);
-        MatcherAssert.assertThat(value, Utils.between(0, maxValue));
+        MatcherAssert.assertThat(value, between(0, maxValue));
     }
 
     @Test
@@ -102,7 +104,7 @@ public class CLRRandomTest {
         int maxValue = newInt32WithCondition(-55, (v) -> v <= 0 || v == Integer.MAX_VALUE);
         CLRRandom random = new CLRRandom(0);
         int value = random.nextInt(maxValue);
-        MatcherAssert.assertThat(value, Utils.between(0, maxValue));
+        MatcherAssert.assertThat(value, between(0, maxValue));
     }
 
     @Test
@@ -114,7 +116,7 @@ public class CLRRandomTest {
         int maxValue = newInt32WithCondition(-55, (v) -> v <= 0 || v == Integer.MAX_VALUE);
         CLRRandom random = new CLRRandom(randValue);
         int value = random.nextInt(maxValue);
-        MatcherAssert.assertThat(value, Utils.between(0, maxValue));
+        MatcherAssert.assertThat(value, between(0, maxValue));
     }
 
     @Test
@@ -122,7 +124,7 @@ public class CLRRandomTest {
         int maxValue = newInt32WithCondition(-55, (v) -> v <= 0 || v == Integer.MAX_VALUE);
         CLRRandom random = new CLRRandom(maxValue);
         int value = random.nextInt(maxValue);
-        MatcherAssert.assertThat(value, Utils.between(0, maxValue));
+        MatcherAssert.assertThat(value, between(0, maxValue));
     }
 
     @Test
@@ -145,7 +147,7 @@ public class CLRRandomTest {
         int minValue = newInt32WithCondition(-55, (v) -> v >= maxValue);
         CLRRandom random = new CLRRandom();
         int value = random.nextInt(minValue, maxValue);
-        MatcherAssert.assertThat(value, Utils.between(minValue, maxValue));
+        MatcherAssert.assertThat(value, between(minValue, maxValue));
     }
 
     @Test
@@ -154,7 +156,7 @@ public class CLRRandomTest {
         int minValue = newInt32WithCondition(-55, (v) -> v >= maxValue);
         CLRRandom random = new CLRRandom(Integer.MAX_VALUE);
         int value = random.nextInt(minValue, maxValue);
-        MatcherAssert.assertThat(value, Utils.between(minValue, maxValue));
+        MatcherAssert.assertThat(value, between(minValue, maxValue));
     }
 
     @Test
@@ -163,7 +165,7 @@ public class CLRRandomTest {
         int minValue = newInt32WithCondition(-55, (v) -> v >= maxValue);
         CLRRandom random = new CLRRandom(0);
         int value = random.nextInt(minValue, maxValue);
-        MatcherAssert.assertThat(value, Utils.between(minValue, maxValue));
+        MatcherAssert.assertThat(value, between(minValue, maxValue));
     }
 
     @Test
@@ -176,7 +178,7 @@ public class CLRRandomTest {
         int minValue = newInt32WithCondition(-55, (v) -> v >= maxValue);
         CLRRandom random = new CLRRandom(randValue);
         int value = random.nextInt(minValue, maxValue);
-        MatcherAssert.assertThat(value, Utils.between(minValue, maxValue));
+        MatcherAssert.assertThat(value, between(minValue, maxValue));
     }
 
     @Test
@@ -185,7 +187,7 @@ public class CLRRandomTest {
         int minValue = newInt32WithCondition(-55, (v) -> v >= maxValue);
         CLRRandom random = new CLRRandom(maxValue);
         int value = random.nextInt(minValue, maxValue);
-        MatcherAssert.assertThat(value, Utils.between(minValue, maxValue));
+        MatcherAssert.assertThat(value, between(minValue, maxValue));
     }
 
     @Test
@@ -205,7 +207,7 @@ public class CLRRandomTest {
         int minValue = newInt32WithCondition(-55, (v) -> v >= maxValue);
         CLRRandom random = new CLRRandom(maxValue);
         int value = random.nextInt(minValue, minValue);
-        MatcherAssert.assertThat(value, Utils.between(minValue, maxValue));
+        MatcherAssert.assertThat(value, between(minValue, maxValue));
     }
 
     @Test
@@ -217,17 +219,17 @@ public class CLRRandomTest {
 
     @Test
     public void testRandomNextDouble_PosTest1() {
-        MatcherAssert.assertThat(new CLRRandom(-55).nextDouble(), Utils.between(0d, 1d));
+        MatcherAssert.assertThat(new CLRRandom(-55).nextDouble(), between(0d, 1d));
     }
 
     @Test
     public void testRandomNextDouble_PosTest2() {
-        MatcherAssert.assertThat(new CLRRandom(Integer.MAX_VALUE).nextDouble(), Utils.between(0d, 1d));
+        MatcherAssert.assertThat(new CLRRandom(Integer.MAX_VALUE).nextDouble(), between(0d, 1d));
     }
 
     @Test
     public void testRandomNextDouble_PosTest3() {
-        MatcherAssert.assertThat(new CLRRandom(0).nextDouble(), Utils.between(0d, 1d));
+        MatcherAssert.assertThat(new CLRRandom(0).nextDouble(), between(0d, 1d));
     }
 
     @Test
@@ -236,41 +238,41 @@ public class CLRRandomTest {
         if (randValue > 0) {
             randValue *= -1;
         }
-        MatcherAssert.assertThat(new CLRRandom(randValue).nextDouble(), Utils.between(0d, 1d));
+        MatcherAssert.assertThat(new CLRRandom(randValue).nextDouble(), between(0d, 1d));
     }
 
     @Test
     public void testRandomNextBytes_PosTest1() {
         byte[] b = new byte[1024];
         new CLRRandom(-55).nextBytes(b);
-        MatcherAssert.assertThat(Utils.toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
+        MatcherAssert.assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
         new CLRRandom(0).nextBytes(b);
-        MatcherAssert.assertThat(Utils.toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
+        MatcherAssert.assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
         new CLRRandom(Integer.MAX_VALUE).nextBytes(b);
-        MatcherAssert.assertThat(Utils.toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
+        MatcherAssert.assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
         new CLRRandom(-1).nextBytes(b);
-        MatcherAssert.assertThat(Utils.toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
+        MatcherAssert.assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
         new CLRRandom(Byte.MAX_VALUE).nextBytes(b);
-        MatcherAssert.assertThat(Utils.toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
+        MatcherAssert.assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
         new CLRRandom(Byte.MIN_VALUE).nextBytes(b);
-        MatcherAssert.assertThat(Utils.toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
+        MatcherAssert.assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
     }
 
     @Test
     public void testRandomNextBytes_PosTest2() {
         byte[] b = new byte[1];
         new CLRRandom(-55).nextBytes(b);
-        MatcherAssert.assertThat(Utils.toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
+        MatcherAssert.assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
         new CLRRandom(0).nextBytes(b);
-        MatcherAssert.assertThat(Utils.toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
+        MatcherAssert.assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
         new CLRRandom(Integer.MAX_VALUE).nextBytes(b);
-        MatcherAssert.assertThat(Utils.toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
+        MatcherAssert.assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
         new CLRRandom(-1).nextBytes(b);
-        MatcherAssert.assertThat(Utils.toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
+        MatcherAssert.assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
         new CLRRandom(Byte.MAX_VALUE).nextBytes(b);
-        MatcherAssert.assertThat(Utils.toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
+        MatcherAssert.assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
         new CLRRandom(Byte.MIN_VALUE).nextBytes(b);
-        MatcherAssert.assertThat(Utils.toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
+        MatcherAssert.assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
     }
 
     @Test
@@ -288,13 +290,13 @@ public class CLRRandomTest {
         final int[] expected = {853, 486, 124, 219, 890, 790, 885, 574, 751, 165};
 
         CLRRandom rInt = new CLRRandom(seedInt);
-        int[] actualInt = ArrayUtils.generateIntArray(expected.length, () -> rInt.nextInt(1000));
+        int[] actualInt = generateIntArray(expected.length, () -> rInt.nextInt(1000));
 
         CLRRandom rLong = new CLRRandom(seedLong);
-        int[] actualLong = ArrayUtils.generateIntArray(expected.length, () -> rLong.nextInt(1000));
+        int[] actualLong = generateIntArray(expected.length, () -> rLong.nextInt(1000));
 
         CLRRandom rArray = new CLRRandom(seedArray);
-        int[] actualArray = ArrayUtils.generateIntArray(expected.length, () -> rArray.nextInt(1000));
+        int[] actualArray = generateIntArray(expected.length, () -> rArray.nextInt(1000));
 
         assertThat(actualInt, equalTo(expected));
         assertThat(actualLong, equalTo(expected));
@@ -311,7 +313,7 @@ public class CLRRandomTest {
     @Test
     public void testNextInt_16() {
         int[] expected = {8, 6, 4, 0, 5, 13, 10, 1, 12, 13};
-        int[] actual = ArrayUtils.generateIntArray(expected.length, () -> r.nextInt(16));
+        int[] actual = generateIntArray(expected.length, () -> r.nextInt(16));
 
         assertThat(actual, equalTo(expected));
     }
@@ -321,7 +323,7 @@ public class CLRRandomTest {
         int[] expected = {-287579909, 90175452, 80605103, 1593771972, 1778445194, -482557609, 1894541034, 1056929146,
                 779980809, 1253822814, 1884515393, 614983788, -358924531, 298830117, 903849615, -549623606, 676576329,
                 853008319, 370052958, 194295684};
-        int[] actual = ArrayUtils.generateIntArray(expected.length, () -> r.nextInt(-1_000_000_000, Integer.MAX_VALUE));
+        int[] actual = generateIntArray(expected.length, () -> r.nextInt(-1_000_000_000, Integer.MAX_VALUE));
 
         assertThat(actual, equalTo(expected));
     }
@@ -329,7 +331,7 @@ public class CLRRandomTest {
     @Test
     public void testNextInt_9() {
         int[] expected = {4, 3, 2, 0, 2, 7, 5, 0, 6, 7, 6, 6, 7, 4, 2, 2, 1, 8, 3, 8};
-        int[] actual = ArrayUtils.generateIntArray(expected.length, () -> r.nextInt(9));
+        int[] actual = generateIntArray(expected.length, () -> r.nextInt(9));
 
         assertThat(actual, equalTo(expected));
     }
@@ -338,7 +340,7 @@ public class CLRRandomTest {
     public void testNextLong() {
         long[] expected = {-659861015L, -2890171289807960499L, -1441396374L, 7740928225207699870L,
                 1208723606135141233L, 7682170035453475444L, -375136752L, -1532912740L, 602691552480251525L, -517781486L};
-        long[] actual = ArrayUtils.generateLongArray(expected.length, () -> r.nextLong());
+        long[] actual = generateLongArray(expected.length, () -> r.nextLong());
 
         assertThat(actual, equalTo(expected));
     }
@@ -348,7 +350,7 @@ public class CLRRandomTest {
         double[] expected = {0.547308153727701, 0.42220238895258044, 0.3072717289008534, 0.006450907330238682,
                 0.31335299849200665, 0.8306209607192413, 0.6481559642814826, 0.07130287451264582, 0.7655025449420803,
                 0.8250625430723012};
-        double[] actual = ArrayUtils.generateDoubleArray(expected.length, () -> r.nextDouble());
+        double[] actual = generateDoubleArray(expected.length, () -> r.nextDouble());
 
         assertThat(actual, equalTo(expected));
     }
@@ -358,7 +360,7 @@ public class CLRRandomTest {
     public void testNextFloat() {
         float[] expected = {0.54730815F, 0.42220238F, 0.30727172F, 0.0064509073F, 0.313353F, 0.83062094F, 0.648156F,
                 0.071302876F, 0.7655026F, 0.8250625F};
-        float[] actual = ArrayUtils.generateFloatArray(expected.length, () -> r.nextFloat());
+        float[] actual = generateFloatArray(expected.length, () -> r.nextFloat());
 
         assertThat(actual, equalTo(expected));
     }
@@ -367,7 +369,7 @@ public class CLRRandomTest {
     public void testNextBoolean() {
         boolean[] expected = {true, false, false, false, false, true, true, false, true, true, true, true, true, true,
                 false, false, false, true, false, true};
-        boolean[] actual = ArrayUtils.generateBooleanArray(expected.length, () -> r.nextBoolean());
+        boolean[] actual = generateBooleanArray(expected.length, () -> r.nextBoolean());
 
         assertThat(actual, equalTo(expected));
     }
@@ -375,23 +377,23 @@ public class CLRRandomTest {
     @Test
     @Ignore
     public void testNextInt_NoBoundStream() {
-        IntPredicate betweenPredicate = Utils.betweenPredicate(0, Integer.MAX_VALUE);
-        boolean result = Utils.createStream(1_000_000_000L, () -> r.nextInt()).allMatch(betweenPredicate);
+        IntPredicate betweenPredicate = betweenPredicate(0, Integer.MAX_VALUE);
+        boolean result = createStream(1_000_000_000L, () -> r.nextInt()).allMatch(betweenPredicate);
         assertThat(result, equalTo(true));
     }
 
     @Test
     public void testNextIntStream() {
         CLRRandom r = new CLRRandom(rand.nextInt());
-        final Matcher<Integer> betweenMatcher = Utils.between(0, 1000);
-        Utils.createStream(100000, () -> r.nextInt(1000)).forEach((t) -> assertThat(t, betweenMatcher));
+        final Matcher<Integer> betweenMatcher = between(0, 1000);
+        createStream(100000, () -> r.nextInt(1000)).forEach((t) -> assertThat(t, betweenMatcher));
     }
 
     @Test
     public void testNextInt_RangeStream() {
         CLRRandom r = new CLRRandom(rand.nextInt());
-        final Matcher<Integer> betweenMatcher = Utils.between(-1000, 3000);
-        Utils.createStream(100000, () -> r.nextInt(-1000, 3000)).forEach((t) -> assertThat(t, betweenMatcher));
+        final Matcher<Integer> betweenMatcher = between(-1000, 3000);
+        createStream(100000, () -> r.nextInt(-1000, 3000)).forEach((t) -> assertThat(t, betweenMatcher));
     }
 
     @Test
@@ -404,8 +406,8 @@ public class CLRRandomTest {
     @Test
     public void testNextDoubleStream() {
         CLRRandom r = new CLRRandom(rand.nextInt());
-        final Matcher<Double> betweenMatcher = Utils.between(0d, 1d);
-        Utils.createStream(100000, r::nextDouble).forEach((t) -> assertThat(t, betweenMatcher));
+        final Matcher<Double> betweenMatcher = between(0d, 1d);
+        createStream(100000, r::nextDouble).forEach((t) -> assertThat(t, betweenMatcher));
     }
 
     @Test
