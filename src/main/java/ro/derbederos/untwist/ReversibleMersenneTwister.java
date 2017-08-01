@@ -4,45 +4,46 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 
-/** This class implements a powerful pseudo-random number generator
+/**
+ * This class implements a powerful pseudo-random number generator
  * developed by Makoto Matsumoto and Takuji Nishimura during
  * 1996-1997.
-
+ * <p>
  * <p>This generator features an extremely long period
  * (2<sup>19937</sup>-1) and 623-dimensional equidistribution up to 32
  * bits accuracy. The home page for this generator is located at <a
  * href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html">
  * http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html</a>.</p>
-
+ * <p>
  * <p>This generator is described in a paper by Makoto Matsumoto and
  * Takuji Nishimura in 1998: <a
  * href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/ARTICLES/mt.pdf">Mersenne
  * Twister: A 623-Dimensionally Equidistributed Uniform Pseudo-Random
  * Number Generator</a>, ACM Transactions on Modeling and Computer
  * Simulation, Vol. 8, No. 1, January 1998, pp 3--30</p>
-
+ * <p>
  * <p>This class is mainly a Java port of the 2002-01-26 version of
  * the generator written in C by Makoto Matsumoto and Takuji
  * Nishimura. Here is their original copyright:</p>
-
+ * <p>
  * <table border="0" width="80%" cellpadding="10" align="center" bgcolor="#E0E0E0">
  * <tr><td>Copyright (C) 1997 - 2002, Makoto Matsumoto and Takuji Nishimura,
- *     All rights reserved.</td></tr>
-
+ * All rights reserved.</td></tr>
+ * <p>
  * <tr><td>Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
  * <ol>
- *   <li>Redistributions of source code must retain the above copyright
- *       notice, this list of conditions and the following disclaimer.</li>
- *   <li>Redistributions in binary form must reproduce the above copyright
- *       notice, this list of conditions and the following disclaimer in the
- *       documentation and/or other materials provided with the distribution.</li>
- *   <li>The names of its contributors may not be used to endorse or promote
- *       products derived from this software without specific prior written
- *       permission.</li>
+ * <li>Redistributions of source code must retain the above copyright
+ * notice, this list of conditions and the following disclaimer.</li>
+ * <li>Redistributions in binary form must reproduce the above copyright
+ * notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution.</li>
+ * <li>The names of its contributors may not be used to endorse or promote
+ * products derived from this software without specific prior written
+ * permission.</li>
  * </ol></td></tr>
-
+ * <p>
  * <tr><td><strong>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
  * CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -85,9 +86,9 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
      */
     private int[] mt = new int[N];
 
-    // used to store the initial state which apparently cannot be undone completely
-    // either first or last element can't be restored
-    private int[] mt_initial = new int[N];
+    // used to store the first and last element of the initial state
+    // because, either first or last element can't be restored
+    private int[] mt_initial = new int[2];
     private long twists;
 
     /**
@@ -155,7 +156,8 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
         clear(); // Clear normal deviate cache
 
         // Saving initial state separately
-        System.arraycopy(mt, 0, mt_initial, 0, mt.length);
+        mt_initial[0] = mt[0];
+        mt_initial[1] = mt[N - 1];
         twists = 0;
     }
 
@@ -212,7 +214,8 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
         clear(); // Clear normal deviate cache
 
         // Saving initial state separately
-        System.arraycopy(mt, 0, mt_initial, 0, mt.length);
+        mt_initial[0] = mt[0];
+        mt_initial[1] = mt[N - 1];
         twists = 0;
     }
 
@@ -267,14 +270,13 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
     }
 
     void twist() {
-        if (++twists == 0) {
-            System.arraycopy(mt_initial, 0, mt, 0, mt.length);
-            twists = 0;
-            return;
-        }
         for (int i = 0; i < N; i++) {
             int x = (mt[i] & 0x80000000) | (mt[(i + 1) % N] & 0x7fffffff);
             mt[i] = mt[(i + M) % N] ^ (x >>> 1) ^ MAG01[x & 0x1];
+        }
+        if (++twists == 0) {
+            mt[0] = mt_initial[0];
+            mt[N - 1] = mt_initial[1];
         }
     }
 
@@ -282,12 +284,6 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
     // https://jazzy.id.au/2010/09/25/cracking_random_number_generators_part_4.html
     // https://adriftwith.me/coding/2010/08/13/reversing-the-mersenne-twister-rng-temper-function/
     void untwist() {
-        if (--twists == 0) {
-            System.arraycopy(mt_initial, 0, mt, 0, mt.length);
-            twists = 0;
-            return;
-        }
-
         for (int i = 623; i >= 0; i--) {
             int result;
             // first we calculate the first bit
@@ -311,6 +307,10 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
             // extract the final 30 bits
             result |= (tmp << 1) & 0x7fffffff;
             mt[i] = result;
+        }
+        if (--twists == 0) {
+            mt[0] = mt_initial[0];
+            mt[N - 1] = mt_initial[1];
         }
     }
 
