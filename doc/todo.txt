@@ -3,4 +3,6 @@
 
 #2. generic reversible random generator tests
 
-#3. fix serialization for all generators
+#3. implement the prevGaussian method
+
+#4. implement serialization for all generators
