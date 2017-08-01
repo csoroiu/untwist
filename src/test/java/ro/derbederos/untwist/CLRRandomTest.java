@@ -17,8 +17,10 @@ import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static ro.derbederos.untwist.ArrayUtils.*;
-import static ro.derbederos.untwist.Utils.*;
+import static ro.derbederos.untwist.Utils.between;
+import static ro.derbederos.untwist.Utils.betweenPredicate;
 import static ro.derbederos.untwist.Utils.createStream;
+import static ro.derbederos.untwist.Utils.toByteList;
 
 public class CLRRandomTest {
 
@@ -436,5 +438,110 @@ public class CLRRandomTest {
             result = rand.nextInt();
         } while (loopCondition.test(result));
         return result;
+    }
+
+    private static final int COMPARE_STEPS = 100_000;
+
+    @Test
+    public void testStateNextPrev() {
+        CLRRandom clrRandom = new CLRRandom(new int[]{291, 564, 837, 1110});
+        int[] expected = clrRandom.getState();
+
+        //going forward
+        clrRandom.nextInt();
+        //going back to the initial state
+        clrRandom.prevInt();
+
+        int[] actual = clrRandom.getState();
+
+        //compare states
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Test
+    public void testStateNextPrevMany() {
+        int errors = 0;
+        CLRRandom clrRandom = new CLRRandom(new int[]{291, 564, 837, 1110});
+
+        for (int i = 0; i < COMPARE_STEPS; i++, clrRandom.nextInt()) {
+            int[] expected = clrRandom.getState();
+
+            //going forward
+            clrRandom.nextInt();
+            //going back to the initial state
+            clrRandom.prevInt();
+
+            int[] actual = clrRandom.getState();
+
+            //compare states
+            try {
+                assertThat(actual, equalTo(expected));
+            } catch (AssertionError e) {
+                System.err.println("Step " + i);
+                e.printStackTrace();
+                errors++;
+            }
+        }
+        assertThat(errors, equalTo(0));
+    }
+
+    @Test
+    public void testStatePrevNext() {
+        CLRRandom clrRandom = new CLRRandom(new int[]{291, 564, 837, 1110});
+        int[] expected = clrRandom.getState();
+
+        //going back
+        clrRandom.prevInt();
+        //going forward to the initial state
+        clrRandom.nextInt();
+
+        int[] actual = clrRandom.getState();
+
+        //compare states
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Test
+    public void testStatePrevNextMany() {
+        int errors = 0;
+        CLRRandom clrRandom = new CLRRandom(new int[]{291, 564, 837, 1110});
+
+        for (int i = 0; i < COMPARE_STEPS; i++, clrRandom.prevInt()) {
+            int[] expected = clrRandom.getState();
+
+            //going back
+            clrRandom.prevInt();
+            //going forward to the initial state
+            clrRandom.nextInt();
+
+            int[] actual = clrRandom.getState();
+
+            //compare states
+            try {
+                assertThat(actual, equalTo(expected));
+            } catch (AssertionError e) {
+                System.err.println("Step " + i);
+                e.printStackTrace();
+                errors++;
+            }
+        }
+        assertThat(errors, equalTo(0));
+    }
+
+    @Test
+    public void testStatePrevNextVsNextPrev() {
+        CLRRandom clrRandom1 = new CLRRandom(new int[]{291, 564, 837, 1110});
+        clrRandom1.prevInt();
+        clrRandom1.nextInt();
+        int[] expected = clrRandom1.getState();
+
+
+        CLRRandom clrRandom2 = new CLRRandom(new int[]{291, 564, 837, 1110});
+        clrRandom2.prevInt();
+        clrRandom2.nextInt();
+        int[] actual = clrRandom2.getState();
+
+        //compare states
+        assertThat(actual, equalTo(expected));
     }
 }

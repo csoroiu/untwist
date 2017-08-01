@@ -17,7 +17,8 @@ import java.util.Arrays;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static ro.derbederos.untwist.ArrayUtils.*;
-import static ro.derbederos.untwist.Utils.*;
+import static ro.derbederos.untwist.Utils.between;
+import static ro.derbederos.untwist.Utils.createStream;
 
 @RunWith(DataProviderRunner.class)
 public class MersenneTwisterPy3KTest {

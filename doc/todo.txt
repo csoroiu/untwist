@@ -5,4 +5,5 @@
 
 #3. implement the prevGaussian method
 
-#4. implement serialization for all generators
+#4. ReversibleMersenneTwister - find a way to get rid of the initial state.
+    try saving only the first and the last element from the state.

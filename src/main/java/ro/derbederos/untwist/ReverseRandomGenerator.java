@@ -2,7 +2,9 @@ package ro.derbederos.untwist;
 
 import org.apache.commons.math3.random.RandomGenerator;
 
-public interface ReverseRandomGenerator extends RandomGenerator {
+import java.io.Serializable;
+
+public interface ReverseRandomGenerator extends RandomGenerator, Serializable {
     void prevBytes(byte[] bytes);
 
     int prevInt();

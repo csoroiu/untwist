@@ -79,6 +79,7 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
         return (int) (seed >>> 32 - bits);
     }
 
+    @Override
     protected int prev(int bits) {
         int result = (int) (seed >>> 32 - bits);
         prevSeed();

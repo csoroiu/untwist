@@ -1,9 +1,10 @@
 package ro.derbederos.untwist;
 
 import org.apache.commons.math3.random.BitsStreamGenerator;
-import org.apache.commons.math3.random.RandomGenerator;
 
-public class CLRRandom implements RandomGenerator {
+import java.util.Arrays;
+
+public class CLRRandom implements ReverseRandomGenerator {
     private static final long serialVersionUID = 1L;
 
     // http://referencesource.microsoft.com/#mscorlib/system/random.cs
@@ -66,7 +67,9 @@ public class CLRRandom implements RandomGenerator {
                 }
             }
         }
-        inext = 0;
+        //.net initializes this with 0, but ++0 = ++55 (according to internalSample)
+        // 55 helps us for the prevInternalSample
+        inext = 55;
         inextp = 21;
     }
 
@@ -79,8 +82,18 @@ public class CLRRandom implements RandomGenerator {
      *
      * @return a double [0..1)
      */
-
     private double sample() {
+        // Including this division at the end gives us significantly improved
+        // random number distribution.
+        return internalSample() * (1.0 / MBIG);
+    }
+
+    /**
+     * Return a new random number [0..1) and re-seed the seed array.
+     *
+     * @return a double [0..1)
+     */
+    private double prevSample() {
         // Including this division at the end gives us significantly improved
         // random number distribution.
         return internalSample() * (1.0 / MBIG);
@@ -115,6 +128,38 @@ public class CLRRandom implements RandomGenerator {
         return retVal;
     }
 
+    private int prevInternalSample() {
+        int retVal;
+        int locINext = inext;
+        int locINextp = inextp;
+
+        retVal = seedArray[locINext];
+
+        int prevRetVal = seedArray[locINextp] + retVal;
+        if (prevRetVal == MBIG) {
+            prevRetVal--;
+        }
+        if (prevRetVal < 0) {
+            prevRetVal -= MBIG;
+        }
+        seedArray[locINext] = prevRetVal;
+
+        if (--locINext < 1) {
+            locINext = 55;
+        }
+        if (--locINextp == 0) {
+            locINextp = 55;
+        }
+
+        inext = locINext;
+        inextp = locINextp;
+        return retVal;
+    }
+
+    int[] getState() {
+        return Arrays.copyOf(seedArray, seedArray.length);
+    }
+
     private double getSampleForLargeRange() {
         // The distribution of double value returned by Sample
         // is not distributed well enough for a large range.
@@ -124,6 +169,25 @@ public class CLRRandom implements RandomGenerator {
         int result = internalSample();
         // Note we can't use addition here. The distribution will be bad if we do that.
         boolean negative = internalSample() % 2 == 0; // decide the sign based on second sample
+        if (negative) {
+            result = -result;
+        }
+        double d = result;
+        d += (Integer.MAX_VALUE - 1); // get a number in range [0 .. 2 * Int32MaxValue - 1)
+        d /= 2 * (long) Integer.MAX_VALUE - 1;
+        return d;
+    }
+
+    private double getPrevSampleForLargeRange() {
+        // The distribution of double value returned by Sample
+        // is not distributed well enough for a large range.
+        // If we use Sample for a range [Int32.MinValue..Int32.MaxValue)
+        // We will end up getting even numbers only.
+
+        // Note we can't use addition here. The distribution will be bad if we do that.
+        boolean negative = prevInternalSample() % 2 == 0; // decide the sign based on second sample
+
+        int result = prevInternalSample();
         if (negative) {
             result = -result;
         }
@@ -164,6 +228,14 @@ public class CLRRandom implements RandomGenerator {
     }
 
     /**
+     * @return an int [0..Int32.MaxValue)
+     */
+    @Override
+    public int prevInt() {
+        return prevInternalSample();
+    }
+
+    /**
      * @param minValue the least legal value for the Random number.
      * @param maxValue one greater than the greatest legal return value.
      * @return an int [minvalue..maxvalue)
@@ -182,6 +254,24 @@ public class CLRRandom implements RandomGenerator {
     }
 
     /**
+     * @param minValue the least legal value for the Random number.
+     * @param maxValue one greater than the greatest legal return value.
+     * @return an int [minvalue..maxvalue)
+     */
+    public int prevInt(int minValue, int maxValue) {
+        if (minValue > maxValue) {
+            throw new IllegalArgumentException("minValue must be less than maxValue");
+        }
+
+        long range = (long) maxValue - minValue;
+        if (range <= (long) Integer.MAX_VALUE) {
+            return ((int) (sample() * range) + minValue);
+        } else {
+            return (int) ((long) (getPrevSampleForLargeRange() * range) + minValue);
+        }
+    }
+
+    /**
      * @param maxValue one more than the greatest legal return value.
      * @return an int [0..maxValue)
      */
@@ -194,6 +284,18 @@ public class CLRRandom implements RandomGenerator {
     }
 
     /**
+     * @param maxValue one more than the greatest legal return value.
+     * @return an int [0..maxValue)
+     */
+    @Override
+    public int prevInt(int maxValue) {
+        if (maxValue < 0) {
+            throw new IllegalArgumentException("maxValue must be positive");
+        }
+        return (int) (prevSample() * maxValue);
+    }
+
+    /**
      * @return a double [0..1)
      */
     @Override
@@ -201,10 +303,24 @@ public class CLRRandom implements RandomGenerator {
         return sample();
     }
 
+    /**
+     * @return a double [0..1)
+     */
+    @Override
+    public double prevDouble() {
+        return prevSample();
+    }
+
     @Override
     @Deprecated
     public float nextFloat() {
         return (float) nextDouble();
+    }
+
+    @Override
+    @Deprecated
+    public float prevFloat() {
+        return (float) prevDouble();
     }
 
     /**
@@ -223,6 +339,22 @@ public class CLRRandom implements RandomGenerator {
         }
     }
 
+    /**
+     * Fills the byte array with random bytes [0..0x7f]. The entire array is filled.
+     *
+     * @param buffer the array to be filled.
+     */
+    @Override
+    public void prevBytes(byte[] buffer) {
+        if (buffer == null) {
+            throw new NullPointerException("buffer");
+        }
+
+        for (int i = buffer.length - 1; i >= 0; i++) {
+            buffer[i] = (byte) (prevInternalSample() % (1 << 8));
+        }
+    }
+
     @Override
     public long nextLong() {
         return ((long) (nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE)) << 32)
@@ -230,8 +362,19 @@ public class CLRRandom implements RandomGenerator {
     }
 
     @Override
+    public long prevLong() {
+        return prevInt(Integer.MIN_VALUE, Integer.MAX_VALUE) |
+                ((long) (prevInt(Integer.MIN_VALUE, Integer.MAX_VALUE)) << 32);
+    }
+
+    @Override
     public boolean nextBoolean() {
         return sample() >= 0.5; // same thing as nextInt(2) == 1
+    }
+
+    @Override
+    public boolean prevBoolean() {
+        return prevSample() >= 0.5; // same thing as nextInt(2) == 1
     }
 
     /**
@@ -254,5 +397,11 @@ public class CLRRandom implements RandomGenerator {
             nextGaussian = Double.NaN;
         }
         return random;
+    }
+
+    @Override
+    public double prevGaussian() {
+        //FIXME
+        throw new UnsupportedOperationException();
     }
 }

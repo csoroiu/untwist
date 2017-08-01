@@ -1,6 +1,8 @@
 package ro.derbederos.untwist;
 
 import java.lang.reflect.Field;
+import java.security.AccessController;
+import java.security.PrivilegedExceptionAction;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -13,25 +15,51 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
     private final static long mask = (1L << 48) - 1;
     private final static double DOUBLE_UNIT = 0x1.0p-53; // 1.0 / (1L << 53)
 
-    private AtomicLong seedRef;
+    private final AtomicLong seedRef = getReferenceToSeed();
+
+    private static final Field SEED_FIELD;
+
+    static {
+        Field seedField = null;
+        try {
+            final PrivilegedExceptionAction<Field> action =
+                    () ->
+                    {
+                        final Field f = Random.class.getDeclaredField("seed");
+                        f.setAccessible(true);
+                        return f;
+                    };
+
+            seedField = AccessController.doPrivileged(action);
+        } catch (final Exception ex) {
+            rethrowUnchecked(ex);
+        }
+        SEED_FIELD = seedField;
+    }
+
+    private static void rethrowUnchecked(final Throwable ex) {
+        ReversibleJdkRandom.<RuntimeException>rethrow(ex);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T extends Throwable> void rethrow(final Throwable t) throws T {
+        throw (T) t;
+    }
 
     public ReversibleJdkRandom() {
         super();
-        setReferenceToSeed();
     }
 
     public ReversibleJdkRandom(long seed) {
         super(seed);
-        setReferenceToSeed();
     }
 
-    private void setReferenceToSeed() {
+    private AtomicLong getReferenceToSeed() {
         try {
-            Field f = Random.class.getDeclaredField("seed");
-            f.setAccessible(true);
-            seedRef = (AtomicLong) f.get(this);
-        } catch (Exception e) {
+            return (AtomicLong) SEED_FIELD.get(this);
+        } catch (IllegalAccessException ignore) {
         }
+        return null;
     }
 
     @Override
