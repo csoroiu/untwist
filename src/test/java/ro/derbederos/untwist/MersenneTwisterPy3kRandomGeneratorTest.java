@@ -1,34 +1,9 @@
 package ro.derbederos.untwist;
 
-import org.apache.commons.math3.random.MersenneTwisterTest;
-import org.apache.commons.math3.random.RandomGenerator;
-import org.junit.Assert;
-import org.junit.Test;
-
-public class MersenneTwisterPy3kRandomGeneratorTest extends MersenneTwisterTest {
+public class MersenneTwisterPy3kRandomGeneratorTest extends ReversibleMersenneTwisterTest {
 
     @Override
-    protected RandomGenerator makeGenerator() {
+    protected ReverseRandomGenerator makeGenerator() {
         return new MersenneTwisterPy3k(123456789013L);
-    }
-
-    @Override
-    @Test
-    public void testNextIntIAE2() {
-        try {
-            generator.nextInt(-1);
-            Assert.fail("IllegalArgumentException expected");
-        } catch (IllegalArgumentException ignored) {
-        }
-        try {
-            generator.nextInt(0);
-        } catch (IllegalArgumentException ignored) {
-        }
-    }
-
-    @Override
-    @Test(expected = IllegalArgumentException.class)
-    public void testNextIntNeg() {
-        generator.nextInt(-1);
     }
 }

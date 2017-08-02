@@ -83,6 +83,12 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
     }
 
     @Override
+    public int prevInt(int n) throws IllegalArgumentException {
+        //FIXME
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public long nextLong() {
         final long low = ((long) next(32)) & 0xffffffffL;
         final long high = ((long) next(32)) << 32;
@@ -136,6 +142,12 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
     }
 
     @Override
+    public void prevBytes(byte[] bytes) {
+        //FIXME
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     // http://svn.python.org/projects/python/trunk/Modules/_randommodule.c # random_getrandbits
     public long nextLong(long n) throws IllegalArgumentException {
         if (n > 0) {
@@ -150,6 +162,12 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
             return bits;
         }
         throw new IllegalArgumentException("n must be strictly positive");
+    }
+
+    @Override
+    public long prevLong(long n) throws IllegalArgumentException {
+        //FIXME
+        throw new UnsupportedOperationException();
     }
 
     private static int[] reversedArray(int[] seed) {

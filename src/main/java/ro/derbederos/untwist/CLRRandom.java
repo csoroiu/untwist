@@ -71,6 +71,7 @@ public class CLRRandom implements ReverseRandomGenerator {
         // 55 helps us for the prevInternalSample
         inext = 55;
         inextp = 21;
+        nextGaussian = Double.NaN;
     }
 
     //

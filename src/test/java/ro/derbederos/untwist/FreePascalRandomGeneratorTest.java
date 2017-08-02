@@ -1,16 +1,14 @@
 package ro.derbederos.untwist;
 
-import org.apache.commons.math3.random.MersenneTwisterTest;
-import org.apache.commons.math3.random.RandomGenerator;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-public class FreePascalRandomGeneratorTest extends MersenneTwisterTest {
+public class FreePascalRandomGeneratorTest extends ReversibleMersenneTwisterTest {
 
     @Override
-    protected RandomGenerator makeGenerator() {
+    protected ReverseRandomGenerator makeGenerator() {
         return new FreePascalRandom(123456789013L);
     }
 

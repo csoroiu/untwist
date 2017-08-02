@@ -1,6 +1,7 @@
 package ro.derbederos.untwist;
 
 import org.hamcrest.Matcher;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,11 +18,39 @@ public class TurboPascalRandomTest {
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
-    private TurboPascalRandom r;
+    private TurboPascalRandom generator;
 
     @Before
     public void setup() {
-        r = new TurboPascalRandom(1234567890L);
+        generator = new TurboPascalRandom(1234567890L);
+    }
+
+
+    @Test
+    public void testNextIntIAE2() {
+        try {
+            generator.nextInt(-1);
+            Assert.fail("IllegalArgumentException expected");
+        } catch (IllegalArgumentException ignored) {
+        }
+        try {
+            generator.nextInt(0);
+        } catch (IllegalArgumentException ignored) {
+        }
+    }
+
+    @Test
+    public void testNextIntNeg() {
+        expectedException.expect(IllegalArgumentException.class);
+
+        generator.nextInt(-1);
+    }
+
+    @Test
+    public void testPrevIntNeg() {
+        expectedException.expect(IllegalArgumentException.class);
+
+        generator.prevInt(-1);
     }
 
     @Test
@@ -46,16 +75,9 @@ public class TurboPascalRandomTest {
     }
 
     @Test
-    public void testNextInt_NegativeValue() {
-        expectedException.expect(IllegalArgumentException.class);
-
-        r.nextInt(-16);
-    }
-
-    @Test
     public void testNextInt_NoBound() {
         int expected = 1878152731;
-        int actual = r.nextInt();
+        int actual = generator.nextInt();
         assertThat(actual, equalTo(expected));
     }
 
@@ -63,7 +85,7 @@ public class TurboPascalRandomTest {
     public void testNextInt_IntMaxValue() {
         int[] expected = {939076365, 1451019587, 342299220, 1109061030, 1380499522, 1017810769, 734729370, 174788868,
                 419817753, 505066367};
-        int[] actual = generateIntArray(expected.length, () -> r.nextInt(Integer.MAX_VALUE));
+        int[] actual = generateIntArray(expected.length, () -> generator.nextInt(Integer.MAX_VALUE));
 
         assertThat(actual, equalTo(expected));
     }
@@ -71,7 +93,7 @@ public class TurboPascalRandomTest {
     @Test
     public void testNextInt_16() {
         int[] expected = {6, 10, 2, 8, 10, 7, 5, 1, 3, 3};
-        int[] actual = generateIntArray(expected.length, () -> r.nextInt(16));
+        int[] actual = generateIntArray(expected.length, () -> generator.nextInt(16));
 
         assertThat(actual, equalTo(expected));
     }
@@ -79,7 +101,7 @@ public class TurboPascalRandomTest {
     @Test
     public void testNextInt_9() {
         int[] expected = {3, 6, 1, 4, 5, 4, 3, 0, 1, 2};
-        int[] actual = generateIntArray(expected.length, () -> r.nextInt(9));
+        int[] actual = generateIntArray(expected.length, () -> generator.nextInt(9));
 
         assertThat(actual, equalTo(expected));
     }
@@ -88,7 +110,7 @@ public class TurboPascalRandomTest {
     public void testNextLong() {
         long[] expected = {-1392928120L, -2076845234L, -6588343460521763164L, 6311277235765912074L,
                 3606207044135511808L, -464022778L, -51589220L, -735761854L, -498207624L, 95602918877569982L};
-        long[] actual = generateLongArray(expected.length, () -> r.nextLong());
+        long[] actual = generateLongArray(expected.length, () -> generator.nextLong());
 
         assertThat(actual, equalTo(expected));
     }
@@ -98,7 +120,7 @@ public class TurboPascalRandomTest {
         double[] expected = {0.937291509239003062, 0.175683649256825447, 0.659395495662465692, 0.016446787398308516,
                 0.142845185240730643, 0.973955073393881321, 0.842135024489834905, 0.5813924097456038,
                 0.695492875529453158, 0.735189855098724365};
-        double[] actual = generateDoubleArray(expected.length, () -> r.nextDouble());
+        double[] actual = generateDoubleArray(expected.length, () -> generator.nextDouble());
 
         assertThat(actual, equalTo(expected));
     }
@@ -108,18 +130,18 @@ public class TurboPascalRandomTest {
     public void testNextFloat() {
         float[] expected = {0.9372915F, 0.17568365F, 0.6593955F, 0.016446788F, 0.14284518F, 0.9739551F, 0.842135F,
                 0.5813924F, 0.69549286F, 0.73518986F};
-        float[] actual = generateFloatArray(expected.length, () -> r.nextFloat());
+        float[] actual = generateFloatArray(expected.length, () -> generator.nextFloat());
 
         assertThat(actual, equalTo(expected));
     }
 
     @Test
     public void testNextDouble_CoprocDisabled() {
-        TurboPascalRandom r = new TurboPascalRandom(1234567890, false);
+        TurboPascalRandom generator = new TurboPascalRandom(1234567890, false);
         double[] expected = {0.43729150923900306, 0.67568364925682545, 0.15939549566246569, 0.51644678739830852,
                 0.64284518524073064, 0.47395507339388132, 0.3421350244898349, 0.0813924097456038, 0.19549287552945316,
                 0.23518985509872437};
-        double[] actual = generateDoubleArray(expected.length, r::nextDouble);
+        double[] actual = generateDoubleArray(expected.length, generator::nextDouble);
 
         assertThat(actual, equalTo(expected));
     }
@@ -127,10 +149,10 @@ public class TurboPascalRandomTest {
     @Test
     @SuppressWarnings("deprecation")
     public void testNextFloat_CoprocDisabled() {
-        TurboPascalRandom r = new TurboPascalRandom(1234567890, false);
+        TurboPascalRandom generator = new TurboPascalRandom(1234567890, false);
         float[] expected = {0.4372915F, 0.6756837F, 0.1593955F, 0.51644677F, 0.6428452F, 0.47395507F, 0.342135F,
                 0.08139241F, 0.19549288F, 0.23518986F};
-        float[] actual = generateFloatArray(expected.length, r::nextFloat);
+        float[] actual = generateFloatArray(expected.length, generator::nextFloat);
 
         assertThat(actual, equalTo(expected));
     }
@@ -138,7 +160,7 @@ public class TurboPascalRandomTest {
     @Test
     public void testNextBoolean() {
         boolean[] expected = {false, true, false, true, true, false, false, false, false, false};
-        boolean[] actual = generateBooleanArray(expected.length, () -> r.nextBoolean());
+        boolean[] actual = generateBooleanArray(expected.length, () -> generator.nextBoolean());
 
         assertThat(actual, equalTo(expected));
     }
@@ -146,31 +168,31 @@ public class TurboPascalRandomTest {
     @Test
     public void testNextIntStream() {
         final Matcher<Integer> betweenMatcher = between(0, 1000);
-        createStream(100000, () -> r.nextInt(1000)).forEach((t) -> assertThat(t, betweenMatcher));
+        createStream(100000, () -> generator.nextInt(1000)).forEach((t) -> assertThat(t, betweenMatcher));
     }
 
     @Test
     public void testNextDoubleStream() {
         final Matcher<Double> betweenMatcher = between(0d, 1d);
-        createStream(100000, () -> r.nextDouble()).forEach((t) -> assertThat(t, betweenMatcher));
+        createStream(100000, () -> generator.nextDouble()).forEach((t) -> assertThat(t, betweenMatcher));
     }
 
     @Test
     public void testZero() {
-        r.setSeed(Integer.toUnsignedLong(-1498392781));
-        assertThat(r.nextDouble(), equalTo(0.0));
+        generator.setSeed(Integer.toUnsignedLong(-1498392781));
+        assertThat(generator.nextDouble(), equalTo(0.0));
     }
 
     @Test
     public void testZero_CoprocDisabled() {
-        TurboPascalRandom r = new TurboPascalRandom(-1498392781, false);
-        assertThat(r.nextDouble(), equalTo(0.5));
+        TurboPascalRandom generator = new TurboPascalRandom(-1498392781, false);
+        assertThat(generator.nextDouble(), equalTo(0.5));
     }
 
     @Test
     public void testPrevInt() {
-        int expected = r.nextInt(100);
-        int actual = r.prevInt(100);
+        int expected = generator.nextInt(100);
+        int actual = generator.prevInt(100);
 
         assertThat(expected, equalTo(43));
         assertThat(actual, equalTo(expected));
@@ -180,24 +202,17 @@ public class TurboPascalRandomTest {
     public void testPrevInt_16() {
         int[] expected = {3, 3, 1, 5, 7, 10, 8, 2, 10, 6};
         for (int i = 0; i < 10; i++) {
-            r.nextInt(16);
+            generator.nextInt(16);
         }
-        int[] actual = generateIntArray(expected.length, () -> r.prevInt(16));
+        int[] actual = generateIntArray(expected.length, () -> generator.prevInt(16));
 
         assertThat(actual, equalTo(expected));
     }
 
     @Test
-    public void testPrevInt_NegativeValue() {
-        expectedException.expect(IllegalArgumentException.class);
-
-        r.prevInt(-16);
-    }
-
-    @Test
     public void testPrevInt_NoBound() {
-        int expected = r.nextInt();
-        int actual = r.prevInt();
+        int expected = generator.nextInt();
+        int actual = generator.prevInt();
 
         assertThat(expected, equalTo(1878152731));
         assertThat(actual, equalTo(expected));
@@ -210,10 +225,10 @@ public class TurboPascalRandomTest {
                 -1392928120L};
 
         for (int i = 0; i < 10; i++) {
-            r.nextLong();
+            generator.nextLong();
         }
 
-        long[] actual = generateLongArray(expected.length, () -> r.prevLong());
+        long[] actual = generateLongArray(expected.length, () -> generator.prevLong());
 
         assertThat(actual, equalTo(expected));
     }
@@ -225,10 +240,10 @@ public class TurboPascalRandomTest {
                 0.175683649256825447, 0.937291509239003062};
 
         for (int i = 0; i < 10; i++) {
-            r.nextDouble();
+            generator.nextDouble();
         }
 
-        double[] actual = generateDoubleArray(expected.length, () -> r.prevDouble());
+        double[] actual = generateDoubleArray(expected.length, () -> generator.prevDouble());
 
         assertThat(actual, equalTo(expected));
     }
@@ -240,26 +255,26 @@ public class TurboPascalRandomTest {
                 0.016446788F, 0.6593955F, 0.17568365F, 0.9372915F};
 
         for (int i = 0; i < 10; i++) {
-            r.nextFloat();
+            generator.nextFloat();
         }
 
-        float[] actual = generateFloatArray(expected.length, () -> r.prevFloat());
+        float[] actual = generateFloatArray(expected.length, () -> generator.prevFloat());
 
         assertThat(actual, equalTo(expected));
     }
 
     @Test
     public void testPrevDouble_CoprocDisabled() {
-        TurboPascalRandom r = new TurboPascalRandom(1234567890, false);
+        TurboPascalRandom generator = new TurboPascalRandom(1234567890, false);
         double[] expected = {0.23518985509872437, 0.19549287552945316, 0.0813924097456038, 0.3421350244898349,
                 0.47395507339388132, 0.64284518524073064, 0.51644678739830852, 0.15939549566246569,
                 0.67568364925682545, 0.43729150923900306};
 
         for (int i = 0; i < 10; i++) {
-            r.nextDouble();
+            generator.nextDouble();
         }
 
-        double[] actual = generateDoubleArray(expected.length, r::prevDouble);
+        double[] actual = generateDoubleArray(expected.length, generator::prevDouble);
 
         assertThat(actual, equalTo(expected));
     }
@@ -267,15 +282,15 @@ public class TurboPascalRandomTest {
     @Test
     @SuppressWarnings("deprecation")
     public void testPrevFloat_CoprocDisabled() {
-        TurboPascalRandom r = new TurboPascalRandom(1234567890, false);
+        TurboPascalRandom generator = new TurboPascalRandom(1234567890, false);
         float[] expected = {0.23518986F, 0.19549288F, 0.08139241F, 0.342135F, 0.47395507F, 0.6428452F,
                 0.51644677F, 0.1593955F, 0.6756837F, 0.4372915F};
 
         for (int i = 0; i < 10; i++) {
-            r.nextFloat();
+            generator.nextFloat();
         }
 
-        float[] actual = generateFloatArray(expected.length, r::prevFloat);
+        float[] actual = generateFloatArray(expected.length, generator::prevFloat);
 
         assertThat(actual, equalTo(expected));
     }
@@ -284,10 +299,10 @@ public class TurboPascalRandomTest {
     public void testPrevBoolean() {
         boolean[] expected = {false, false, false, false, false, true, true, false, true, false};
         for (int i = 0; i < 10; i++) {
-            r.nextBoolean();
+            generator.nextBoolean();
         }
 
-        boolean[] actual = generateBooleanArray(expected.length, () -> r.prevBoolean());
+        boolean[] actual = generateBooleanArray(expected.length, () -> generator.prevBoolean());
 
         assertThat(actual, equalTo(expected));
     }
@@ -299,8 +314,8 @@ public class TurboPascalRandomTest {
         byte[] expected = new byte[nextBytes.length];
         byte[] actual = new byte[prevBytes.length];
 
-        r.nextBytes(expected);
-        r.prevBytes(actual);
+        generator.nextBytes(expected);
+        generator.prevBytes(actual);
 
         assertThat(expected, equalTo(nextBytes));
         assertThat(actual, equalTo(prevBytes));
@@ -313,8 +328,8 @@ public class TurboPascalRandomTest {
         byte[] expected = new byte[nextBytes.length];
         byte[] actual = new byte[prevBytes.length];
 
-        r.nextBytes(expected);
-        r.prevBytes(actual);
+        generator.nextBytes(expected);
+        generator.prevBytes(actual);
 
         assertThat(expected, equalTo(nextBytes));
         assertThat(actual, equalTo(prevBytes));

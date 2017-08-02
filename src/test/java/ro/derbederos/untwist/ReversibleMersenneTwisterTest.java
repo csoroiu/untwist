@@ -1,8 +1,8 @@
 package ro.derbederos.untwist;
 
 import org.apache.commons.math3.random.MersenneTwisterTest;
-import org.apache.commons.math3.random.RandomGenerator;
 import org.hamcrest.MatcherAssert;
+import org.junit.Assert;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -20,8 +20,28 @@ public class ReversibleMersenneTwisterTest extends MersenneTwisterTest {
     public ReversibleMersenneTwisterTest() {
     }
 
-    protected RandomGenerator makeGenerator() {
+    protected ReverseRandomGenerator makeGenerator() {
         return new ReversibleMersenneTwister(LONG_SEED);
+    }
+
+    @Override
+    @Test
+    public void testNextIntIAE2() {
+        try {
+            generator.nextInt(-1);
+            Assert.fail("IllegalArgumentException expected");
+        } catch (IllegalArgumentException ignored) {
+        }
+        try {
+            generator.nextInt(0);
+        } catch (IllegalArgumentException ignored) {
+        }
+    }
+
+    @Override
+    @Test(expected = IllegalArgumentException.class)
+    public void testNextIntNeg() {
+        generator.nextInt(-1);
     }
 
     @Test

@@ -18,12 +18,11 @@ public class JDKRandomPy3kCompatTest {
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
-    private JDKRandomPy3kCompat r;
+    private JDKRandomPy3kCompat generator;
 
     @Before
     public void setup() {
-        r = new JDKRandomPy3kCompat();
-        r.setSeed(0L);
+        generator = new JDKRandomPy3kCompat(0L);
     }
 
     @SuppressWarnings("deprecation")
@@ -52,9 +51,9 @@ public class JDKRandomPy3kCompatTest {
 
     @Test
     public void testSetSeedLong() {
-        r.setSeed(42523532L);
+        generator.setSeed(42523532L);
         int expected = -1778905166;
-        int actual = r.nextInt();
+        int actual = generator.nextInt();
         assertThat(actual, equalTo(expected));
     }
 
@@ -62,43 +61,43 @@ public class JDKRandomPy3kCompatTest {
     public void testNextBytes() {
         byte[] expected = new byte[]{96, -76, 32, -69, 56, 81, -39, -44};
         byte[] actual = new byte[expected.length];
-        r.nextBytes(actual);
+        generator.nextBytes(actual);
         assertThat(actual, equalTo(expected));
     }
 
     @Test
     public void testNextInt_NoBound() {
         int expected = -1155484576;
-        int actual = r.nextInt();
+        int actual = generator.nextInt();
         assertThat(actual, equalTo(expected));
     }
 
     @Test
     public void testNextInt_Lue() {
         int expected = 12;
-        int actual = r.nextInt(42);
+        int actual = generator.nextInt(42);
         assertThat(actual, equalTo(expected));
     }
 
     @Test
     public void testNextInt_Pow2() {
         int expected = 784870680;
-        int actual = r.nextInt(1 << 30);
+        int actual = generator.nextInt(1 << 30);
         assertThat(actual, equalTo(expected));
     }
 
     @Test
     public void testNextInt_IntOverflow() {
-        r.setSeed(215660466117472L);
+        generator.setSeed(215660466117472L);
         int expected = 4224;
-        int actual = r.nextInt(100000);
+        int actual = generator.nextInt(100000);
         assertThat(actual, equalTo(expected));
     }
 
     @Test
     public void testNextLong() {
         long expected = -4962768465676381896L;
-        long actual = r.nextLong();
+        long actual = generator.nextLong();
         assertThat(actual, equalTo(expected));
     }
 
@@ -107,7 +106,7 @@ public class JDKRandomPy3kCompatTest {
         double[] expected = {0.730967787376657, 0.24053641567148587, 0.6374174253501083, 0.5504370051176339,
                 0.5975452777972018, 0.3332183994766498, 0.3851891847407185, 0.984841540199809, 0.8791825178724801,
                 0.9412491794821144};
-        double[] actual = generateDoubleArray(expected.length, () -> r.nextDouble());
+        double[] actual = generateDoubleArray(expected.length, () -> generator.nextDouble());
 
         assertThat(actual, equalTo(expected));
     }
@@ -117,7 +116,7 @@ public class JDKRandomPy3kCompatTest {
     public void testNextFloatStream() {
         float[] expected = {0.73096776F, 0.24053642F, 0.63741744F, 0.55043703F, 0.59754527F, 0.3332184F, 0.38518918F,
                 0.9848415F, 0.8791825F, 0.9412492F};
-        float[] actual = generateFloatArray(expected.length, () -> r.nextFloat());
+        float[] actual = generateFloatArray(expected.length, () -> generator.nextFloat());
 
         assertThat(actual, equalTo(expected));
     }
@@ -125,13 +124,13 @@ public class JDKRandomPy3kCompatTest {
     @Test
     public void testNextDouble() {
         double expected = 0.73096778737665700;
-        double actual = r.nextDouble();
+        double actual = generator.nextDouble();
         assertThat(actual, equalTo(expected));
     }
 
     @Test
     public void testNextBoolean() {
-        boolean actual = r.nextBoolean();
+        boolean actual = generator.nextBoolean();
         assertThat(actual, equalTo(true));
     }
 }

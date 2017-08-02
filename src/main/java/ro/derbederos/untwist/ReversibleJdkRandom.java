@@ -23,8 +23,7 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
         Field seedField = null;
         try {
             final PrivilegedExceptionAction<Field> action =
-                    () ->
-                    {
+                    () -> {
                         final Field f = Random.class.getDeclaredField("seed");
                         f.setAccessible(true);
                         return f;
@@ -63,8 +62,9 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
     }
 
     @Override
+    @Deprecated
     public void setSeed(int seed) {
-        setSeed(seed);
+        setSeed((long) seed);
     }
 
     @Override

@@ -86,15 +86,15 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
      */
     private int[] mt = new int[N];
 
-    // used to store the first and last element of the initial state
-    // because, either first or last element can't be restored
-    private int[] mt_initial = new int[2];
-    private long twists;
-
     /**
      * Current index in the bytes pool.
      */
     private int mti;
+
+    // used to store the first and last element of the initial state
+    // because, either first or last element can't be restored
+    private int[] mt_initial = new int[2];
+    private long twists;
 
     /**
      * Creates a new random number generator.

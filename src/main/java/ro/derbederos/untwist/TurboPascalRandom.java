@@ -59,6 +59,7 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
     @Deprecated
     public void setSeed(int seed) {
         this.seed = seed;
+        clear();
     }
 
     @Override
@@ -86,12 +87,12 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
         return result;
     }
 
-    private void prevSeed() {
-        seed = ((seed - addend) * invmultiplier) & mask;
-    }
-
     private void nextSeed() {
         seed = (seed * multiplier + addend) & mask;
+    }
+
+    private void prevSeed() {
+        seed = ((seed - addend) * invmultiplier) & mask;
     }
 
     @Override
@@ -114,7 +115,7 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
 
     @Override
     public long nextLong() {
-        return ((long) (nextInt()) << 32) | nextInt();
+        return ((long) nextInt() << 32) | nextInt();
     }
 
     @Override
