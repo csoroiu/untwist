@@ -40,7 +40,7 @@ public abstract class ReverseBitsStreamGenerator extends BitsStreamGenerator imp
         }
 
         if ((bound & -bound) == bound) {
-            return (int) (((long) bound * prev(31)) >> 31);
+            return (int) (((long) bound * prev(31)) >>> 31);
         }
 
         int bits, val;

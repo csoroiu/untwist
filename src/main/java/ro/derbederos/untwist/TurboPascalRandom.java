@@ -113,16 +113,6 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
         throw new IllegalArgumentException("n must be strictly positive");
     }
 
-    @Override
-    public long nextLong() {
-        return ((long) nextInt() << 32) | nextInt();
-    }
-
-    @Override
-    public long prevLong() {
-        return prevInt() | ((long) (prevInt()) << 32);
-    }
-
     // RandSeed = -1498392781 precedes 0
     // http://www.efg2.com/Lab/Library/Delphi/MathFunctions/random.txt - _randExt
     // https://github.com/rofl0r/KOL/blob/master/system/system.pas

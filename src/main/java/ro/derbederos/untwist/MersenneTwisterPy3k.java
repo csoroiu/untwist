@@ -127,9 +127,9 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
         while (i < iEnd) {
             final int random = next(32);
             bytes[i] = (byte) (random & 0xff);
-            bytes[i + 1] = (byte) ((random >> 8) & 0xff);
-            bytes[i + 2] = (byte) ((random >> 16) & 0xff);
-            bytes[i + 3] = (byte) ((random >> 24) & 0xff);
+            bytes[i + 1] = (byte) ((random >>> 8) & 0xff);
+            bytes[i + 2] = (byte) ((random >>> 16) & 0xff);
+            bytes[i + 3] = (byte) ((random >>> 24) & 0xff);
             i += 4;
         }
         int random = next(32);

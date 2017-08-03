@@ -359,12 +359,12 @@ public class CLRRandom implements ReverseRandomGenerator {
     @Override
     public long nextLong() {
         return ((long) (nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE)) << 32)
-                | nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
+                | ((long) nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE)) & 0xFFFFFFFFL;
     }
 
     @Override
     public long prevLong() {
-        return prevInt(Integer.MIN_VALUE, Integer.MAX_VALUE) |
+        return ((long) prevInt(Integer.MIN_VALUE, Integer.MAX_VALUE)) & 0xFFFFFFFFL |
                 ((long) (prevInt(Integer.MIN_VALUE, Integer.MAX_VALUE)) << 32);
     }
 

@@ -185,7 +185,7 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
         for (int k = Math.max(N, seed.length); k != 0; k--) {
             long l0 = (mt[i] & 0x7fffffffL) | ((mt[i] < 0) ? 0x80000000L : 0x0L);
             long l1 = (mt[i - 1] & 0x7fffffffL) | ((mt[i - 1] < 0) ? 0x80000000L : 0x0L);
-            long l = (l0 ^ ((l1 ^ (l1 >> 30)) * 1664525L)) + seed[j] + j; // non linear
+            long l = (l0 ^ ((l1 ^ (l1 >>> 30)) * 1664525L)) + seed[j] + j; // non linear
             mt[i] = (int) (l & 0xffffffffL);
             i++;
             j++;
@@ -201,7 +201,7 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
         for (int k = N - 1; k != 0; k--) {
             long l0 = (mt[i] & 0x7fffffffL) | ((mt[i] < 0) ? 0x80000000L : 0x0L);
             long l1 = (mt[i - 1] & 0x7fffffffL) | ((mt[i - 1] < 0) ? 0x80000000L : 0x0L);
-            long l = (l0 ^ ((l1 ^ (l1 >> 30)) * 1566083941L)) - i; // non linear
+            long l = (l0 ^ ((l1 ^ (l1 >>> 30)) * 1566083941L)) - i; // non linear
             mt[i] = (int) (l & 0xffffffffL);
             i++;
             if (i >= N) {

@@ -1,6 +1,8 @@
 #1. reversible MersenneTwisterPy3k
   prevInt(int), prevLong(long), prevBytes(byte[])
 
-#2. generic reversible random generator tests
+#2. MersenneTwisterPy3k test int after nextbytes when 4 byte aligned (multiple)
 
-#3. implement the prevGaussian method
+#3. generic reversible random generator tests
+
+#4. implement the prevGaussian method
