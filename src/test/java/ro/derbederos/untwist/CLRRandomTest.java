@@ -14,7 +14,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.lessThan;
 import static ro.derbederos.untwist.ArrayUtils.*;
 import static ro.derbederos.untwist.Utils.between;
-import static ro.derbederos.untwist.Utils.betweenPredicate;
 import static ro.derbederos.untwist.Utils.createStream;
 
 public class CLRRandomTest {
@@ -27,13 +26,6 @@ public class CLRRandomTest {
     @Before
     public void setup() {
         generator = new CLRRandom(1234567890L);
-    }
-
-    @Test
-    public void testNextInt_NegativeValue() {
-        expectedException.expect(IllegalArgumentException.class);
-
-        generator.nextInt(-16);
     }
 
     @Test
@@ -104,7 +96,7 @@ public class CLRRandomTest {
     @Test
     @Ignore
     public void testNextInt_NoBoundStream() {
-        IntPredicate betweenPredicate = betweenPredicate(0, Integer.MAX_VALUE);
+        IntPredicate betweenPredicate = (i) -> 0 <= i && i < Integer.MAX_VALUE;
         boolean result = createStream(1_000_000_000L, () -> generator.nextInt()).allMatch(betweenPredicate);
         assertThat(result, equalTo(true));
     }
@@ -128,19 +120,7 @@ public class CLRRandomTest {
         generator.nextInt(200, 100);
     }
 
-    @Test
-    public void testNextDoubleStream() {
-        final Matcher<Double> betweenMatcher = between(0d, 1d);
-        createStream(100000, generator::nextDouble).forEach((t) -> assertThat(t, betweenMatcher));
-    }
-
-    @Test
-    public void testNextBytes_NullBuffer() {
-        expectedException.expect(NullPointerException.class);
-
-        generator.nextBytes(null);
-    }
-
+    // STATE TESTS
     private static final int COMPARE_STEPS = 100_000;
 
     @Test

@@ -99,7 +99,7 @@ public class JDKRandomPy3kCompatTest {
     }
 
     @Test
-    public void testNextDoubleStream() {
+    public void testNextDouble() {
         double[] expected = {0.730967787376657, 0.24053641567148587, 0.6374174253501083, 0.5504370051176339,
                 0.5975452777972018, 0.3332183994766498, 0.3851891847407185, 0.984841540199809, 0.8791825178724801,
                 0.9412491794821144};
@@ -110,18 +110,11 @@ public class JDKRandomPy3kCompatTest {
 
     @Test
     @SuppressWarnings("deprecation")
-    public void testNextFloatStream() {
+    public void testNextFloat() {
         float[] expected = {0.73096776F, 0.24053642F, 0.63741744F, 0.55043703F, 0.59754527F, 0.3332184F, 0.38518918F,
                 0.9848415F, 0.8791825F, 0.9412492F};
         float[] actual = generateFloatArray(expected.length, () -> generator.nextFloat());
 
-        assertThat(actual, equalTo(expected));
-    }
-
-    @Test
-    public void testNextDouble() {
-        double expected = 0.73096778737665700;
-        double actual = generator.nextDouble();
         assertThat(actual, equalTo(expected));
     }
 

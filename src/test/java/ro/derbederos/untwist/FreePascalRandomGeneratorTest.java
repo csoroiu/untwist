@@ -28,9 +28,25 @@ public class FreePascalRandomGeneratorTest extends ReversibleMersenneTwisterTest
     }
 
     @Override
+    public void testPrevIntIAE2() {
+        int prevInt = generator.prevInt(-1);
+        assertThat(prevInt, equalTo(0));
+
+        prevInt = generator.prevInt(0);
+        assertThat(prevInt, equalTo(0));
+    }
+
+    @Override
     @Test
     public void testNextIntNeg() {
         int nextInt = generator.nextInt(-1);
         assertThat(nextInt, equalTo(0));
+    }
+
+    @Override
+    @Test
+    public void testPrevIntNeg() {
+        int prevInt = generator.prevInt(-1);
+        assertThat(prevInt, equalTo(0));
     }
 }

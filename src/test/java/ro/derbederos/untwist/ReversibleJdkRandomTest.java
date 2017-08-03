@@ -1,43 +1,15 @@
 package ro.derbederos.untwist;
 
-import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 public class ReversibleJdkRandomTest extends ReverseRandomGeneratorAbstractTest<ReversibleJdkRandom> {
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
-
     @Override
     protected ReversibleJdkRandom makeGenerator() {
         return new ReversibleJdkRandom(1000);
-    }
-
-    @Override
-    @Test
-    public void testNextIntIAE2() {
-        try {
-            generator.nextInt(-1);
-            Assert.fail("IllegalArgumentException expected");
-        } catch (IllegalArgumentException ignored) {
-        }
-        try {
-            generator.nextInt(0);
-        } catch (IllegalArgumentException ignored) {
-        }
-    }
-
-    @Override
-    @Test
-    public void testNextIntNeg() {
-        expectedException.expect(IllegalArgumentException.class);
-
-        generator.nextInt(-1);
     }
 
     @Test
@@ -47,13 +19,6 @@ public class ReversibleJdkRandomTest extends ReverseRandomGeneratorAbstractTest<
 
         assertThat(expected, equalTo(87));
         assertThat(actual, equalTo(expected));
-    }
-
-    @Test
-    public void testPrevIntNeg() {
-        expectedException.expect(IllegalArgumentException.class);
-
-        generator.prevInt(-16);
     }
 
     @Test

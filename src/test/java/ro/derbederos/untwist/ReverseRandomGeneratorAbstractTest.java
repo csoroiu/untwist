@@ -11,9 +11,14 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.fail;
 import static ro.derbederos.untwist.ArrayUtils.*;
+import static ro.derbederos.untwist.Utils.between;
 import static ro.derbederos.untwist.Utils.reverseArray;
 
 @Ignore
@@ -82,6 +87,46 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
         assertThat("LongVsArray", actualLong, equalTo(actualArray));
     }
 
+    @Override
+    @Test
+    public void testNextIntIAE2() {
+        try {
+            generator.nextInt(-1);
+            fail("IllegalArgumentException expected");
+        } catch (IllegalArgumentException ignored) {
+        }
+        try {
+            generator.nextInt(0);
+        } catch (IllegalArgumentException ignored) {
+        }
+    }
+
+    @Test
+    public void testPrevIntIAE2() {
+        try {
+            generator.prevInt(-1);
+            fail("IllegalArgumentException expected");
+        } catch (IllegalArgumentException ignored) {
+        }
+        try {
+            generator.prevInt(0);
+        } catch (IllegalArgumentException ignored) {
+        }
+    }
+
+    @Override
+    @Test
+    public void testNextIntNeg() {
+        expectedException.expect(IllegalArgumentException.class);
+
+        generator.nextInt(-1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testPrevIntNeg() {
+        generator.prevInt(-1);
+    }
+
     @Test
     public void testNextPrevInt() {
         int[] expected = generateIntArray(2459, () -> generator.nextInt());
@@ -113,6 +158,7 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
         int[] expected = generateIntArray(2459, () -> generator.nextInt(78209372));
         int[] actual = generateIntArray(2459, () -> generator.prevInt(78209372));
 
+        IntStream.of(expected).forEach((t) -> assertThat(t, between(0, 78209372)));
         assertThat(actual, equalTo(reverseArray(expected)));
 
         expected = generateIntArray(2467, () -> generator.nextInt(78209372));
@@ -126,6 +172,7 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
         int[] expected = generateIntArray(2459, () -> generator.prevInt(78209372));
         int[] actual = generateIntArray(2459, () -> generator.nextInt(78209372));
 
+        IntStream.of(expected).forEach((t) -> assertThat(t, between(0, 78209372)));
         assertThat(actual, equalTo(reverseArray(expected)));
 
         expected = generateIntArray(2467, () -> generator.prevInt(78209372));
@@ -164,6 +211,7 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
         double[] expected = generateDoubleArray(2459, () -> generator.nextDouble());
         double[] actual = generateDoubleArray(2459, () -> generator.prevDouble());
 
+        DoubleStream.of(expected).forEach((t) -> assertThat(t, between(0.0, 1.0)));
         assertThat(actual, equalTo(reverseArray(expected)));
 
         expected = generateDoubleArray(2467, () -> generator.nextDouble());
@@ -177,6 +225,7 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
         double[] expected = generateDoubleArray(2459, () -> generator.prevDouble());
         double[] actual = generateDoubleArray(2459, () -> generator.nextDouble());
 
+        DoubleStream.of(expected).forEach((t) -> assertThat(t, between(0.0, 1.0)));
         assertThat(actual, equalTo(reverseArray(expected)));
 
         expected = generateDoubleArray(2467, () -> generator.prevDouble());
@@ -238,8 +287,7 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
 
     @DataProvider(format = "%m %i")
     public static Object[][] dataProviderTestNextPrevBytes() {
-        return new Object[][]{{2459}, {2467}, {256}, {257}, {258}, {259},
-        };
+        return new Object[][]{{2459}, {2467}, {256}, {257}, {258}, {259}};
     }
 
     @Test
@@ -280,7 +328,12 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
 
         assertThat(actual2, equalTo(reverseArray(expected2)));
         assertThat(expected1, equalTo(expected2));
-        ;
     }
 
+    @Test
+    public void testNextBytes_NullBuffer() {
+        expectedException.expect(NullPointerException.class);
+
+        generator.nextBytes(null);
+    }
 }

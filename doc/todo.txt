@@ -1,10 +1,7 @@
-#1. reversible MersenneTwisterPy3k
-  prevLong(long)
+#1. generic reversible random generator tests
 
-#2. generic reversible random generator tests
-
-#3. CLRRandom - fix nextLong(some values will not be generated)
+#2. CLRRandom - fix nextLong(some values will not be generated)
                 nextInt(int, int) does not return the right end of the interval
                 so 3 values will be missing for sure
 
-#4. implement the prevGaussian method
+#3. implement the prevGaussian method

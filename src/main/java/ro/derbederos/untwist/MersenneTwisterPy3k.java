@@ -187,8 +187,20 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
 
     @Override
     public long prevLong(long n) throws IllegalArgumentException {
-        //FIXME
-        throw new UnsupportedOperationException();
+        if (n > 0) {
+            final int bit_length = Long.SIZE - Long.numberOfLeadingZeros(n);
+            long bits;
+            do {
+                bits = 0;
+                if (bit_length > 32) {
+                    bits = ((long) prev(bit_length - 32)) << 32;
+                }
+                bits |= ((long) prev(Math.min(32, bit_length))) & 0xffffffffL;
+            } while (bits >= n);
+            return bits;
+        }
+        throw new IllegalArgumentException("n must be strictly positive");
+
     }
 
     private static int[] reverseArray(int[] seed) {

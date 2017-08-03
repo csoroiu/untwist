@@ -3,7 +3,6 @@ package ro.derbederos.untwist;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
-import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,8 +16,6 @@ import java.util.Arrays;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static ro.derbederos.untwist.ArrayUtils.*;
-import static ro.derbederos.untwist.Utils.between;
-import static ro.derbederos.untwist.Utils.createStream;
 
 @RunWith(DataProviderRunner.class)
 public class MersenneTwisterPy3kTest {
@@ -43,13 +40,6 @@ public class MersenneTwisterPy3kTest {
         int[] actual = generateIntArray(expected.length, () -> generator.nextInt(1000));
 
         assertThat(actual, equalTo(expected));
-    }
-
-    @Test
-    public void testNextInt_NegativeValue() {
-        expectedException.expect(IllegalArgumentException.class);
-
-        generator.nextInt(-16);
     }
 
     @Test
@@ -193,13 +183,6 @@ public class MersenneTwisterPy3kTest {
     }
 
     @Test
-    public void testNextBytes_NullBuffer() {
-        expectedException.expect(NullPointerException.class);
-
-        generator.nextBytes(null);
-    }
-
-    @Test
     public void testNextDouble() {
         double[] expected = {0.9206826283274985, 0.6351002019693018, 0.4435211436398484, 0.8068844348124993,
                 0.8926848452848529, 0.8081301250035834, 0.25490020128427027, 0.08395441205038512, 0.13853413517651525,
@@ -225,18 +208,6 @@ public class MersenneTwisterPy3kTest {
         boolean[] actual = generateBooleanArray(expected.length, () -> generator.nextBoolean());
 
         assertThat(actual, equalTo(expected));
-    }
-
-    @Test
-    public void testNextIntStream() {
-        final Matcher<Integer> betweenMatcher = between(0, 1000);
-        createStream(100000, () -> generator.nextInt(1000)).forEach((t) -> assertThat(t, betweenMatcher));
-    }
-
-    @Test
-    public void testNextDoubleStream() {
-        final Matcher<Double> betweenMatcher = between(0d, 1d);
-        createStream(100000, () -> generator.nextDouble()).forEach((t) -> assertThat(t, betweenMatcher));
     }
 
     private static long bytesToLong(byte[] littleEndian) {

@@ -1,11 +1,13 @@
 package ro.derbederos.untwist;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.lessThan;
+import static org.junit.Assert.assertEquals;
+import static ro.derbederos.untwist.ArrayUtils.generateLongArray;
+import static ro.derbederos.untwist.Utils.reverseArray;
 
 public class ReversibleMersenneTwisterTest extends ReverseRandomGeneratorAbstractTest<ReversibleMersenneTwister> {
 
@@ -285,35 +287,41 @@ public class ReversibleMersenneTwisterTest extends ReverseRandomGeneratorAbstrac
 
         for (int i = 0; i < refInt.length; ++i) {
             int r = mt.nextInt();
-            Assert.assertEquals(refInt[i], (r & 0x7fffffffL) | ((r < 0) ? 0x80000000L : 0x0L));
+            assertEquals(refInt[i], (r & 0x7fffffffL) | ((r < 0) ? 0x80000000L : 0x0L));
         }
 
         for (int i = 0; i < refDouble.length; ++i) {
             int r = mt.nextInt();
-            Assert.assertEquals(refDouble[i],
+            assertEquals(refDouble[i],
                     ((r & 0x7fffffffL) | ((r < 0) ? 0x80000000L : 0x0L)) / 4294967296.0,
                     1.0e-8);
         }
     }
 
-    @Override
     @Test
-    public void testNextIntIAE2() {
-        try {
-            generator.nextInt(-1);
-            Assert.fail("IllegalArgumentException expected");
-        } catch (IllegalArgumentException ignored) {
-        }
-        try {
-            generator.nextInt(0);
-        } catch (IllegalArgumentException ignored) {
-        }
+    public void testNextPrevLongRange() {
+        long[] expected = generateLongArray(2459, () -> generator.nextLong(0x7ABCDEL));
+        long[] actual = generateLongArray(2459, () -> generator.prevLong(0x7ABCDEL));
+
+        assertThat(actual, equalTo(reverseArray(expected)));
+
+        expected = generateLongArray(2467, () -> generator.nextLong(0x7ABCDEL));
+        actual = generateLongArray(2467, () -> generator.prevLong(0x7ABCDEL));
+
+        assertThat(actual, equalTo(reverseArray(expected)));
     }
 
-    @Override
-    @Test(expected = IllegalArgumentException.class)
-    public void testNextIntNeg() {
-        generator.nextInt(-1);
+    @Test
+    public void testPrevNextLongRange() {
+        long[] expected = generateLongArray(2459, () -> generator.prevLong(0x7ABCDEF8FFFFFFFFL));
+        long[] actual = generateLongArray(2459, () -> generator.nextLong(0x7ABCDEF8FFFFFFFFL));
+
+        assertThat(actual, equalTo(reverseArray(expected)));
+
+        expected = generateLongArray(2467, () -> generator.prevLong(0x7ABCDEF8FFFFFFFFL));
+        actual = generateLongArray(2467, () -> generator.nextLong(0x7ABCDEF8FFFFFFFFL));
+
+        assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test

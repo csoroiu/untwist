@@ -1,6 +1,5 @@
 package ro.derbederos.untwist;
 
-import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -9,8 +8,6 @@ import org.junit.rules.ExpectedException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static ro.derbederos.untwist.ArrayUtils.*;
-import static ro.derbederos.untwist.Utils.between;
-import static ro.derbederos.untwist.Utils.createStream;
 
 public class FreePascalRandomTest {
 
@@ -147,17 +144,5 @@ public class FreePascalRandomTest {
         boolean[] actual = generateBooleanArray(expected.length, () -> generator.nextBoolean());
 
         assertThat(actual, equalTo(expected));
-    }
-
-    @Test
-    public void testNextIntStream() {
-        final Matcher<Integer> betweenMatcher = between(0, 1000);
-        createStream(100000, () -> generator.nextInt(1000)).forEach((t) -> assertThat(t, betweenMatcher));
-    }
-
-    @Test
-    public void testNextDoubleStream() {
-        final Matcher<Double> betweenMatcher = between(0d, 1d);
-        createStream(100000, () -> generator.nextDouble()).forEach((t) -> assertThat(t, betweenMatcher));
     }
 }

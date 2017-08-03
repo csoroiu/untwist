@@ -1,17 +1,12 @@
 package ro.derbederos.untwist;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 
 public class ReverseBitsStreamGeneratorTest extends ReverseRandomGeneratorAbstractTest<ReverseBitsStreamGenerator> {
-
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
 
     protected ReverseBitsStreamGenerator makeGenerator() {
         ReverseBitsStreamGenerator generator = new TestBitStreamGenerator();
@@ -85,13 +80,6 @@ public class ReverseBitsStreamGeneratorTest extends ReverseRandomGeneratorAbstra
 
         assertThat(expected, equalTo(87));
         assertThat(actual, equalTo(expected));
-    }
-
-    @Test
-    public void testPrevIntNeg() {
-        expectedException.expect(IllegalArgumentException.class);
-
-        generator.prevInt(-16);
     }
 
     @Test
