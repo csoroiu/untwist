@@ -1,7 +1,6 @@
 package ro.derbederos.untwist;
 
 import org.hamcrest.Matcher;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,51 +26,10 @@ public class TurboPascalRandomTest {
 
 
     @Test
-    public void testNextIntIAE2() {
-        try {
-            generator.nextInt(-1);
-            Assert.fail("IllegalArgumentException expected");
-        } catch (IllegalArgumentException ignored) {
-        }
-        try {
-            generator.nextInt(0);
-        } catch (IllegalArgumentException ignored) {
-        }
-    }
-
-    @Test
-    public void testNextIntNeg() {
-        expectedException.expect(IllegalArgumentException.class);
-
-        generator.nextInt(-1);
-    }
-
-    @Test
     public void testPrevIntNeg() {
         expectedException.expect(IllegalArgumentException.class);
 
         generator.prevInt(-1);
-    }
-
-    @Test
-    public void testSet32BitSeedIntVsLongVsArray() {
-        final int seedInt = 0x12345678;
-        final long seedLong = 0x12345678L;
-        final int[] seedArray = {seedInt};
-        final int[] expected = {794, 476, 850, 946, 898, 885, 613, 790, 353, 868};
-
-        TurboPascalRandom rInt = new TurboPascalRandom(seedInt);
-        int[] actualInt = generateIntArray(expected.length, () -> rInt.nextInt(1000));
-
-        TurboPascalRandom rLong = new TurboPascalRandom(seedLong);
-        int[] actualLong = generateIntArray(expected.length, () -> rLong.nextInt(1000));
-
-        TurboPascalRandom rArray = new TurboPascalRandom(seedArray);
-        int[] actualArray = generateIntArray(expected.length, () -> rArray.nextInt(1000));
-
-        assertThat(actualInt, equalTo(expected));
-        assertThat(actualLong, equalTo(expected));
-        assertThat(actualArray, equalTo(expected));
     }
 
     @Test

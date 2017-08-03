@@ -29,7 +29,6 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
         super(seed);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void setSeed(int seed) {
         super.setSeed(seed);
@@ -50,7 +49,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
         if (seed.length == 1) {
             setSeed(seed[0]);
         } else {
-            super.setSeed(reversedArray(seed));
+            super.setSeed(reverseArray(seed));
         }
     }
 
@@ -134,7 +133,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
         }
     }
 
-    private static int[] reversedArray(int[] seed) {
+    private static int[] reverseArray(int[] seed) {
         int[] seedReversed = new int[seed.length];
         int j = seed.length;
         for (int i = 0; i < seedReversed.length; i++) {

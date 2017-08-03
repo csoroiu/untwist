@@ -21,7 +21,7 @@ import static ro.derbederos.untwist.Utils.between;
 import static ro.derbederos.untwist.Utils.createStream;
 
 @RunWith(DataProviderRunner.class)
-public class MersenneTwisterPy3KTest {
+public class MersenneTwisterPy3kTest {
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
@@ -43,38 +43,6 @@ public class MersenneTwisterPy3KTest {
         int[] actual = generateIntArray(expected.length, () -> generator.nextInt(1000));
 
         assertThat(actual, equalTo(expected));
-    }
-
-    @Test
-    public void testSet32BitSeedLongVsArray() {
-        final long seedLong = 0x12345678L;
-        final int[] seedArray = {0x12345678};
-        final int[] expected = {881, 986, 223, 648, 848, 779, 753, 702, 302, 131};
-
-        MersenneTwisterPy3k rLong = new MersenneTwisterPy3k(seedLong);
-        int[] actualLong = generateIntArray(expected.length, () -> rLong.nextInt(1000));
-
-        MersenneTwisterPy3k rArray = new MersenneTwisterPy3k(seedArray);
-        int[] actualArray = generateIntArray(expected.length, () -> rArray.nextInt(1000));
-
-        assertThat(actualLong, equalTo(expected));
-        assertThat(actualArray, equalTo(expected));
-    }
-
-    @Test
-    public void testSet64bitSeedLongVsArray() {
-        final long seedLong = 0x0304050601010102L;
-        final int[] seedArray = {0x03040506, 0x01010102};
-        final int[] expected = {4, 815, 264, 766, 681, 399, 91, 22, 171, 420};
-
-        generator.setSeed(seedLong);
-        int[] actualLong = generateIntArray(expected.length, () -> generator.nextInt(1000));
-
-        generator.setSeed(seedArray);
-        int[] actualArray = generateIntArray(expected.length, () -> generator.nextInt(1000));
-
-        assertThat(actualLong, equalTo(expected));
-        assertThat(actualArray, equalTo(expected));
     }
 
     @Test

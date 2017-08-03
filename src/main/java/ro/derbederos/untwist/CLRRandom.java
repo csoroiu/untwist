@@ -97,7 +97,7 @@ public class CLRRandom implements ReverseRandomGenerator {
     private double prevSample() {
         // Including this division at the end gives us significantly improved
         // random number distribution.
-        return internalSample() * (1.0 / MBIG);
+        return prevInternalSample() * (1.0 / MBIG);
     }
 
     private int internalSample() {
@@ -203,7 +203,6 @@ public class CLRRandom implements ReverseRandomGenerator {
     //
 
     @Override
-    @Deprecated
     public void setSeed(int seed) {
         initialize(seed);
     }
@@ -351,7 +350,7 @@ public class CLRRandom implements ReverseRandomGenerator {
             throw new NullPointerException("buffer");
         }
 
-        for (int i = buffer.length - 1; i >= 0; i++) {
+        for (int i = 0; i < buffer.length; i++) {
             buffer[i] = (byte) (prevInternalSample() % (1 << 8));
         }
     }

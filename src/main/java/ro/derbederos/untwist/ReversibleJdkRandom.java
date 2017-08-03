@@ -62,7 +62,6 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
     }
 
     @Override
-    @Deprecated
     public void setSeed(int seed) {
         setSeed((long) seed);
     }

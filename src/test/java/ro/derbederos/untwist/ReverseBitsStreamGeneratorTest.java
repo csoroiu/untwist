@@ -45,7 +45,8 @@ public class ReverseBitsStreamGeneratorTest extends ReverseRandomGeneratorAbstra
         }
 
         public void setSeed(int[] seed) {
-            this.ran.setSeed((long) seed[0]);
+            this.ran.setSeed(RandomUtils.convertToLong(seed));
+            this.clear();
         }
 
         public void setSeed(long seed) {

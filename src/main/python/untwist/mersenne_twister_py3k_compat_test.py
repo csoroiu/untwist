@@ -2,7 +2,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
-from derbederos.random.random_py3k import RandomPy3k
+from untwist.random_py3k import RandomPy3k
 
 import unittest
 

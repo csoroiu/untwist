@@ -26,43 +26,6 @@ public class FreePascalRandomTest {
     }
 
     @Test
-    public void testSet32BitSeedIntVsLongVsArray() {
-        final int seedInt = 0x12345678;
-        final long seedLong = 0x12345678L;
-        final int[] seedArray = {seedInt};
-        final int[] expected = {775, 36, 653, 879, 708, 392, 434, 947, 274, 584};
-
-        FreePascalRandom rInt = new FreePascalRandom(seedInt);
-        int[] actualInt = generateIntArray(expected.length, () -> rInt.nextInt(1000));
-
-        FreePascalRandom rLong = new FreePascalRandom(seedLong);
-        int[] actualLong = generateIntArray(expected.length, () -> rLong.nextInt(1000));
-
-        FreePascalRandom rArray = new FreePascalRandom(seedArray);
-        int[] actualArray = generateIntArray(expected.length, () -> rArray.nextInt(1000));
-
-        assertThat(actualInt, equalTo(expected));
-        assertThat(actualLong, equalTo(expected));
-        assertThat(actualArray, equalTo(expected));
-    }
-
-    @Test
-    public void testSet64bitSeedLongVsArray() {
-        final long seedLong = 0x0304050601010102L;
-        final int[] seedArray = {0x03040506, 0x01010102};
-        final int[] expected = {4, 796, 258, 748, 665, 390, 89, 21, 167, 410};
-
-        generator.setSeed(seedLong);
-        int[] actualLong = generateIntArray(expected.length, () -> generator.nextInt(1000));
-
-        generator.setSeed(seedArray);
-        int[] actualArray = generateIntArray(expected.length, () -> generator.nextInt(1000));
-
-        assertThat(actualLong, equalTo(expected));
-        assertThat(actualArray, equalTo(expected));
-    }
-
-    @Test
     public void testNextInt_NegativeValue() {
         int[] expected = {-10, -6, -9, -3, -14, -4, -14, -7, -7, -13, -12, -3, -5, -3, -15};
         int[] actual = generateIntArray(expected.length, () -> generator.nextInt(-16));

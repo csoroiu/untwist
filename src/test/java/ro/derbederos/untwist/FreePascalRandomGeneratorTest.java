@@ -8,8 +8,13 @@ import static org.hamcrest.Matchers.equalTo;
 public class FreePascalRandomGeneratorTest extends ReversibleMersenneTwisterTest {
 
     @Override
-    protected ReverseRandomGenerator makeGenerator() {
+    protected ReversibleMersenneTwister makeGenerator() {
         return new FreePascalRandom(123456789013L);
+    }
+
+    @Override
+    int[] getMakotoNishimuraTestSeed() {
+        return new int[]{0x456, 0x345, 0x234, 0x123};
     }
 
     @Override

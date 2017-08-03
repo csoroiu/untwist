@@ -39,10 +39,60 @@ class Utils {
         return DoubleStream.generate(supplier).limit(limit);
     }
 
+    static byte[] reverseArray(byte[] b) {
+        int j = b.length - 1;
+        for (int i = 0; i < b.length / 2; i++) {
+            final byte tmp = b[i];
+            b[i] = b[j];
+            b[j--] = tmp;
+        }
+        return b;
+    }
+
     static int[] reverseArray(int[] b) {
         int j = b.length - 1;
         for (int i = 0; i < b.length / 2; i++) {
             final int tmp = b[i];
+            b[i] = b[j];
+            b[j--] = tmp;
+        }
+        return b;
+    }
+
+    static long[] reverseArray(long[] b) {
+        int j = b.length - 1;
+        for (int i = 0; i < b.length / 2; i++) {
+            final long tmp = b[i];
+            b[i] = b[j];
+            b[j--] = tmp;
+        }
+        return b;
+    }
+
+    static double[] reverseArray(double[] b) {
+        int j = b.length - 1;
+        for (int i = 0; i < b.length / 2; i++) {
+            final double tmp = b[i];
+            b[i] = b[j];
+            b[j--] = tmp;
+        }
+        return b;
+    }
+
+    static float[] reverseArray(float[] b) {
+        int j = b.length - 1;
+        for (int i = 0; i < b.length / 2; i++) {
+            final float tmp = b[i];
+            b[i] = b[j];
+            b[j--] = tmp;
+        }
+        return b;
+    }
+
+    static boolean[] reverseArray(boolean[] b) {
+        int j = b.length - 1;
+        for (int i = 0; i < b.length / 2; i++) {
+            final boolean tmp = b[i];
             b[i] = b[j];
             b[j--] = tmp;
         }

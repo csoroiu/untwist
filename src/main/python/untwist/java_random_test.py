@@ -4,7 +4,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 import unittest
 
-from derbederos.random.java_random import JavaRandom
+from untwist.java_random import JavaRandom
 
 
 class JavaRandomTest(unittest.TestCase):

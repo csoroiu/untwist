@@ -1,8 +1,10 @@
 #1. reversible MersenneTwisterPy3k
-  prevInt(int), prevLong(long), prevBytes(byte[])
+  prevLong(long)
 
-#2. MersenneTwisterPy3k test int after nextbytes when 4 byte aligned (multiple)
+#2. generic reversible random generator tests
 
-#3. generic reversible random generator tests
+#3. CLRRandom - fix nextLong(some values will not be generated)
+                nextInt(int, int) does not return the right end of the interval
+                so 3 values will be missing for sure
 
 #4. implement the prevGaussian method

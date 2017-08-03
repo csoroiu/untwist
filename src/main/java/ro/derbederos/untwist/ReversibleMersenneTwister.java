@@ -133,15 +133,7 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
         setSeed(seed);
     }
 
-    /**
-     * Reinitialize the generator as if just built with the given int seed.
-     * <p>The state of the generator is exactly the same as a new
-     * generator built with the same seed.</p>
-     *
-     * @param seed the initial seed (32 bits integer)
-     */
-    @Override
-    public void setSeed(int seed) {
+    private void initGenRand(int seed) {
         // we use a long masked by 0xffffffffL as a poor man unsigned int
         long longMT = seed;
         // NB: unlike original C code, we are working with java longs, the cast below makes masking unnecessary
@@ -162,6 +154,18 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
     }
 
     /**
+     * Reinitialize the generator as if just built with the given int seed.
+     * <p>The state of the generator is exactly the same as a new
+     * generator built with the same seed.</p>
+     *
+     * @param seed the initial seed (32 bits integer)
+     */
+    @Override
+    public void setSeed(int seed) {
+        initGenRand(seed);
+    }
+
+    /**
      * Reinitialize the generator as if just built with the given int array seed.
      * <p>The state of the generator is exactly the same as a new
      * generator built with the same seed.</p>
@@ -178,7 +182,7 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
             return;
         }
 
-        setSeed(19650218);
+        initGenRand(19650218);
         int i = 1;
         int j = 0;
 
@@ -211,6 +215,7 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
         }
 
         mt[0] = 0x80000000; // MSB is 1; assuring non-zero initial array
+
         clear(); // Clear normal deviate cache
 
         // Saving initial state separately

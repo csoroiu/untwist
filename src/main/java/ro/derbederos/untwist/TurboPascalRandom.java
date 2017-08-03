@@ -56,7 +56,6 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
     }
 
     @Override
-    @Deprecated
     public void setSeed(int seed) {
         this.seed = seed;
         clear();

@@ -1,7 +1,6 @@
 package ro.derbederos.untwist;
 
 import org.hamcrest.Matcher;
-import org.hamcrest.MatcherAssert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -9,18 +8,14 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.util.function.IntPredicate;
-import java.util.function.Predicate;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.everyItem;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.lessThan;
 import static ro.derbederos.untwist.ArrayUtils.*;
 import static ro.derbederos.untwist.Utils.between;
 import static ro.derbederos.untwist.Utils.betweenPredicate;
 import static ro.derbederos.untwist.Utils.createStream;
-import static ro.derbederos.untwist.Utils.toByteList;
 
 public class CLRRandomTest {
 
@@ -32,277 +27,6 @@ public class CLRRandomTest {
     @Before
     public void setup() {
         generator = new CLRRandom(1234567890L);
-    }
-
-    @Test
-    public void testRandomCtor1_PosTest1() {
-        CLRRandom r = new CLRRandom();
-        assertThat(r, notNullValue());
-    }
-
-    @Test
-    public void testRandomCtor2_int_PosTest1() {
-        int randValue = newInt32WithCondition(-55, (v) -> v == Integer.MIN_VALUE);
-        CLRRandom r = new CLRRandom(randValue);
-        assertThat(r, notNullValue());
-    }
-
-    @Test
-    public void testRandomCtor2_int_PosTest2() {
-        CLRRandom r = new CLRRandom(Integer.MIN_VALUE);
-        assertThat(r, notNullValue());
-    }
-
-    @Test
-    public void testRandomNext1_PosTest1() {
-        CLRRandom r = new CLRRandom(-55);
-        int value = r.nextInt();
-        MatcherAssert.assertThat(value, between(0, Integer.MAX_VALUE));
-    }
-
-    @Test
-    public void testRandomNext1_PosTest2() {
-        CLRRandom r = new CLRRandom(Integer.MAX_VALUE);
-        int value = r.nextInt();
-        MatcherAssert.assertThat(value, between(0, Integer.MAX_VALUE));
-    }
-
-    @Test
-    public void testRandomNext1_PosTest3() {
-        CLRRandom r = new CLRRandom(0);
-        int value = r.nextInt();
-        MatcherAssert.assertThat(value, between(0, Integer.MAX_VALUE));
-    }
-
-    @Test
-    public void testRandomNext1_PosTest4() {
-        int randValue = newInt32WithCondition(-55, (v) -> v == Integer.MIN_VALUE || v == 0);
-        if (randValue > 0) {
-            randValue *= -1;
-        }
-        CLRRandom r = new CLRRandom(randValue);
-        int value = r.nextInt();
-        MatcherAssert.assertThat(value, between(0, Integer.MAX_VALUE));
-    }
-
-    @Test
-    public void testRandomNext2_int_PosTest1() {
-        int maxValue = newInt32WithCondition(-55, (v) -> v <= 0 || v == Integer.MAX_VALUE);
-        CLRRandom random = new CLRRandom(-55);
-        int value = random.nextInt(maxValue);
-        MatcherAssert.assertThat(value, between(0, maxValue));
-    }
-
-    @Test
-    public void testRandomNext2_int_PosTest2() {
-        int maxValue = newInt32WithCondition(-55, (v) -> v <= 0 || v == Integer.MAX_VALUE);
-        CLRRandom random = new CLRRandom(Integer.MAX_VALUE);
-        int value = random.nextInt(maxValue);
-        MatcherAssert.assertThat(value, between(0, maxValue));
-    }
-
-    @Test
-    public void testRandomNext2_int_PosTest3() {
-        int maxValue = newInt32WithCondition(-55, (v) -> v <= 0 || v == Integer.MAX_VALUE);
-        CLRRandom random = new CLRRandom(0);
-        int value = random.nextInt(maxValue);
-        MatcherAssert.assertThat(value, between(0, maxValue));
-    }
-
-    @Test
-    public void testRandomNext2_int_PosTest4() {
-        int randValue = newInt32WithCondition(-55, (v) -> v == Integer.MIN_VALUE || v == 0);
-        if (randValue > 0) {
-            randValue *= -1;
-        }
-        int maxValue = newInt32WithCondition(-55, (v) -> v <= 0 || v == Integer.MAX_VALUE);
-        CLRRandom random = new CLRRandom(randValue);
-        int value = random.nextInt(maxValue);
-        MatcherAssert.assertThat(value, between(0, maxValue));
-    }
-
-    @Test
-    public void testRandomNext2_int_PosTest5() {
-        int maxValue = newInt32WithCondition(-55, (v) -> v <= 0 || v == Integer.MAX_VALUE);
-        CLRRandom random = new CLRRandom(maxValue);
-        int value = random.nextInt(maxValue);
-        MatcherAssert.assertThat(value, between(0, maxValue));
-    }
-
-    @Test
-    public void testRandomNext2_int_PosTest6() {
-        CLRRandom random = new CLRRandom(0);
-        int value = random.nextInt(0);
-        assertThat(value, equalTo(0));
-    }
-
-    @Test
-    public void testRandomNext2_int_NegTest1() {
-        expectedException.expect(IllegalArgumentException.class);
-        CLRRandom random = new CLRRandom(-55);
-        random.nextInt(-1);
-    }
-
-    @Test
-    public void testRandomNext3_int_int_PosTest1() {
-        int maxValue = newInt32WithCondition(-55, (v) -> v == Integer.MAX_VALUE);
-        int minValue = newInt32WithCondition(-55, (v) -> v >= maxValue);
-        CLRRandom random = new CLRRandom();
-        int value = random.nextInt(minValue, maxValue);
-        MatcherAssert.assertThat(value, between(minValue, maxValue));
-    }
-
-    @Test
-    public void testRandomNext3_int_int_PosTest2() {
-        int maxValue = newInt32WithCondition(-55, (v) -> v == Integer.MAX_VALUE);
-        int minValue = newInt32WithCondition(-55, (v) -> v >= maxValue);
-        CLRRandom random = new CLRRandom(Integer.MAX_VALUE);
-        int value = random.nextInt(minValue, maxValue);
-        MatcherAssert.assertThat(value, between(minValue, maxValue));
-    }
-
-    @Test
-    public void testRandomNext3_int_int_PosTest3() {
-        int maxValue = newInt32WithCondition(-55, (v) -> v == Integer.MAX_VALUE);
-        int minValue = newInt32WithCondition(-55, (v) -> v >= maxValue);
-        CLRRandom random = new CLRRandom(0);
-        int value = random.nextInt(minValue, maxValue);
-        MatcherAssert.assertThat(value, between(minValue, maxValue));
-    }
-
-    @Test
-    public void testRandomNext3_int_int_PosTest4() {
-        int randValue = newInt32WithCondition(-55, (v) -> v == Integer.MIN_VALUE || v == 0);
-        if (randValue > 0) {
-            randValue *= -1;
-        }
-        int maxValue = newInt32WithCondition(-55, (v) -> v == Integer.MAX_VALUE);
-        int minValue = newInt32WithCondition(-55, (v) -> v >= maxValue);
-        CLRRandom random = new CLRRandom(randValue);
-        int value = random.nextInt(minValue, maxValue);
-        MatcherAssert.assertThat(value, between(minValue, maxValue));
-    }
-
-    @Test
-    public void testRandomNext3_int_int_PosTest5() {
-        int maxValue = newInt32WithCondition(-55, (v) -> v == Integer.MAX_VALUE);
-        int minValue = newInt32WithCondition(-55, (v) -> v >= maxValue);
-        CLRRandom random = new CLRRandom(maxValue);
-        int value = random.nextInt(minValue, maxValue);
-        MatcherAssert.assertThat(value, between(minValue, maxValue));
-    }
-
-    @Test
-    public void testRandomNext3_int_int_PosTest6() {
-        assertThat(new CLRRandom(0).nextInt(0, 0), equalTo(0));
-        assertThat(new CLRRandom(0).nextInt(Integer.MAX_VALUE, Integer.MAX_VALUE), equalTo(Integer.MAX_VALUE));
-        assertThat(new CLRRandom(0).nextInt(Integer.MIN_VALUE, Integer.MIN_VALUE), equalTo(Integer.MIN_VALUE));
-        assertThat(new CLRRandom(0).nextInt(Integer.MAX_VALUE - 1, Integer.MAX_VALUE),
-                equalTo(Integer.MAX_VALUE - 1));
-        assertThat(new CLRRandom(Integer.MAX_VALUE).nextInt(Integer.MAX_VALUE - 1, Integer.MAX_VALUE),
-                equalTo(Integer.MAX_VALUE - 1));
-    }
-
-    @Test
-    public void testRandomNext3_int_int_PosTest7() {
-        int maxValue = newInt32WithCondition(-55, (v) -> v == Integer.MAX_VALUE);
-        int minValue = newInt32WithCondition(-55, (v) -> v >= maxValue);
-        CLRRandom random = new CLRRandom(maxValue);
-        int value = random.nextInt(minValue, minValue);
-        MatcherAssert.assertThat(value, between(minValue, maxValue));
-    }
-
-    @Test
-    public void testRandomNext3_int_int_NegTest1() {
-        expectedException.expect(IllegalArgumentException.class);
-        CLRRandom random = new CLRRandom(-55);
-        random.nextInt(1, 0);
-    }
-
-    @Test
-    public void testRandomNextDouble_PosTest1() {
-        MatcherAssert.assertThat(new CLRRandom(-55).nextDouble(), between(0d, 1d));
-    }
-
-    @Test
-    public void testRandomNextDouble_PosTest2() {
-        MatcherAssert.assertThat(new CLRRandom(Integer.MAX_VALUE).nextDouble(), between(0d, 1d));
-    }
-
-    @Test
-    public void testRandomNextDouble_PosTest3() {
-        MatcherAssert.assertThat(new CLRRandom(0).nextDouble(), between(0d, 1d));
-    }
-
-    @Test
-    public void testRandomNextDouble_PosTest4() {
-        int randValue = newInt32WithCondition(-55, (v) -> v == Integer.MIN_VALUE || v == 0);
-        if (randValue > 0) {
-            randValue *= -1;
-        }
-        MatcherAssert.assertThat(new CLRRandom(randValue).nextDouble(), between(0d, 1d));
-    }
-
-    @Test
-    public void testRandomNextBytes_PosTest1() {
-        byte[] b = new byte[1024];
-        new CLRRandom(-55).nextBytes(b);
-        MatcherAssert.assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
-        new CLRRandom(0).nextBytes(b);
-        MatcherAssert.assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
-        new CLRRandom(Integer.MAX_VALUE).nextBytes(b);
-        MatcherAssert.assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
-        new CLRRandom(-1).nextBytes(b);
-        MatcherAssert.assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
-        new CLRRandom(Byte.MAX_VALUE).nextBytes(b);
-        MatcherAssert.assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
-        new CLRRandom(Byte.MIN_VALUE).nextBytes(b);
-        MatcherAssert.assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
-    }
-
-    @Test
-    public void testRandomNextBytes_PosTest2() {
-        byte[] b = new byte[1];
-        new CLRRandom(-55).nextBytes(b);
-        MatcherAssert.assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
-        new CLRRandom(0).nextBytes(b);
-        MatcherAssert.assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
-        new CLRRandom(Integer.MAX_VALUE).nextBytes(b);
-        MatcherAssert.assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
-        new CLRRandom(-1).nextBytes(b);
-        MatcherAssert.assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
-        new CLRRandom(Byte.MAX_VALUE).nextBytes(b);
-        MatcherAssert.assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
-        new CLRRandom(Byte.MIN_VALUE).nextBytes(b);
-        MatcherAssert.assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
-    }
-
-    @Test
-    public void testRandomNextBytes_NegTest1() {
-        expectedException.expect(NullPointerException.class);
-        CLRRandom random = new CLRRandom(-55);
-        random.nextBytes(null);
-    }
-
-    @Test
-    public void testSet32BitSeedIntVsLongVsArray() {
-        final int seedInt = 0x12345678;
-        final long seedLong = 0x12345678L;
-        final int[] seedArray = {seedInt};
-        final int[] expected = {853, 486, 124, 219, 890, 790, 885, 574, 751, 165};
-
-        CLRRandom rInt = new CLRRandom(seedInt);
-        int[] actualInt = generateIntArray(expected.length, () -> rInt.nextInt(1000));
-
-        CLRRandom rLong = new CLRRandom(seedLong);
-        int[] actualLong = generateIntArray(expected.length, () -> rLong.nextInt(1000));
-
-        CLRRandom rArray = new CLRRandom(seedArray);
-        int[] actualArray = generateIntArray(expected.length, () -> rArray.nextInt(1000));
-
-        assertThat(actualInt, equalTo(expected));
-        assertThat(actualLong, equalTo(expected));
-        assertThat(actualArray, equalTo(expected));
     }
 
     @Test
@@ -387,16 +111,14 @@ public class CLRRandomTest {
 
     @Test
     public void testNextIntStream() {
-        CLRRandom r = new CLRRandom(rand.nextInt());
         final Matcher<Integer> betweenMatcher = between(0, 1000);
-        createStream(100000, () -> r.nextInt(1000)).forEach((t) -> assertThat(t, betweenMatcher));
+        createStream(100000, () -> generator.nextInt(1000)).forEach((t) -> assertThat(t, betweenMatcher));
     }
 
     @Test
     public void testNextInt_RangeStream() {
-        CLRRandom r = new CLRRandom(rand.nextInt());
         final Matcher<Integer> betweenMatcher = between(-1000, 3000);
-        createStream(100000, () -> r.nextInt(-1000, 3000)).forEach((t) -> assertThat(t, betweenMatcher));
+        createStream(100000, () -> generator.nextInt(-1000, 3000)).forEach((t) -> assertThat(t, betweenMatcher));
     }
 
     @Test
@@ -408,9 +130,8 @@ public class CLRRandomTest {
 
     @Test
     public void testNextDoubleStream() {
-        CLRRandom r = new CLRRandom(rand.nextInt());
         final Matcher<Double> betweenMatcher = between(0d, 1d);
-        createStream(100000, r::nextDouble).forEach((t) -> assertThat(t, betweenMatcher));
+        createStream(100000, generator::nextDouble).forEach((t) -> assertThat(t, betweenMatcher));
     }
 
     @Test
@@ -418,27 +139,6 @@ public class CLRRandomTest {
         expectedException.expect(NullPointerException.class);
 
         generator.nextBytes(null);
-    }
-
-    private static Integer seed = null;
-    private static CLRRandom rand;
-
-    private void setSeed(Integer seed) {
-        if (CLRRandomTest.seed == null) {
-            CLRRandomTest.seed = seed;
-            if (seed != null) {
-                rand = new CLRRandom(CLRRandomTest.seed);
-            }
-        }
-    }
-
-    private int newInt32WithCondition(Integer seed, Predicate<Integer> loopCondition) {
-        int result;
-        do {
-            setSeed(seed);
-            result = rand.nextInt();
-        } while (loopCondition.test(result));
-        return result;
     }
 
     private static final int COMPARE_STEPS = 100_000;
@@ -481,6 +181,7 @@ public class CLRRandomTest {
                 System.err.println("Step " + i);
                 e.printStackTrace();
                 errors++;
+                assertThat(errors, lessThan(10));
             }
         }
         assertThat(errors, equalTo(0));
@@ -524,6 +225,7 @@ public class CLRRandomTest {
                 System.err.println("Step " + i);
                 e.printStackTrace();
                 errors++;
+                assertThat(errors, lessThan(10));
             }
         }
         assertThat(errors, equalTo(0));

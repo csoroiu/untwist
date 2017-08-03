@@ -5,11 +5,9 @@ import org.junit.Test;
 
 public class TurboPascalRandomGeneratorTest extends ReverseRandomGeneratorAbstractTest {
 
-    private static int SEED = 0xc44002dc;
-
     @Override
     protected ReverseRandomGenerator makeGenerator() {
-        return new TurboPascalRandom(1234567890L);
+        return new TurboPascalRandom(0xC44002DC);
     }
 
     @Override

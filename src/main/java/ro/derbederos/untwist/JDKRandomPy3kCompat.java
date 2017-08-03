@@ -17,7 +17,6 @@ public class JDKRandomPy3kCompat extends Random implements RandomGenerator {
     }
 
     @Override
-    @Deprecated
     public void setSeed(int seed) {
         setSeed((long) seed);
     }

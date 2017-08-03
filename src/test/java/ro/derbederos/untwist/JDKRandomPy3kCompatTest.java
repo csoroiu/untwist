@@ -25,28 +25,25 @@ public class JDKRandomPy3kCompatTest {
         generator = new JDKRandomPy3kCompat(0L);
     }
 
-    @SuppressWarnings("deprecation")
     @Test
     public void testSet32BitSeedIntVsLongVsArray() {
         final int seedInt = 0x12345678;
         final long seedLong = 0x12345678L;
         final int[] seedArray = {seedInt};
-        final int[] expected = {880, 671, 970, 214, 37, 891, 670, 23, 301, 904};
 
         JDKRandomPy3kCompat rInt = new JDKRandomPy3kCompat();
         rInt.setSeed(seedInt);
-        int[] actualInt = generateIntArray(expected.length, () -> rInt.nextInt(1000));
+        int[] actualInt = generateIntArray(10, () -> rInt.nextInt(1000));
 
         JDKRandomPy3kCompat rLong = new JDKRandomPy3kCompat(seedLong);
-        int[] actualLong = generateIntArray(expected.length, () -> rLong.nextInt(1000));
+        int[] actualLong = generateIntArray(10, () -> rLong.nextInt(1000));
 
         JDKRandomPy3kCompat rArray = new JDKRandomPy3kCompat();
         rArray.setSeed(seedArray);
-        int[] actualArray = generateIntArray(expected.length, () -> rArray.nextInt(1000));
+        int[] actualArray = generateIntArray(10, () -> rArray.nextInt(1000));
 
-        assertThat(actualInt, equalTo(expected));
-        assertThat(actualLong, equalTo(expected));
-        assertThat(actualArray, equalTo(expected));
+        assertThat("IntVsLong", actualInt, equalTo(actualLong));
+        assertThat("LongVsArray", actualLong, equalTo(actualArray));
     }
 
     @Test

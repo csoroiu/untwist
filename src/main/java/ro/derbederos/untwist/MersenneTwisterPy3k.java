@@ -23,10 +23,8 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
     }
 
     @Override
-    @Deprecated
-    // Do not use this method directly
     public void setSeed(int seed) {
-        super.setSeed(seed);
+        super.setSeed(new int[]{seed});
     }
 
     @Override
@@ -43,7 +41,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
     public void setSeed(int[] seed) {
         // for python compatibility where the seed is a number (big integer)
         // and it is big endian
-        super.setSeed(reversedArray(seed));
+        super.setSeed(reverseArray(seed));
     }
 
     @Override
@@ -84,8 +82,15 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
 
     @Override
     public int prevInt(int n) throws IllegalArgumentException {
-        //FIXME
-        throw new UnsupportedOperationException();
+        if (n > 0) {
+            final int bit_length = Integer.SIZE - Integer.numberOfLeadingZeros(n);
+            int bits;
+            do {
+                bits = prev(bit_length);
+            } while (bits >= n);
+            return bits;
+        }
+        throw new IllegalArgumentException("n must be strictly positive");
     }
 
     @Override
@@ -143,8 +148,24 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
 
     @Override
     public void prevBytes(byte[] bytes) {
-        //FIXME
-        throw new UnsupportedOperationException();
+        int i = 0;
+        final int endIndex = bytes.length;
+        int iEnd = endIndex - endIndex / 4 * 4;
+        if (iEnd != 0) {
+            int random = prev(32);
+            while (i < iEnd) {
+                bytes[i++] = (byte) ((random >> 24) & 0xff);
+                random <<= 8;
+            }
+        }
+        while (i < endIndex) {
+            final int random = prev(32);
+            bytes[i] = (byte) ((random >>> 24) & 0xff);
+            bytes[i + 1] = (byte) ((random >>> 16) & 0xff);
+            bytes[i + 2] = (byte) ((random >>> 8) & 0xff);
+            bytes[i + 3] = (byte) (random & 0xff);
+            i += 4;
+        }
     }
 
     @Override
@@ -170,7 +191,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
         throw new UnsupportedOperationException();
     }
 
-    private static int[] reversedArray(int[] seed) {
+    private static int[] reverseArray(int[] seed) {
         int[] seedReversed = new int[seed.length];
         int j = seed.length;
         for (int i = 0; i < seedReversed.length; i++) {
