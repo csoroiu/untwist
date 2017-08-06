@@ -1,88 +1,276 @@
 package ro.derbederos.untwist;
 
-import org.junit.Before;
-import org.junit.Rule;
+import org.hamcrest.Matcher;
+import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
+
+import java.util.function.IntPredicate;
+import java.util.stream.IntStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.lessThan;
 import static ro.derbederos.untwist.ArrayUtils.*;
+import static ro.derbederos.untwist.Utils.between;
+import static ro.derbederos.untwist.Utils.createStream;
+import static ro.derbederos.untwist.Utils.reverseArray;
 
-public class CLRRandomTest {
+public class CLRRandomTest extends ReverseRandomGeneratorAbstractTest<CLRRandom> {
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
+    @Override
+    protected CLRRandom makeGenerator() {
+        return new CLRRandom(new int[]{291, 564, 837, 1110});
+    }
 
-    private CLRRandom generator;
+    @Override
+    @Test
+    public void testNextInt2() {
+        //FIXME
+        //super.testNextInt2();
+    }
 
-    @Before
-    public void setup() {
-        generator = new CLRRandom(1234567890L);
+    @Override
+    @Test
+    public void testNextIntWideRange() {
+        //FIXME
+        //super.testNextIntWideRange();
     }
 
     @Test
-    public void testNextInt_16() {
-        int[] expected = {8, 6, 4, 0, 5, 13, 10, 1, 12, 13};
-        int[] actual = generateIntArray(expected.length, () -> generator.nextInt(16));
-
-        assertThat(actual, equalTo(expected));
+    @Ignore
+    public void testNextInt_NoBoundStream() {
+        IntPredicate betweenPredicate = (i) -> 0 <= i && i < Integer.MAX_VALUE;
+        boolean result = createStream(1_000_000_000L, () -> generator.nextInt()).allMatch(betweenPredicate);
+        assertThat(result, equalTo(true));
     }
 
     @Test
-    public void testNextInt_32bit() {
-        int[] expected = {-287579909, 90175452, 80605103, 1593771972, 1778445194, -482557609, 1894541034, 1056929146,
-                779980809, 1253822814, 1884515393, 614983788, -358924531, 298830117, 903849615, -549623606, 676576329,
-                853008319, 370052958, 194295684};
+    public void testNextInt_InvalidRange() {
+        expectedException.expect(IllegalArgumentException.class);
+
+        generator.nextInt(200, 100);
+    }
+
+    @Test
+    public void testPrevInt_InvalidRange() {
+        expectedException.expect(IllegalArgumentException.class);
+
+        generator.prevInt(200, 100);
+    }
+
+    @Test
+    public void testNextInt() {
+        final Matcher<Integer> betweenMatcher = between(0, 1000);
+        createStream(100000, () -> generator.nextInt(1000))
+                .forEach((t) -> assertThat(t, betweenMatcher));
+    }
+
+    @Test
+    public void testNextPrevIntRange() {
+        int[] expected = generateIntArray(2459, () -> generator.nextInt(-1000, 3000));
+        int[] actual = generateIntArray(2459, () -> generator.prevInt(-1000, 3000));
+
+        IntStream.of(expected).forEach((t) -> assertThat(t, between(-1000, 3000)));
+        assertThat(actual, equalTo(reverseArray(expected)));
+
+        expected = generateIntArray(2467, () -> generator.nextInt(-1000, 3000));
+        actual = generateIntArray(2467, () -> generator.prevInt(-1000, 3000));
+
+        assertThat(actual, equalTo(reverseArray(expected)));
+    }
+
+    @Test
+    public void testPrevNextIntRange() {
+        int[] expected = generateIntArray(2459, () -> generator.prevInt(-1000, 3000));
+        int[] actual = generateIntArray(2459, () -> generator.nextInt(-1000, 3000));
+
+        IntStream.of(expected).forEach((t) -> assertThat(t, between(-1000, 3000)));
+        assertThat(actual, equalTo(reverseArray(expected)));
+
+        expected = generateIntArray(2467, () -> generator.prevInt(-1000, 3000));
+        actual = generateIntArray(2467, () -> generator.nextInt(-1000, 3000));
+
+        assertThat(actual, equalTo(reverseArray(expected)));
+    }
+
+    @Test
+    //test for range larger than Integer.MAX_VALUE
+    public void testNextIntLargeRange32bit() {
+        int[] expected = {72659689, 479570516, 1964597322, 1152315378, 835159700, 1400239888, 824890196, -84625816,
+                934767641, 1787676899, -950803732, -984901899, 1160627160, 854462981, -375650433, 751425218,
+                -869369328, -311654904, 1868174591, 1892969089};
         int[] actual = generateIntArray(expected.length, () -> generator.nextInt(-1_000_000_000, Integer.MAX_VALUE));
 
         assertThat(actual, equalTo(expected));
     }
 
+    @Override
     @Test
-    public void testNextInt_9() {
-        int[] expected = {4, 3, 2, 0, 2, 7, 5, 0, 6, 7, 6, 6, 7, 4, 2, 2, 1, 8, 3, 8};
-        int[] actual = generateIntArray(expected.length, () -> generator.nextInt(9));
+    public void testNextInt16ExactValue() {
+        int[] expected = {5, 10, 0, 10, 14, 0, 5, 1, 2, 4};
+        int[] actual = generateIntArray(expected.length, () -> generator.nextInt(16));
 
         assertThat(actual, equalTo(expected));
     }
 
+    @Override
     @Test
-    public void testNextLong() {
-        long[] expected = {-5048026723238850071L, -2890171289807960499L, 7060514762430744938L,
-                7740928225207699870L, 1208723606135141233L, 7682170035453475444L, -5466162641285947888L,
-                1934692803206552476L, 602691552480251525L, -1193777884039002094L};
+    public void testNextIntExactValue() {
+        int[] expected = {683762528, 1373746042, 128503505, 1360364556, 1897922134,
+                90664323, 789505134, 235596161, 356723453, 608884583};
+        int[] actual = generateIntArray(expected.length, () -> generator.nextInt());
+
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Override
+    @Test
+    public void testNextLongExactValue() {
+        long[] expected = {-2936737700413755091L, 8151513492379067501L, 1532115561184041709L, 1471928142329522304L,
+                2115896892498654480L, -8935042981661352373L, 3439612340202707043L, -5564189664267228114L,
+                -8457772951952128489L, 7586400010322612781L};
         long[] actual = generateLongArray(expected.length, () -> generator.nextLong());
 
         assertThat(actual, equalTo(expected));
+
     }
 
+    @Override
     @Test
-    public void testNextDouble() {
-        double[] expected = {0.547308153727701, 0.42220238895258044, 0.3072717289008534, 0.006450907330238682,
-                0.31335299849200665, 0.8306209607192413, 0.6481559642814826, 0.07130287451264582, 0.7655025449420803,
-                0.8250625430723012};
+    public void testNextDoubleExactValue() {
+        double[] expected = {0.31840173914954145, 0.6397003506495154, 0.05983910758972127, 0.6334691106497632,
+                0.8837888645398378, 0.04221886538072436, 0.3676419772057058, 0.10970801166710817,
+                0.1661123024141939, 0.2835339788736468};
         double[] actual = generateDoubleArray(expected.length, () -> generator.nextDouble());
 
         assertThat(actual, equalTo(expected));
+
     }
 
+    @Override
     @Test
     @SuppressWarnings("deprecation")
-    public void testNextFloat() {
-        float[] expected = {0.54730815F, 0.42220238F, 0.30727172F, 0.0064509073F, 0.313353F, 0.83062094F, 0.648156F,
-                0.071302876F, 0.7655026F, 0.8250625F};
+    public void testNextFloatExactValue() {
+        float[] expected = {0.31840175F, 0.63970035F, 0.059839107F, 0.6334691F, 0.8837889F,
+                0.042218864F, 0.367642F, 0.10970801F, 0.1661123F, 0.283534F};
         float[] actual = generateFloatArray(expected.length, () -> generator.nextFloat());
 
         assertThat(actual, equalTo(expected));
     }
 
+    @Override
     @Test
-    public void testNextBoolean() {
-        boolean[] expected = {true, false, false, false, false, true, true, false, true, true, true, true, true, true,
-                false, false, false, true, false, true};
+    public void testNextBooleanExactValue() {
+        boolean[] expected = {false, true, false, true, true, false, false, false, false, false,
+                true, false, false, true, false, true, false, true, true, false};
         boolean[] actual = generateBooleanArray(expected.length, () -> generator.nextBoolean());
 
+        assertThat(actual, equalTo(expected));
+    }
+
+    // -----------
+    // STATE TESTS
+    // -----------
+    private static final int COMPARE_STEPS = 100_000;
+
+    @Test
+    public void testStateNextPrev() {
+        int[] expected = generator.getState();
+
+        //going forward
+        generator.nextInt();
+        //going back to the initial state
+        generator.prevInt();
+
+        int[] actual = generator.getState();
+
+        //compare states
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Test
+    public void testStateNextPrevMany() {
+        int errors = 0;
+
+        for (int i = 0; i < COMPARE_STEPS; i++, generator.nextInt()) {
+            int[] expected = generator.getState();
+
+            //going forward
+            generator.nextInt();
+            //going back to the initial state
+            generator.prevInt();
+
+            int[] actual = generator.getState();
+
+            //compare states
+            try {
+                assertThat(actual, equalTo(expected));
+            } catch (AssertionError e) {
+                System.err.println("Step " + i);
+                e.printStackTrace();
+                errors++;
+                assertThat(errors, lessThan(10));
+            }
+        }
+        assertThat(errors, equalTo(0));
+    }
+
+    @Test
+    public void testStatePrevNext() {
+        int[] expected = generator.getState();
+
+        //going back
+        generator.prevInt();
+        //going forward to the initial state
+        generator.nextInt();
+
+        int[] actual = generator.getState();
+
+        //compare states
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Test
+    public void testStatePrevNextMany() {
+        int errors = 0;
+
+        for (int i = 0; i < COMPARE_STEPS; i++, generator.prevInt()) {
+            int[] expected = generator.getState();
+
+            //going back
+            generator.prevInt();
+            //going forward to the initial state
+            generator.nextInt();
+
+            int[] actual = generator.getState();
+
+            //compare states
+            try {
+                assertThat(actual, equalTo(expected));
+            } catch (AssertionError e) {
+                System.err.println("Step " + i);
+                e.printStackTrace();
+                errors++;
+                assertThat(errors, lessThan(10));
+            }
+        }
+        assertThat(errors, equalTo(0));
+    }
+
+    @Test
+    public void testStatePrevNextVsNextPrev() {
+        CLRRandom clrRandom1 = new CLRRandom(new int[]{291, 564, 837, 1110});
+        clrRandom1.prevInt();
+        clrRandom1.nextInt();
+        int[] expected = clrRandom1.getState();
+
+
+        CLRRandom clrRandom2 = new CLRRandom(new int[]{291, 564, 837, 1110});
+        clrRandom2.prevInt();
+        clrRandom2.nextInt();
+        int[] actual = clrRandom2.getState();
+
+        //compare states
         assertThat(actual, equalTo(expected));
     }
 }

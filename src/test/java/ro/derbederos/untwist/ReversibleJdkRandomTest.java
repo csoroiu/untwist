@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static ro.derbederos.untwist.ArrayUtils.*;
 
 public class ReversibleJdkRandomTest extends ReverseRandomGeneratorAbstractTest<ReversibleJdkRandom> {
 
@@ -88,5 +89,68 @@ public class ReversibleJdkRandomTest extends ReverseRandomGeneratorAbstractTest<
 
         assertThat(expected, equalTo(nextBytes));
         assertThat(actual, equalTo(prevBytes));
+    }
+
+    @Override
+    @Test
+    public void testNextInt16ExactValue() {
+        int[] expected = {11, 3, 9, 7, 15, 0, 0, 13, 7, 5};
+        int[] actual = generateIntArray(expected.length, () -> generator.nextInt(16));
+
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Override
+    @Test
+    public void testNextIntExactValue() {
+        int[] expected = {-1244746321, 1060493871, -1826063944, 1976922248, -230127712,
+                68408698, 169247282, -735843605, 2089114528, 1533708900};
+        int[] actual = generateIntArray(expected.length, () -> generator.nextInt());
+
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Override
+    @Test
+    public void testNextLongExactValue() {
+        long[] expected = {-5346144739450824145L, -7842884917907853176L, -988390996874898054L, 726911540391045867L,
+                8972678576892185188L, 8222391730744523982L, -7363680848376404625L, -8294095627538487754L,
+                -6307709242837825884L, -470456323649602622L};
+        long[] actual = generateLongArray(expected.length, () -> generator.nextLong());
+
+        assertThat(actual, equalTo(expected));
+
+    }
+
+    @Override
+    @Test
+    public void testNextDoubleExactValue() {
+        double[] expected = {0.7101849056320707, 0.574836350385667, 0.9464192094792073, 0.039405954311386604,
+                0.4864098780914311, 0.4457367367074283, 0.6008140654988429, 0.550376169584217,
+                0.6580583901495688, 0.9744965039734514};
+        double[] actual = generateDoubleArray(expected.length, () -> generator.nextDouble());
+
+        assertThat(actual, equalTo(expected));
+
+    }
+
+    @Override
+    @Test
+    public void testNextFloatExactValue() {
+        float[] expected = {0.7101849F, 0.24691546F, 0.5748363F, 0.46028805F, 0.9464192F,
+                0.015927613F, 0.039405942F, 0.828673F, 0.48640984F, 0.3570944F};
+        float[] actual = generateFloatArray(expected.length, () -> generator.nextFloat());
+
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Override
+    @Test
+    public void testNextBooleanExactValue() {
+        boolean[] expected = {true, false, true, false, true, false, false, true, false, false,
+                false, false, true, false, true, true, true, false, true, false};
+        boolean[] actual = generateBooleanArray(expected.length, () -> generator.nextBoolean());
+
+        assertThat(actual, equalTo(expected));
     }
 }

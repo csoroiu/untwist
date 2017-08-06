@@ -1,99 +1,167 @@
 package ro.derbederos.untwist;
 
-import org.junit.Before;
-import org.junit.Rule;
+import com.tngtech.java.junit.dataprovider.DataProvider;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.function.LongSupplier;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static ro.derbederos.untwist.ArrayUtils.*;
 
-public class MersenneTwisterPy3kTest {
+@RunWith(DataProviderRunner.class)
+public class MersenneTwisterPy3kTest extends
+        ReversibleMersenneTwisterTest {
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
-
-    private MersenneTwisterPy3k generator;
-
-    @Before
-    public void setup() {
-        generator = makeGenerator();
+    @Override
+    protected ReversibleMersenneTwister makeGenerator() {
+        return new MersenneTwisterPy3k(123456789013L);
     }
 
-    private MersenneTwisterPy3k makeGenerator() {
-        return new MersenneTwisterPy3k(1234567890);
+    @Override
+    int[] getMakotoNishimuraTestSeed() {
+        return new int[]{0x456, 0x345, 0x234, 0x123};
     }
 
+    @Override
     @Test
-    public void testNextLong_LongMaxValue() {
-        final long[] expected = {5378934912805100368L, 1481834513793674581L, 2022704902811851265L,
-                5525701581272513140L, 6955939542478552692L, 2825459752566365625L, 8145320789793645473L,
-                4067308899818932548L, 8059721601458305289L, 1476791508350122857L};
-        final long[] actual = generateLongArray(expected.length, () -> generator.nextLong(Long.MAX_VALUE));
-
-        assertThat(actual, equalTo(expected));
-    }
-
-    @Test
-    public void testNextLong_32bit() {
-        long[] expected = {2727734613L, 1904908801L, 3470892473L, 360581444L, 1854258025L, 1304656966L, 1499749522L,
-                3662865218L, 2732253452L, 3880916009L};
-        final long _32bit = 1L << 32;
-        long[] actual = generateLongArray(expected.length, () -> generator.nextLong(_32bit));
-
-        assertThat(actual, equalTo(expected));
-    }
-
-    @Test
-    public void testNextInt_16() {
-        int[] expected = {5, 14, 7, 9, 8, 2, 14, 4, 13, 5};
+    public void testNextInt16ExactValue() {
+        int[] expected = {15, 7, 9, 5, 11, 4, 13, 14, 9, 1};
         int[] actual = generateIntArray(expected.length, () -> generator.nextInt(16));
 
         assertThat(actual, equalTo(expected));
     }
 
+    @Override
     @Test
-    public void testNextLong_16() {
-        long[] expected = {5, 14, 7, 9, 8, 2, 14, 4, 13, 5};
+    public void testNextIntExactValue() {
+        int[] expected = {2131728873, -149450095, -2087059751, 1068585415, 1209760669,
+                -425486438, 783461773, -80805226, 1545398317, -1623044361};
+        int[] actual = generateIntArray(expected.length, () -> generator.nextInt());
+
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Override
+    @Test
+    public void testNextLong16ExactValue() {
+        long[] expected = {15L, 7L, 9L, 5L, 11L, 4L, 13L, 14L, 9L, 1L};
         long[] actual = generateLongArray(expected.length, () -> generator.nextLong(16));
 
         assertThat(actual, equalTo(expected));
     }
 
+    @Override
     @Test
-    public void testNextInt_9() {
-        int[] expected = {2, 7, 3, 4, 4, 1, 7, 2, 6, 2};
-        int[] actual = generateIntArray(expected.length, () -> generator.nextInt(9));
+    public void testNextLongExactValue() {
+        long[] expected = {-641883268277364247L, 4589539412615495385L, -1827450334891770979L, -347055802232427123L,
+                -6970922448906819539L, 2488676750358164198L, -8896639325777151682L, -6782370575323180803L,
+                5196967370074779647L, -5701509883458360255L};
+        long[] actual = generateLongArray(expected.length, () -> generator.nextLong());
 
         assertThat(actual, equalTo(expected));
+
     }
 
+    @Override
     @Test
-    public void testNextDouble() {
-        double[] expected = {0.9206826283274985, 0.6351002019693018, 0.4435211436398484, 0.8068844348124993,
-                0.8926848452848529, 0.8081301250035834, 0.25490020128427027, 0.08395441205038512, 0.13853413517651525,
-                0.4317280885585699};
+    public void testNextDoubleExactValue() {
+        double[] expected = {0.4963318106919783, 0.5140685308635192, 0.2816693551907965, 0.18241391316939937,
+                0.35981608645696583, 0.632311993352409, 0.4229770415850893, 0.44843774760013033,
+                0.8226690238842976, 0.03549077131539968};
         double[] actual = generateDoubleArray(expected.length, () -> generator.nextDouble());
 
         assertThat(actual, equalTo(expected));
+
     }
 
+    @Override
     @Test
-    @SuppressWarnings("deprecation")
-    public void testNextFloat() {
-        float[] expected = {0.9206826F, 0.6351002F, 0.44352114F, 0.8068844F, 0.8926848F, 0.80813015F, 0.2549002F,
-                0.08395441F, 0.13853413F, 0.4317281F};
+    public void testNextFloatExactValue() {
+        float[] expected = {0.4963318F, 0.51406854F, 0.28166935F, 0.1824139F, 0.35981607F,
+                0.632312F, 0.42297703F, 0.44843775F, 0.822669F, 0.03549077F};
         float[] actual = generateFloatArray(expected.length, () -> generator.nextFloat());
 
         assertThat(actual, equalTo(expected));
     }
 
+    @Override
     @Test
-    public void testNextBoolean() {
-        boolean[] expected = {true, true, true, false, false, false, true, true, true, true};
+    public void testNextBooleanExactValue() {
+        boolean[] expected = {false, true, true, false, false, true, false, true, false, true,
+                true, false, false, true, false, true, true, false, false, true};
         boolean[] actual = generateBooleanArray(expected.length, () -> generator.nextBoolean());
 
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Test
+    public void testNextIntVsLongRangeIntMaxValue() {
+        ReversibleMersenneTwister generator1 = makeGenerator();
+        ReversibleMersenneTwister generator2 = makeGenerator();
+        long[] expected = generateLongArray(700, () -> generator1.nextInt(Integer.MAX_VALUE));
+        long[] actual = generateLongArray(700, () -> generator2.nextLong(Integer.MAX_VALUE));
+
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Test
+    public void testNextLongVsByteArray() {
+        ReversibleMersenneTwister generator1 = makeGenerator();
+        ReversibleMersenneTwister generator2 = makeGenerator();
+        long[] expected = generateLongArray(700, (LongSupplier) generator1::nextLong);
+
+        byte[] b = new byte[8];
+        long[] actual = generateLongArray(700, () -> {
+            generator2.nextBytes(b);
+            return ByteBuffer.wrap(b).order(ByteOrder.LITTLE_ENDIAN).getLong();
+        });
+
+        assertThat(actual, equalTo(expected));
+    }
+
+    @DataProvider(format = "%m %i")
+    public static Object[][] dataProviderTestNextBytes() {
+        //@formatter:off
+        return new Object[][]{
+                {new byte[]{-23, -103, 15, 127, -111, -110, 23, -9}},
+                {new byte[]{-23, -103, 15, 127, -110, 23, -9}},
+                {new byte[]{-23, -103, 15, 127, 23, -9}},
+                {new byte[]{-23, -103, 15, 127, -9}},
+        };
+        //@formatter:on
+    }
+
+    @Test
+    @UseDataProvider("dataProviderTestNextBytes")
+    public void testNextBytes(byte[] expected) {
+        byte[] actual = new byte[expected.length];
+        generator.nextBytes(actual);
+        assertThat(actual, equalTo(expected));
+    }
+
+    @DataProvider(format = "%m %i")
+    public static Object[][] dataProviderTestNextBytesRange() {
+        //@formatter:off
+        return new Object[][]{
+                {new byte[]{0, 0, -23, -103, 15, 127, -111, -110, 23, -9, 0}},
+                {new byte[]{0, 0, -23, -103, 15, 127, -110, 23, -9, 0}},
+                {new byte[]{0, 0, -23, -103, 15, 127, 23, -9, 0}},
+                {new byte[]{0, 0, -23, -103, 15, 127, -9, 0}},
+        };
+        //@formatter:on
+    }
+
+    @Test
+    @UseDataProvider("dataProviderTestNextBytesRange")
+    public void testNextBytesRange(byte[] expected) {
+        byte[] actual = new byte[expected.length];
+        generator.nextBytes(actual, 2, expected.length - 3);
         assertThat(actual, equalTo(expected));
     }
 }

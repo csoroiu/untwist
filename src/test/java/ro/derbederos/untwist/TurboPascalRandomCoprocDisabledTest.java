@@ -6,17 +6,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static ro.derbederos.untwist.ArrayUtils.*;
 
-public class TurboPascalRandomTest extends ReverseBitsStreamGeneratorAbstractTest<TurboPascalRandom> {
+public class TurboPascalRandomCoprocDisabledTest extends ReverseBitsStreamGeneratorAbstractTest<TurboPascalRandom> {
 
     @Override
     protected TurboPascalRandom makeGenerator() {
-        return new TurboPascalRandom(0xC44002DC);
+        return new TurboPascalRandom(0xC44002DC, false);
     }
 
     @Test
     public void testZero() {
-        TurboPascalRandom generator = new TurboPascalRandom(-1498392781, true);
-        assertThat(generator.nextDouble(), equalTo(0.0));
+        TurboPascalRandom generator = new TurboPascalRandom(-1498392781, false);
+        assertThat(generator.nextDouble(), equalTo(0.5));
     }
 
     @Override
@@ -62,9 +62,9 @@ public class TurboPascalRandomTest extends ReverseBitsStreamGeneratorAbstractTes
     @Override
     @Test
     public void testNextDoubleExactValue() {
-        double[] expected = {0.30312337283976376, 0.013781279791146517, 0.18803224223665893, 0.31765864603221416,
-                0.27547088847495615, 0.9520445461384952, 0.718031702330336, 0.44134502578526735,
-                0.6637153711635619, 0.7491658166982234};
+        double[] expected = {0.8031233728397638, 0.5137812797911465, 0.6880322422366589, 0.8176586460322142,
+                0.7754708884749562, 0.4520445461384952, 0.21803170233033597, 0.9413450257852674,
+                0.16371537116356194, 0.24916581669822335};
         double[] actual = generateDoubleArray(expected.length, () -> generator.nextDouble());
 
         assertThat(actual, equalTo(expected));
@@ -74,8 +74,8 @@ public class TurboPascalRandomTest extends ReverseBitsStreamGeneratorAbstractTes
     @Override
     @Test
     public void testNextFloatExactValue() {
-        float[] expected = {0.30312338F, 0.013781279F, 0.18803224F, 0.31765863F, 0.27547088F,
-                0.95204455F, 0.7180317F, 0.44134504F, 0.66371536F, 0.74916583F};
+        float[] expected = {0.80312335F, 0.5137813F, 0.68803227F, 0.81765866F, 0.7754709F,
+                0.45204455F, 0.2180317F, 0.94134504F, 0.16371538F, 0.24916582F};
         float[] actual = generateFloatArray(expected.length, () -> generator.nextFloat());
 
         assertThat(actual, equalTo(expected));

@@ -346,4 +346,22 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
 
         generator.nextBytes(null);
     }
+
+    @Test
+    public abstract void testNextInt16ExactValue();
+
+    @Test
+    public abstract void testNextIntExactValue();
+
+    @Test
+    public abstract void testNextLongExactValue();
+
+    @Test
+    public abstract void testNextDoubleExactValue();
+
+    @Test
+    public abstract void testNextFloatExactValue();
+
+    @Test
+    public abstract void testNextBooleanExactValue();
 }

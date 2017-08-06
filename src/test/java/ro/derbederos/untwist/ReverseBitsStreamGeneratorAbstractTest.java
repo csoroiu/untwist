@@ -105,4 +105,7 @@ public abstract class ReverseBitsStreamGeneratorAbstractTest<T extends ReverseBi
         assertThat(actual2, equalTo(reverseArray(expected2)));
         assertThat(expected1, equalTo(expected2));
     }
+
+    @Test
+    public abstract void testNextLong16ExactValue();
 }
