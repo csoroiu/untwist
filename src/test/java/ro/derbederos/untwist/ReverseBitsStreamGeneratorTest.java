@@ -36,24 +36,29 @@ public class ReverseBitsStreamGeneratorTest extends ReverseBitsStreamGeneratorAb
         TestBitStreamGenerator() {
         }
 
+        @Override
         public void setSeed(int seed) {
             this.ran.setSeed((long) seed);
             this.clear();
         }
 
+        @Override
         public void setSeed(int[] seed) {
             this.ran.setSeed(RandomUtils.convertToLong(seed));
             this.clear();
         }
 
+        @Override
         public void setSeed(long seed) {
             this.ran.setSeed(seed);
         }
 
+        @Override
         protected int next(int bits) {
             return this.ran.nextBits(bits);
         }
 
+        @Override
         protected int prev(int bits) {
             return this.ran.prevBits(bits);
         }

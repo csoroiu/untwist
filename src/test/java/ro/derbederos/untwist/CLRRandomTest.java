@@ -1,10 +1,9 @@
 package ro.derbederos.untwist;
 
-import org.hamcrest.Matcher;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -12,7 +11,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.lessThan;
 import static ro.derbederos.untwist.ArrayUtils.*;
 import static ro.derbederos.untwist.Utils.between;
-import static ro.derbederos.untwist.Utils.createStream;
 import static ro.derbederos.untwist.Utils.reverseArray;
 
 public class CLRRandomTest extends ReverseRandomGeneratorAbstractTest<CLRRandom> {
@@ -24,6 +22,7 @@ public class CLRRandomTest extends ReverseRandomGeneratorAbstractTest<CLRRandom>
 
     @Override
     @Test
+    @Ignore
     public void testNextInt2() {
         //FIXME
         //super.testNextInt2();
@@ -32,15 +31,31 @@ public class CLRRandomTest extends ReverseRandomGeneratorAbstractTest<CLRRandom>
     @Override
     @Test
     public void testNextIntWideRange() {
-        //FIXME
-        //super.testNextIntWideRange();
+        // FIXME - uncomment after nextInt is fixed
+        // super.testNextIntWideRange();
+        int lower = -0x6543210F;
+        int upper = 0x456789AB;
+        int max = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < 1_000_000; ++i) {
+            int r = generator.nextInt(lower, upper + 1);
+            max = Math.max(max, r);
+            min = Math.min(min, r);
+            Assert.assertTrue(r >= lower);
+            Assert.assertTrue(r <= upper);
+        }
+        double ratio = (((double) max) - ((double) min)) /
+                (((double) upper) - ((double) lower));
+        Assert.assertTrue(ratio > 0.99999);
     }
 
     @Test
     @Ignore
     public void testNextInt_NoBoundStream() {
-        IntPredicate betweenPredicate = (i) -> 0 <= i && i < Integer.MAX_VALUE;
-        boolean result = createStream(1_000_000_000L, () -> generator.nextInt()).allMatch(betweenPredicate);
+        boolean result = IntStream
+                .generate(() -> generator.nextInt())
+                .limit(1_000_000_000L)
+                .allMatch((i) -> 0 <= i && i < Integer.MAX_VALUE);
         assertThat(result, equalTo(true));
     }
 
@@ -60,9 +75,12 @@ public class CLRRandomTest extends ReverseRandomGeneratorAbstractTest<CLRRandom>
 
     @Test
     public void testNextInt() {
-        final Matcher<Integer> betweenMatcher = between(0, 1000);
-        createStream(100000, () -> generator.nextInt(1000))
-                .forEach((t) -> assertThat(t, betweenMatcher));
+        boolean result = IntStream.
+                generate(() -> generator.nextInt(1000))
+                .limit((long) 100000)
+                .allMatch((i) -> 0 <= i && i < 1000);
+
+        assertThat(result, equalTo(true));
     }
 
     @Test
@@ -95,7 +113,7 @@ public class CLRRandomTest extends ReverseRandomGeneratorAbstractTest<CLRRandom>
 
     @Test
     //test for range larger than Integer.MAX_VALUE
-    public void testNextIntLargeRange32bit() {
+    public void testNextIntWideRange32bit() {
         int[] expected = {72659689, 479570516, 1964597322, 1152315378, 835159700, 1400239888, 824890196, -84625816,
                 934767641, 1787676899, -950803732, -984901899, 1160627160, 854462981, -375650433, 751425218,
                 -869369328, -311654904, 1868174591, 1892969089};

@@ -16,6 +16,7 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
     public ReversibleMersenneTwisterTest() {
     }
 
+    @Override
     protected ReversibleMersenneTwister makeGenerator() {
         return new ReversibleMersenneTwister(ARRAY_SEED);
     }

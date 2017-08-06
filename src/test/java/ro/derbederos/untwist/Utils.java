@@ -26,14 +26,6 @@ class Utils {
         return allOf(greaterThanOrEqualTo(minValue), lessThan(maxValue));
     }
 
-    static IntStream createStream(long limit, IntSupplier supplier) {
-        return IntStream.generate(supplier).limit(limit);
-    }
-
-    static DoubleStream createStream(long limit, DoubleSupplier supplier) {
-        return DoubleStream.generate(supplier).limit(limit);
-    }
-
     static byte[] reverseArray(byte[] b) {
         int j = b.length - 1;
         for (int i = 0; i < b.length / 2; i++) {
