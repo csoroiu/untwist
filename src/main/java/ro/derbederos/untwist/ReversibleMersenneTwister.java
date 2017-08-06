@@ -79,7 +79,7 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
     /**
      * X * MATRIX_A for X = {0, 1}.
      */
-    private static final int[] MAG01 = {0x0, 0x9908b0df};
+    private static final int[] MAG01 = {0x0, 0x9908B0DF};
 
     /**
      * Bytes pool.
@@ -134,14 +134,14 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
     }
 
     private void initGenRand(int seed) {
-        // we use a long masked by 0xffffffffL as a poor man unsigned int
+        // we use a long masked by 0xFFFFFFFFL as a poor man unsigned int
         long longMT = seed;
         // NB: unlike original C code, we are working with java longs, the cast below makes masking unnecessary
         mt[0] = (int) longMT;
         for (mti = 1; mti < N; ++mti) {
             // See Knuth TAOCP Vol2. 3rd Ed. P.106 for multiplier.
             // initializer from the 2002-01-09 C version by Makoto Matsumoto
-            longMT = (1812433253L * (longMT ^ (longMT >>> 30)) + mti) & 0xffffffffL;
+            longMT = (1812433253L * (longMT ^ (longMT >>> 30)) + mti) & 0xFFFFFFFFL;
             mt[mti] = (int) longMT;
         }
 
@@ -187,10 +187,10 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
         int j = 0;
 
         for (int k = Math.max(N, seed.length); k != 0; k--) {
-            long l0 = (mt[i] & 0x7fffffffL) | ((mt[i] < 0) ? 0x80000000L : 0x0L);
-            long l1 = (mt[i - 1] & 0x7fffffffL) | ((mt[i - 1] < 0) ? 0x80000000L : 0x0L);
+            long l0 = (mt[i] & 0x7FFFFFFFL) | ((mt[i] < 0) ? 0x80000000L : 0x0L);
+            long l1 = (mt[i - 1] & 0x7FFFFFFFL) | ((mt[i - 1] < 0) ? 0x80000000L : 0x0L);
             long l = (l0 ^ ((l1 ^ (l1 >>> 30)) * 1664525L)) + seed[j] + j; // non linear
-            mt[i] = (int) (l & 0xffffffffL);
+            mt[i] = (int) (l & 0xFFFFFFFFL);
             i++;
             j++;
             if (i >= N) {
@@ -203,10 +203,10 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
         }
 
         for (int k = N - 1; k != 0; k--) {
-            long l0 = (mt[i] & 0x7fffffffL) | ((mt[i] < 0) ? 0x80000000L : 0x0L);
-            long l1 = (mt[i - 1] & 0x7fffffffL) | ((mt[i - 1] < 0) ? 0x80000000L : 0x0L);
+            long l0 = (mt[i] & 0x7FFFFFFFL) | ((mt[i] < 0) ? 0x80000000L : 0x0L);
+            long l1 = (mt[i - 1] & 0x7FFFFFFFL) | ((mt[i - 1] < 0) ? 0x80000000L : 0x0L);
             long l = (l0 ^ ((l1 ^ (l1 >>> 30)) * 1566083941L)) - i; // non linear
-            mt[i] = (int) (l & 0xffffffffL);
+            mt[i] = (int) (l & 0xFFFFFFFFL);
             i++;
             if (i >= N) {
                 mt[0] = mt[N - 1];
@@ -233,7 +233,7 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
      */
     @Override
     public void setSeed(long seed) {
-        setSeed(new int[]{(int) (seed >>> 32), (int) (seed & 0xffffffffL)});
+        setSeed(new int[]{(int) (seed >>> 32), (int) (seed & 0xFFFFFFFFL)});
     }
 
     /**
@@ -276,7 +276,7 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
 
     void twist() {
         for (int i = 0; i < N; i++) {
-            int x = (mt[i] & 0x80000000) | (mt[(i + 1) % N] & 0x7fffffff);
+            int x = (mt[i] & 0x80000000) | (mt[(i + 1) % N] & 0x7FFFFFFF);
             mt[i] = mt[(i + M) % N] ^ (x >>> 1) ^ MAG01[x & 0x1];
         }
         if (++twists == 0) {
@@ -296,7 +296,7 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
             tmp ^= mt[(i + 397) % 624];
             // if the first bit is odd, unapply magic
             if ((tmp & 0x80000000) == 0x80000000) {
-                tmp ^= 0x9908b0df;
+                tmp ^= 0x9908B0DF;
             }
             // the second bit of tmp is the first bit of the result
             result = (tmp << 1) & 0x80000000;
@@ -305,12 +305,12 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
             tmp = mt[(i - 1 + 624) % 624];
             tmp ^= mt[(i + 396) % 624];
             if ((tmp & 0x80000000) == 0x80000000) {
-                tmp ^= 0x9908b0df;
+                tmp ^= 0x9908B0DF;
                 // since it was odd, the last bit must have been 1
                 result |= 1;
             }
             // extract the final 30 bits
-            result |= (tmp << 1) & 0x7fffffff;
+            result |= (tmp << 1) & 0x7FFFFFFF;
             mt[i] = result;
         }
         if (--twists == 0) {

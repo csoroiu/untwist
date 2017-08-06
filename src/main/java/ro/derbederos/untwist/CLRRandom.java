@@ -215,7 +215,7 @@ public class CLRRandom implements ReverseRandomGenerator {
     @Override
     public void setSeed(long seed) {
         final int high = (int) (seed >>> 32);
-        final int low = (int) (seed & 0xffffffffL);
+        final int low = (int) (seed & 0xFFFFFFFFL);
         setSeed(RandomUtils.convertToInt(high, low));
     }
 
@@ -265,7 +265,7 @@ public class CLRRandom implements ReverseRandomGenerator {
 
         long range = (long) maxValue - minValue;
         if (range <= (long) Integer.MAX_VALUE) {
-            return ((int) (sample() * range) + minValue);
+            return ((int) (prevSample() * range) + minValue);
         } else {
             return (int) ((long) (getPrevSampleForLargeRange() * range) + minValue);
         }

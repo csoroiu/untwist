@@ -69,7 +69,7 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
     @Override
     public void setSeed(long seed) {
         final int high = (int) (seed >>> 32);
-        final int low = (int) (seed & 0xffffffffL);
+        final int low = (int) (seed & 0xFFFFFFFFL);
         setSeed(RandomUtils.convertToInt(high, low));
     }
 

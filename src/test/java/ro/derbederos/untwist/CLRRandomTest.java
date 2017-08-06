@@ -1,20 +1,13 @@
 package ro.derbederos.untwist;
 
-import org.hamcrest.Matcher;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.util.function.IntPredicate;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.lessThan;
 import static ro.derbederos.untwist.ArrayUtils.*;
-import static ro.derbederos.untwist.Utils.between;
-import static ro.derbederos.untwist.Utils.createStream;
 
 public class CLRRandomTest {
 
@@ -90,141 +83,6 @@ public class CLRRandomTest {
                 false, false, false, true, false, true};
         boolean[] actual = generateBooleanArray(expected.length, () -> generator.nextBoolean());
 
-        assertThat(actual, equalTo(expected));
-    }
-
-    @Test
-    @Ignore
-    public void testNextInt_NoBoundStream() {
-        IntPredicate betweenPredicate = (i) -> 0 <= i && i < Integer.MAX_VALUE;
-        boolean result = createStream(1_000_000_000L, () -> generator.nextInt()).allMatch(betweenPredicate);
-        assertThat(result, equalTo(true));
-    }
-
-    @Test
-    public void testNextIntStream() {
-        final Matcher<Integer> betweenMatcher = between(0, 1000);
-        createStream(100000, () -> generator.nextInt(1000)).forEach((t) -> assertThat(t, betweenMatcher));
-    }
-
-    @Test
-    public void testNextInt_RangeStream() {
-        final Matcher<Integer> betweenMatcher = between(-1000, 3000);
-        createStream(100000, () -> generator.nextInt(-1000, 3000)).forEach((t) -> assertThat(t, betweenMatcher));
-    }
-
-    @Test
-    public void testNextInt_InvalidRange() {
-        expectedException.expect(IllegalArgumentException.class);
-
-        generator.nextInt(200, 100);
-    }
-
-    // STATE TESTS
-    private static final int COMPARE_STEPS = 100_000;
-
-    @Test
-    public void testStateNextPrev() {
-        CLRRandom clrRandom = new CLRRandom(new int[]{291, 564, 837, 1110});
-        int[] expected = clrRandom.getState();
-
-        //going forward
-        clrRandom.nextInt();
-        //going back to the initial state
-        clrRandom.prevInt();
-
-        int[] actual = clrRandom.getState();
-
-        //compare states
-        assertThat(actual, equalTo(expected));
-    }
-
-    @Test
-    public void testStateNextPrevMany() {
-        int errors = 0;
-        CLRRandom clrRandom = new CLRRandom(new int[]{291, 564, 837, 1110});
-
-        for (int i = 0; i < COMPARE_STEPS; i++, clrRandom.nextInt()) {
-            int[] expected = clrRandom.getState();
-
-            //going forward
-            clrRandom.nextInt();
-            //going back to the initial state
-            clrRandom.prevInt();
-
-            int[] actual = clrRandom.getState();
-
-            //compare states
-            try {
-                assertThat(actual, equalTo(expected));
-            } catch (AssertionError e) {
-                System.err.println("Step " + i);
-                e.printStackTrace();
-                errors++;
-                assertThat(errors, lessThan(10));
-            }
-        }
-        assertThat(errors, equalTo(0));
-    }
-
-    @Test
-    public void testStatePrevNext() {
-        CLRRandom clrRandom = new CLRRandom(new int[]{291, 564, 837, 1110});
-        int[] expected = clrRandom.getState();
-
-        //going back
-        clrRandom.prevInt();
-        //going forward to the initial state
-        clrRandom.nextInt();
-
-        int[] actual = clrRandom.getState();
-
-        //compare states
-        assertThat(actual, equalTo(expected));
-    }
-
-    @Test
-    public void testStatePrevNextMany() {
-        int errors = 0;
-        CLRRandom clrRandom = new CLRRandom(new int[]{291, 564, 837, 1110});
-
-        for (int i = 0; i < COMPARE_STEPS; i++, clrRandom.prevInt()) {
-            int[] expected = clrRandom.getState();
-
-            //going back
-            clrRandom.prevInt();
-            //going forward to the initial state
-            clrRandom.nextInt();
-
-            int[] actual = clrRandom.getState();
-
-            //compare states
-            try {
-                assertThat(actual, equalTo(expected));
-            } catch (AssertionError e) {
-                System.err.println("Step " + i);
-                e.printStackTrace();
-                errors++;
-                assertThat(errors, lessThan(10));
-            }
-        }
-        assertThat(errors, equalTo(0));
-    }
-
-    @Test
-    public void testStatePrevNextVsNextPrev() {
-        CLRRandom clrRandom1 = new CLRRandom(new int[]{291, 564, 837, 1110});
-        clrRandom1.prevInt();
-        clrRandom1.nextInt();
-        int[] expected = clrRandom1.getState();
-
-
-        CLRRandom clrRandom2 = new CLRRandom(new int[]{291, 564, 837, 1110});
-        clrRandom2.prevInt();
-        clrRandom2.nextInt();
-        int[] actual = clrRandom2.getState();
-
-        //compare states
         assertThat(actual, equalTo(expected));
     }
 }

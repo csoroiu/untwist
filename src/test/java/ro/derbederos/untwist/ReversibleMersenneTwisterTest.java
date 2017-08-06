@@ -6,12 +6,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertEquals;
-import static ro.derbederos.untwist.ArrayUtils.generateLongArray;
-import static ro.derbederos.untwist.Utils.reverseArray;
 
-public class ReversibleMersenneTwisterTest extends ReverseRandomGeneratorAbstractTest<ReversibleMersenneTwister> {
+public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbstractTest<ReversibleMersenneTwister> {
 
-    private static final int COMPARE_STEPS = 10_000;
     private static final int[] ARRAY_SEED = {0x123, 0x234, 0x345, 0x456};
     private static final int INT_SEED = 1234557890;
 
@@ -287,42 +284,22 @@ public class ReversibleMersenneTwisterTest extends ReverseRandomGeneratorAbstrac
 
         for (int i = 0; i < refInt.length; ++i) {
             int r = mt.nextInt();
-            assertEquals(refInt[i], (r & 0x7fffffffL) | ((r < 0) ? 0x80000000L : 0x0L));
+            assertEquals(refInt[i], (r & 0x7FFFFFFFL) | ((r < 0) ? 0x80000000L : 0x0L));
         }
 
         for (int i = 0; i < refDouble.length; ++i) {
             int r = mt.nextInt();
             assertEquals(refDouble[i],
-                    ((r & 0x7fffffffL) | ((r < 0) ? 0x80000000L : 0x0L)) / 4294967296.0,
+                    ((r & 0x7FFFFFFFL) | ((r < 0) ? 0x80000000L : 0x0L)) / 4294967296.0,
                     1.0e-8);
         }
     }
 
-    @Test
-    public void testNextPrevLongRange() {
-        long[] expected = generateLongArray(2459, () -> generator.nextLong(0x7ABCDEL));
-        long[] actual = generateLongArray(2459, () -> generator.prevLong(0x7ABCDEL));
+    // -----------
+    // STATE TESTS
+    // -----------
 
-        assertThat(actual, equalTo(reverseArray(expected)));
-
-        expected = generateLongArray(2467, () -> generator.nextLong(0x7ABCDEL));
-        actual = generateLongArray(2467, () -> generator.prevLong(0x7ABCDEL));
-
-        assertThat(actual, equalTo(reverseArray(expected)));
-    }
-
-    @Test
-    public void testPrevNextLongRange() {
-        long[] expected = generateLongArray(2459, () -> generator.prevLong(0x7ABCDEF8FFFFFFFFL));
-        long[] actual = generateLongArray(2459, () -> generator.nextLong(0x7ABCDEF8FFFFFFFFL));
-
-        assertThat(actual, equalTo(reverseArray(expected)));
-
-        expected = generateLongArray(2467, () -> generator.prevLong(0x7ABCDEF8FFFFFFFFL));
-        actual = generateLongArray(2467, () -> generator.nextLong(0x7ABCDEF8FFFFFFFFL));
-
-        assertThat(actual, equalTo(reverseArray(expected)));
-    }
+    private static final int COMPARE_STEPS = 10_000;
 
     @Test
     public void testStateNextPrev() {

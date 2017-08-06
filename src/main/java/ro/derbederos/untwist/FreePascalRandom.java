@@ -40,7 +40,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
         if (high == 0) {
             setSeed((int) seed);
         } else {
-            setSeed(new int[]{high, (int) (seed & 0xffffffffL)});
+            setSeed(new int[]{high, (int) (seed & 0xFFFFFFFFL)});
         }
     }
 
@@ -55,12 +55,12 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
 
     @Override
     public double nextDouble() {
-        return ((long) next(32) & 0xffffffffL) * 0x1.0p-32d;
+        return ((long) next(32) & 0xFFFFFFFFL) * 0x1.0p-32d;
     }
 
     @Override
     public double prevDouble() {
-        return ((long) prev(32) & 0xffffffffL) * 0x1.0p-32d;
+        return ((long) prev(32) & 0xFFFFFFFFL) * 0x1.0p-32d;
     }
 
     @Override
@@ -81,7 +81,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
         if (n < 0) {
             n++;
         }
-        long urand = ((long) next(32)) & 0xffffffffL;
+        long urand = ((long) next(32)) & 0xFFFFFFFFL;
         return (int) ((urand * n) >>> 32);
     }
 
@@ -90,13 +90,13 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
         if (n < 0) {
             n++;
         }
-        long urand = ((long) prev(32)) & 0xffffffffL;
+        long urand = ((long) prev(32)) & 0xFFFFFFFFL;
         return (int) ((urand * n) >>> 32);
     }
 
     @Override
     public long nextLong() {
-        final long low = ((long) next(32)) & 0xffffffffL;
+        final long low = ((long) next(32)) & 0xFFFFFFFFL;
         final long high = ((long) next(32)) << 32;
         return high | low;
     }
@@ -104,15 +104,15 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
     @Override
     public long prevLong() {
         final long high = ((long) prev(32)) << 32;
-        final long low = ((long) prev(32)) & 0xffffffffL;
+        final long low = ((long) prev(32)) & 0xFFFFFFFFL;
         return high | low;
     }
 
     @Override
     // https://github.com/graemeg/freepascal/blob/5186987/rtl/inc/system.inc#L676
     public long nextLong(long n) throws IllegalArgumentException {
-        long low = ((long) next(32)) & 0xffffffffL;
-        long high = ((long) next(32)) & 0x7fffffffL; // drop highest one bit
+        long low = ((long) next(32)) & 0xFFFFFFFFL;
+        long high = ((long) next(32)) & 0x7FFFFFFFL; // drop highest one bit
         long value = low | (high << 32);
         if (n != 0) {
             return value % n;
@@ -123,8 +123,8 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
 
     @Override
     public long prevLong(long n) throws IllegalArgumentException {
-        long high = ((long) prev(32)) & 0x7fffffffL; // drop highest one bit
-        long low = ((long) prev(32)) & 0xffffffffL;
+        long high = ((long) prev(32)) & 0x7FFFFFFFL; // drop highest one bit
+        long low = ((long) prev(32)) & 0xFFFFFFFFL;
         long value = low | (high << 32);
         if (n != 0) {
             return value % n;

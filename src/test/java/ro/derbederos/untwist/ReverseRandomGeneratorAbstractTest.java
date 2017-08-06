@@ -47,6 +47,7 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
      * Override this method in subclasses to provide a concrete generator to test.
      * Return a generator seeded with a fixed seed.
      */
+    @Override
     protected abstract T makeGenerator();
 
     @Test
@@ -73,8 +74,8 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
 
     @Test
     public void testSet64bitSeedLongVsArray() {
-        final long seedLong = 0x1234567812345678L;
-        final int[] seedArray = {0x12345678, 0x12345678};
+        final long seedLong = 0x1234567823456789L;
+        final int[] seedArray = {0x12345678, 0x23456789};
 
         ReverseRandomGenerator rLong = makeGenerator();
         rLong.setSeed(seedLong);
@@ -122,8 +123,10 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
         generator.nextInt(-1);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testPrevIntNeg() {
+        expectedException.expect(IllegalArgumentException.class);
+
         generator.prevInt(-1);
     }
 
@@ -154,7 +157,7 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
     }
 
     @Test
-    public void testNextPrevIntRange() {
+    public void testNextPrevIntBounded() {
         int[] expected = generateIntArray(2459, () -> generator.nextInt(78209372));
         int[] actual = generateIntArray(2459, () -> generator.prevInt(78209372));
 
@@ -168,7 +171,7 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
     }
 
     @Test
-    public void testPrevNextIntRange() {
+    public void testPrevNextIntBounded() {
         int[] expected = generateIntArray(2459, () -> generator.prevInt(78209372));
         int[] actual = generateIntArray(2459, () -> generator.nextInt(78209372));
 
@@ -332,6 +335,13 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
 
     @Test
     public void testNextBytes_NullBuffer() {
+        expectedException.expect(NullPointerException.class);
+
+        generator.nextBytes(null);
+    }
+
+    @Test
+    public void testPrevBytes_NullBuffer() {
         expectedException.expect(NullPointerException.class);
 
         generator.nextBytes(null);

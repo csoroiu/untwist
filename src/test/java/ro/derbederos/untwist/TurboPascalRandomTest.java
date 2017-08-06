@@ -108,18 +108,6 @@ public class TurboPascalRandomTest {
     }
 
     @Test
-    public void testZero() {
-        generator.setSeed(Integer.toUnsignedLong(-1498392781));
-        assertThat(generator.nextDouble(), equalTo(0.0));
-    }
-
-    @Test
-    public void testZero_CoprocDisabled() {
-        TurboPascalRandom generator = new TurboPascalRandom(-1498392781, false);
-        assertThat(generator.nextDouble(), equalTo(0.5));
-    }
-
-    @Test
     public void testPrevInt() {
         int expected = generator.nextInt(100);
         int actual = generator.prevInt(100);
@@ -264,5 +252,4 @@ public class TurboPascalRandomTest {
         assertThat(expected, equalTo(nextBytes));
         assertThat(actual, equalTo(prevBytes));
     }
-
 }

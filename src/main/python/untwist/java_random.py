@@ -93,7 +93,7 @@ class JavaRandom(object):
         for i in range(0, len(l)):
             if not i & 3:  # not i % 4
                 n = self.next_int()
-            b = n & 0xff
+            b = n & 0xFF
             # Flip signs. Ugh.
             if b & 0x80:
                 b -= 0x100

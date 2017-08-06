@@ -1,5 +1,6 @@
 package ro.derbederos.untwist;
 
+import org.apache.commons.math3.exception.OutOfRangeException;
 import org.apache.commons.math3.random.BitsStreamGenerator;
 
 public abstract class ReverseBitsStreamGenerator extends BitsStreamGenerator implements ReverseRandomGenerator {
@@ -10,16 +11,35 @@ public abstract class ReverseBitsStreamGenerator extends BitsStreamGenerator imp
 
     @Override
     public void prevBytes(byte[] bytes) {
+        prevBytesFill(bytes, 0, bytes.length);
+    }
+
+    public void prevBytes(byte[] bytes, int start, int len) {
+        if (start < 0 ||
+                start >= bytes.length) {
+            throw new OutOfRangeException(start, 0, bytes.length);
+        }
+        if (len < 0 ||
+                len > bytes.length - start) {
+            throw new OutOfRangeException(len, 0, bytes.length - start);
+        }
+
+        prevBytesFill(bytes, start, len);
+    }
+
+    private void prevBytesFill(byte[] bytes,
+                               int start,
+                               int len) {
         final int bytesInInt = Integer.SIZE / Byte.SIZE;
         final int remainder = bytes.length % bytesInInt;
         if (remainder > 0) {
             for (int i = remainder - 1,
                  rnd = prevInt();
                  i >= 0; i--, rnd >>= Byte.SIZE) {
-                bytes[i] = (byte) (rnd);
+                bytes[i + start] = (byte) (rnd);
             }
         }
-        for (int i = remainder, len = bytes.length; i < len; ) {
+        for (int i = remainder + start, indexLimit = start + len; i < indexLimit; ) {
             for (int rnd = prevInt(),
                  n = bytesInInt;
                  n-- > 0; rnd <<= Byte.SIZE) {
@@ -53,7 +73,7 @@ public abstract class ReverseBitsStreamGenerator extends BitsStreamGenerator imp
 
     @Override
     public long prevLong() {
-        long low = ((long) prev(32)) & 0xffffffffL;
+        long low = ((long) prev(32)) & 0xFFFFFFFFL;
         long high = ((long) prev(32)) << 32;
         return low | high;
     }
@@ -65,7 +85,7 @@ public abstract class ReverseBitsStreamGenerator extends BitsStreamGenerator imp
 
         long bits, val;
         do {
-            bits = ((long) prev(32)) & 0xffffffffL;
+            bits = ((long) prev(32)) & 0xFFFFFFFFL;
             bits |= ((long) prev(31)) << 32;
             val = bits % bound;
         } while ((bits - val) + (bound - 1) < 0);

@@ -22,6 +22,15 @@ public class ReversibleJdkRandomTest extends ReverseRandomGeneratorAbstractTest<
     }
 
     @Test
+    public void testPrevInt2N() {
+        int expected = generator.nextInt(2 << 19);
+        int actual = generator.prevInt(2 << 19);
+
+        assertThat(expected, equalTo(744682));
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Test
     public void testPrevInt_NoBound() {
         int expected = generator.nextInt();
         int actual = generator.prevInt();

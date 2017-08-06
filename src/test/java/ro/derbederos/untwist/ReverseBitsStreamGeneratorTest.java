@@ -6,8 +6,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 
-public class ReverseBitsStreamGeneratorTest extends ReverseRandomGeneratorAbstractTest<ReverseBitsStreamGenerator> {
+public class ReverseBitsStreamGeneratorTest extends ReverseBitsStreamGeneratorAbstractTest<ReverseBitsStreamGenerator> {
 
+    @Override
     protected ReverseBitsStreamGenerator makeGenerator() {
         ReverseBitsStreamGenerator generator = new TestBitStreamGenerator();
         generator.setSeed(1000);
@@ -67,18 +68,20 @@ public class ReverseBitsStreamGeneratorTest extends ReverseRandomGeneratorAbstra
     }
 
     @Test
-    public void testPrevLong_NegativeValue() {
-        expectedException.expect(IllegalArgumentException.class);
-
-        generator.prevLong(-16);
-    }
-
-    @Test
     public void testPrevInt() {
         int expected = generator.nextInt(100);
         int actual = generator.prevInt(100);
 
         assertThat(expected, equalTo(87));
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Test
+    public void testPrevInt2N() {
+        int expected = generator.nextInt(2 << 19);
+        int actual = generator.prevInt(2 << 19);
+
+        assertThat(expected, equalTo(744682));
         assertThat(actual, equalTo(expected));
     }
 
