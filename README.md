@@ -1,4 +1,5 @@
 # untwist
+[![Build Status][build-status-svg]][build-status-link]
 [![License][license-svg]][license-link]
 
 **untwist** is a collection of PRNG's collected from CLR (.NET), FreePascal, TurboPascal, Python.
@@ -16,5 +17,7 @@ Also, LCG's are trivial to revert.
 
 Enjoy using them!
 
+[build-status-svg]: https://travis-ci.org/csoroiu/untwist.svg?branch=master
+[build-status-link]: https://travis-ci.org/csoroiu/untwist
 [license-svg]: https://img.shields.io/badge/license-Apache2-blue.svg
 [license-link]: https://raw.githubusercontent.com/csoroiu/untwist/master/LICENSE

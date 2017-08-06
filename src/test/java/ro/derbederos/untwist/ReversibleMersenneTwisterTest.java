@@ -1,5 +1,6 @@
 package ro.derbederos.untwist;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -295,6 +296,12 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
                     ((r & 0x7FFFFFFFL) | ((r < 0) ? 0x80000000L : 0x0L)) / 4294967296.0,
                     1.0e-8);
         }
+    }
+
+    @Test
+    @Ignore
+    public void testSet32BitSeedIntVsLongVsArray() {
+        super.testSet32BitSeedIntVsLongVsArray();
     }
 
     @Override

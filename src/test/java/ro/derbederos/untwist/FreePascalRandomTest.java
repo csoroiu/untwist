@@ -20,6 +20,11 @@ public class FreePascalRandomTest extends ReversibleMersenneTwisterTest {
         return new int[]{0x456, 0x345, 0x234, 0x123};
     }
 
+    @Test
+    public void testSet32BitSeedIntVsLongVsArray() {
+        super.testSet32BitSeedIntVsLongVsArray();
+    }
+
     @Override
     @Test
     public void testNextIntIAE2() {

@@ -77,9 +77,10 @@ class JavaRandomTest(unittest.TestCase):
         self.assertEqual(self.r.next_boolean(), standard)
 
 
-    @unittest.skip("can't get a lower precision than a double in python")
     def test_next_float(self):
-        standard = float(0.73096776)
+        # in java 0.73096776f = 0.7309677600860596d, same value we get
+        # in python when we work with double precision
+        standard = float(0.7309677600860596)
         self.assertEqual(self.r.next_float(), standard)
 
 

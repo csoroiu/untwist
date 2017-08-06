@@ -8,7 +8,6 @@ import org.junit.rules.ExpectedException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static ro.derbederos.untwist.ArrayUtils.generateDoubleArray;
-import static ro.derbederos.untwist.ArrayUtils.generateFloatArray;
 import static ro.derbederos.untwist.ArrayUtils.generateIntArray;
 
 public class JDKRandomPy3kCompatTest {
@@ -92,17 +91,17 @@ public class JDKRandomPy3kCompatTest {
     }
 
     @Test
-    public void testNextLong() {
+    public void testNextLongExactValue() {
         long expected = -4962768465676381896L;
         long actual = generator.nextLong();
         assertThat(actual, equalTo(expected));
     }
 
     @Test
-    public void testNextDouble() {
+    public void testNextDoubleExactValue() {
         double[] expected = {0.730967787376657, 0.24053641567148587, 0.6374174253501083, 0.5504370051176339,
-                0.5975452777972018, 0.3332183994766498, 0.3851891847407185, 0.984841540199809, 0.8791825178724801,
-                0.9412491794821144};
+                0.5975452777972018, 0.3332183994766498, 0.3851891847407185, 0.984841540199809,
+                0.8791825178724801, 0.9412491794821144};
         double[] actual = generateDoubleArray(expected.length, () -> generator.nextDouble());
 
         assertThat(actual, equalTo(expected));
@@ -110,16 +109,17 @@ public class JDKRandomPy3kCompatTest {
 
     @Test
     @SuppressWarnings("deprecation")
-    public void testNextFloat() {
-        float[] expected = {0.73096776F, 0.24053642F, 0.63741744F, 0.55043703F, 0.59754527F, 0.3332184F, 0.38518918F,
-                0.9848415F, 0.8791825F, 0.9412492F};
-        float[] actual = generateFloatArray(expected.length, () -> generator.nextFloat());
+    public void testNextFloatExactValue() {
+        double[] expected = {0.7309677600860596, 0.2405364215373993, 0.6374174356460571, 0.5504370331764221,
+                0.5975452661514282, 0.33321839570999146, 0.3851891756057739, 0.984841525554657,
+                0.8791825175285339, 0.9412491917610168};
+        double[] actual = generateDoubleArray(expected.length, () -> generator.nextFloat());
 
         assertThat(actual, equalTo(expected));
     }
 
     @Test
-    public void testNextBoolean() {
+    public void testNextBooleanExactValue() {
         boolean actual = generator.nextBoolean();
         assertThat(actual, equalTo(true));
     }

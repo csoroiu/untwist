@@ -4,11 +4,14 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.IntSummaryStatistics;
 import java.util.stream.IntStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static ro.derbederos.untwist.ArrayUtils.*;
 import static ro.derbederos.untwist.Utils.between;
 import static ro.derbederos.untwist.Utils.reverseArray;
@@ -30,28 +33,29 @@ public class CLRRandomTest extends ReverseRandomGeneratorAbstractTest<CLRRandom>
 
     @Override
     @Test
+    @Ignore
     public void testNextIntWideRange() {
         // FIXME - uncomment after nextInt is fixed
         // super.testNextIntWideRange();
+    }
+
+    @Test
+    public void testNextIntWideRangeCLR() {
         int lower = -0x6543210F;
         int upper = 0x456789AB;
-        int max = Integer.MIN_VALUE;
-        int min = Integer.MAX_VALUE;
-        for (int i = 0; i < 1_000_000; ++i) {
-            int r = generator.nextInt(lower, upper + 1);
-            max = Math.max(max, r);
-            min = Math.min(min, r);
-            Assert.assertTrue(r >= lower);
-            Assert.assertTrue(r <= upper);
-        }
-        double ratio = (((double) max) - ((double) min)) /
+        IntSummaryStatistics statistics = IntStream
+                .generate(() -> generator.nextInt(lower, upper + 1))
+                .limit(1_000_000)
+                .summaryStatistics();
+        assertThat(statistics.getMin(), greaterThanOrEqualTo(lower));
+        assertThat(statistics.getMax(), lessThanOrEqualTo(upper));
+        double ratio = ((double) statistics.getMax() - (double) statistics.getMin()) /
                 (((double) upper) - ((double) lower));
         Assert.assertTrue(ratio > 0.99999);
     }
 
     @Test
-    @Ignore
-    public void testNextInt_NoBoundStream() {
+    public void testNextIntIsPositiveNumber() {
         boolean result = IntStream
                 .generate(() -> generator.nextInt())
                 .limit(1_000_000_000L)
@@ -112,8 +116,7 @@ public class CLRRandomTest extends ReverseRandomGeneratorAbstractTest<CLRRandom>
     }
 
     @Test
-    //test for range larger than Integer.MAX_VALUE
-    public void testNextIntWideRange32bit() {
+    public void testNextIntWideRangeExactValue() {
         int[] expected = {72659689, 479570516, 1964597322, 1152315378, 835159700, 1400239888, 824890196, -84625816,
                 934767641, 1787676899, -950803732, -984901899, 1160627160, 854462981, -375650433, 751425218,
                 -869369328, -311654904, 1868174591, 1892969089};

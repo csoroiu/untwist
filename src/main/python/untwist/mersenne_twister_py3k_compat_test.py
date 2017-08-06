@@ -4,8 +4,8 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from untwist.random_py3k import RandomPy3k
 
+import struct
 import unittest
-
 
 INT_MAX = (2 ** 31) - 1
 UINT_MAX = 2 ** 32
@@ -120,14 +120,16 @@ class MersenneTwisterPy3kCompatTest(unittest.TestCase):
         self.assertListEqual(actual, expected)
 
 
-    @unittest.skip("can't get a lower precision than a double in python")
     def test_float(self):
-        expected = [0.9206826, 0.6351002, 0.44352114, 0.8068844,
-                    0.8926848, 0.80813015, 0.2549002, 0.08395441,
-                    0.13853413, 0.4317281]
+        expected = [0.9206826090812683, 0.6351001858711243, 0.4435211420059204, 0.8068844079971313,
+                    0.892684817314148, 0.808130145072937, 0.254900187253952, 0.08395440876483917,
+                    0.13853412866592407, 0.4317280948162079]
         actual = []
         for _ in range(10):
-            actual.append(self.rand.random())
+            # this is what we get if we convert the returned value to float and back
+            # this seems to match value in java
+            value = struct.unpack("f", struct.pack("f", self.rand.random()))[0]
+            actual.append(value)
         self.assertListEqual(actual, expected)
 
 

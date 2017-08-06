@@ -12,7 +12,10 @@ import java.util.function.LongSupplier;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static ro.derbederos.untwist.ArrayUtils.*;
+import static ro.derbederos.untwist.ArrayUtils.generateBooleanArray;
+import static ro.derbederos.untwist.ArrayUtils.generateDoubleArray;
+import static ro.derbederos.untwist.ArrayUtils.generateIntArray;
+import static ro.derbederos.untwist.ArrayUtils.generateLongArray;
 
 @RunWith(DataProviderRunner.class)
 public class MersenneTwisterPy3kTest extends
@@ -26,6 +29,11 @@ public class MersenneTwisterPy3kTest extends
     @Override
     int[] getMakotoNishimuraTestSeed() {
         return new int[]{0x456, 0x345, 0x234, 0x123};
+    }
+
+    @Test
+    public void testSet32BitSeedIntVsLongVsArray() {
+        super.testSet32BitSeedIntVsLongVsArray();
     }
 
     @Override
@@ -83,9 +91,10 @@ public class MersenneTwisterPy3kTest extends
     @Override
     @Test
     public void testNextFloatExactValue() {
-        float[] expected = {0.4963318F, 0.51406854F, 0.28166935F, 0.1824139F, 0.35981607F,
-                0.632312F, 0.42297703F, 0.44843775F, 0.822669F, 0.03549077F};
-        float[] actual = generateFloatArray(expected.length, () -> generator.nextFloat());
+        double[] expected = {0.4963318109512329, 0.5140685439109802, 0.28166934847831726, 0.18241390585899353,
+                0.3598160743713379, 0.632311999797821, 0.4229770302772522, 0.44843775033950806,
+                0.8226690292358398, 0.035490769892930984};
+        double[] actual = generateDoubleArray(expected.length, () -> generator.nextFloat());
 
         assertThat(actual, equalTo(expected));
     }
