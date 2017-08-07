@@ -1,5 +1,1 @@
-#1. CLRRandom - fix nextLong(some values will not be generated)
-                nextInt(int, int) does not return the right end of the interval
-                so 3 values will be missing for sure
-
-#2. implement the prevGaussian method
+#1. implement the prevGaussian method

@@ -41,7 +41,7 @@ public class CLRRandom implements ReverseRandomGenerator {
 
         // Initialize our seed array.
         // This algorithm comes from Numerical Recipes in C (2nd Ed.)
-        int subtraction = (seed == Integer.MIN_VALUE) ? Integer.MAX_VALUE : Math.abs(seed);
+        int subtraction = seed == Integer.MIN_VALUE ? Integer.MAX_VALUE : Math.abs(seed);
         mj = MSEED - subtraction;
         seedArray[55] = mj;
         mk = 1;
@@ -174,7 +174,7 @@ public class CLRRandom implements ReverseRandomGenerator {
             result = -result;
         }
         double d = result;
-        d += (Integer.MAX_VALUE - 1); // get a number in range [0 .. 2 * Int32MaxValue - 1)
+        d += Integer.MAX_VALUE - 1; // get a number in range [0 .. 2 * Int32MaxValue - 1)
         d /= 2 * (long) Integer.MAX_VALUE - 1;
         return d;
     }
@@ -193,7 +193,7 @@ public class CLRRandom implements ReverseRandomGenerator {
             result = -result;
         }
         double d = result;
-        d += (Integer.MAX_VALUE - 1); // get a number in range [0 .. 2 * Int32MaxValue - 1)
+        d += Integer.MAX_VALUE - 1; // get a number in range [0 .. 2 * Int32MaxValue - 1)
         d /= 2 * (long) Integer.MAX_VALUE - 1;
         return d;
     }
@@ -247,7 +247,7 @@ public class CLRRandom implements ReverseRandomGenerator {
 
         long range = (long) maxValue - minValue;
         if (range <= (long) Integer.MAX_VALUE) {
-            return ((int) (sample() * range) + minValue);
+            return (int) (sample() * range) + minValue;
         } else {
             return (int) ((long) (getSampleForLargeRange() * range) + minValue);
         }
@@ -265,7 +265,7 @@ public class CLRRandom implements ReverseRandomGenerator {
 
         long range = (long) maxValue - minValue;
         if (range <= (long) Integer.MAX_VALUE) {
-            return ((int) (prevSample() * range) + minValue);
+            return (int) (prevSample() * range) + minValue;
         } else {
             return (int) ((long) (getPrevSampleForLargeRange() * range) + minValue);
         }
@@ -355,16 +355,21 @@ public class CLRRandom implements ReverseRandomGenerator {
         }
     }
 
+    // https://stackoverflow.com/questions/6651554/random-number-in-long-range-is-this-the-way
     @Override
     public long nextLong() {
-        return ((long) (nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE)) << 32)
-                | ((long) nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE)) & 0xFFFFFFFFL;
+        long b1 = nextInt() & 0xFFFFL; // 16 bits
+        long b2 = nextInt() & 0xFFFFFFL; // 24 bits
+        long b3 = nextInt() & 0xFFFFFFL; // 24 bits
+        return b1 << 48 | b2 << 24 | b3;
     }
 
     @Override
     public long prevLong() {
-        return ((long) prevInt(Integer.MIN_VALUE, Integer.MAX_VALUE)) & 0xFFFFFFFFL |
-                ((long) (prevInt(Integer.MIN_VALUE, Integer.MAX_VALUE)) << 32);
+        long b3 = prevInt() & 0xFFFFFFL; // 24 bits
+        long b2 = prevInt() & 0xFFFFFFL; // 24 bits
+        long b1 = prevInt() & 0xFFFFL; // 16 bits
+        return b1 << 48 | b2 << 24 | b3;
     }
 
     @Override

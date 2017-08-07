@@ -58,7 +58,7 @@ public class CLRRandomTest extends ReverseRandomGeneratorAbstractTest<CLRRandom>
     public void testNextIntIsPositiveNumber() {
         boolean result = IntStream
                 .generate(() -> generator.nextInt())
-                .limit(1_000_000_000L)
+                .limit(429_496_730)
                 .allMatch((i) -> 0 <= i && i < Integer.MAX_VALUE);
         assertThat(result, equalTo(true));
     }
@@ -147,9 +147,9 @@ public class CLRRandomTest extends ReverseRandomGeneratorAbstractTest<CLRRandom>
     @Override
     @Test
     public void testNextLongExactValue() {
-        long[] expected = {-2936737700413755091L, 8151513492379067501L, 1532115561184041709L, 1471928142329522304L,
-                2115896892498654480L, -8935042981661352373L, 3439612340202707043L, -5564189664267228114L,
-                -8457772951952128489L, 7586400010322612781L};
+        long[] expected = {7160971568492367569L, -8931728783750763133L, -1986638387611489539L, -2925306645117407511L,
+                6258300555690268542L, -554966206143487861L, 3824004281963357759L, -2002195686033151106L,
+                -777744680147937180L, 7928930161609697530L};
         long[] actual = generateLongArray(expected.length, () -> generator.nextLong());
 
         assertThat(actual, equalTo(expected));
