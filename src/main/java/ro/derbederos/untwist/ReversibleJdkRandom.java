@@ -71,6 +71,12 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
         setSeed(RandomUtils.convertToLong(seed));
     }
 
+    @Override
+    public synchronized void setSeed(long seed) {
+        clear();
+        super.setSeed(seed);
+    }
+
     public long getSeed() {
         return (seedRef.get() ^ multiplier) & mask;
     }
@@ -154,9 +160,36 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
         return (prev(27) + ((long) (prev(26)) << 27)) * DOUBLE_UNIT;
     }
 
+    private void clear() {
+        shouldReverseGaussian = false;
+        if (hasNextGaussian) {
+            super.nextGaussian();
+            hasNextGaussian = false;
+        }
+    }
+
+    private boolean shouldReverseGaussian;
+    private boolean hasNextGaussian;
+
     @Override
-    public double prevGaussian() {
-        //FIXME
-        throw new UnsupportedOperationException();
+    public double nextGaussian() {
+        shouldReverseGaussian = !shouldReverseGaussian;
+        hasNextGaussian = !hasNextGaussian;
+        return super.nextGaussian();
+    }
+
+    @Override
+    public void undoNextGaussian() {
+        if (shouldReverseGaussian) {
+            double v1, v2, s;
+            do {
+                v1 = 2 * prevDouble() - 1; // between -1 and 1
+                v2 = 2 * prevDouble() - 1; // between -1 and 1
+                s = v1 * v1 + v2 * v2;
+            } while (s >= 1 || s == 0);
+            clear();
+        } else {
+            shouldReverseGaussian = true;
+        }
     }
 }

@@ -1,5 +1,6 @@
 package ro.derbederos.untwist;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -152,5 +153,12 @@ public class ReversibleJdkRandomTest extends ReverseRandomGeneratorAbstractTest<
         boolean[] actual = generateBooleanArray(expected.length, () -> generator.nextBoolean());
 
         assertThat(actual, equalTo(expected));
+    }
+
+    @Override
+    @Test
+    @Ignore
+    public void testNextPrevMixedCalls() {
+        super.testNextPrevMixedCalls();
     }
 }

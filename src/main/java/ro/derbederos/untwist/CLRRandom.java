@@ -72,6 +72,7 @@ public class CLRRandom implements ReverseRandomGenerator {
         inext = 55;
         inextp = 21;
         nextGaussian = Double.NaN;
+        shouldReverseGaussian = false;
     }
 
     //
@@ -387,6 +388,7 @@ public class CLRRandom implements ReverseRandomGenerator {
      */
     @Override
     public double nextGaussian() {
+        shouldReverseGaussian = !shouldReverseGaussian;
         final double random;
         if (Double.isNaN(nextGaussian)) {
             // generate a new pair of gaussian numbers
@@ -404,9 +406,17 @@ public class CLRRandom implements ReverseRandomGenerator {
         return random;
     }
 
+    private boolean shouldReverseGaussian;
+
     @Override
-    public double prevGaussian() {
-        //FIXME
-        throw new UnsupportedOperationException();
+    public void undoNextGaussian() {
+        if (shouldReverseGaussian) {
+            prevDouble();
+            prevDouble();
+            nextGaussian = Double.NaN;
+            shouldReverseGaussian = false;
+        } else {
+            shouldReverseGaussian = true;
+        }
     }
 }

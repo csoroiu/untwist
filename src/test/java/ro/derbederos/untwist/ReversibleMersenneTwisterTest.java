@@ -298,6 +298,7 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
         }
     }
 
+    @Override
     @Test
     @Ignore
     public void testSet32BitSeedIntVsLongVsArray() {

@@ -19,5 +19,5 @@ public interface ReverseRandomGenerator extends RandomGenerator, Serializable {
 
     double prevDouble();
 
-    double prevGaussian();
+    void undoNextGaussian();
 }

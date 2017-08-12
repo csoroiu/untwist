@@ -20,23 +20,21 @@ public class CLRRandomTest extends ReverseRandomGeneratorAbstractTest<CLRRandom>
 
     @Override
     protected CLRRandom makeGenerator() {
-        return new CLRRandom(new int[]{291, 564, 837, 1110});
+        return new CLRRandom(-0x3f97396e);
     }
 
     @Override
     @Test
     @Ignore
     public void testNextInt2() {
-        //FIXME
-        //super.testNextInt2();
+        super.testNextInt2();
     }
 
     @Override
     @Test
     @Ignore
     public void testNextIntWideRange() {
-        // FIXME - uncomment after nextInt is fixed
-        // super.testNextIntWideRange();
+        super.testNextIntWideRange();
     }
 
     @Test

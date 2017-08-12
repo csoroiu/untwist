@@ -11,8 +11,10 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
+import java.util.function.Supplier;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -345,6 +347,115 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
         expectedException.expect(NullPointerException.class);
 
         generator.nextBytes(null);
+    }
+
+    @Test
+    public void testUndoNextGaussianEffect() {
+        double n1 = generator.nextGaussian();
+        double n2 = generator.nextGaussian();
+        double n3 = generator.nextGaussian();
+        generator.undoNextGaussian();
+        generator.undoNextGaussian();
+        generator.undoNextGaussian();
+
+        assertThat(generator.nextGaussian(), equalTo(n1));
+        assertThat(generator.nextGaussian(), equalTo(n2));
+        assertThat(generator.nextGaussian(), equalTo(n3));
+    }
+
+    private static double advanceNextGaussian(ReverseRandomGenerator generator) {
+        generator.nextGaussian();
+        return 0;
+    }
+
+    private static double undoNextGaussianEffect(ReverseRandomGenerator generator) {
+        generator.undoNextGaussian();
+        return 0;
+    }
+
+    @Test
+    public void testNextPrevMixedCalls() {
+        Supplier<double[]> supplier = () -> new double[]{
+                (double) generator.nextInt(),
+                advanceNextGaussian(generator),
+                (double) generator.nextInt(75),
+                generator.nextDouble(),
+                advanceNextGaussian(generator),
+                (double) generator.nextFloat(),
+                generator.nextBoolean() ? 1d : 0d,
+                generator.nextLong(),
+                advanceNextGaussian(generator)};
+
+        Supplier<double[]> reverseSupplier = () -> new double[]{
+                undoNextGaussianEffect(generator),
+                generator.prevLong(),
+                generator.prevBoolean() ? 1d : 0d,
+                (double) generator.prevFloat(),
+                undoNextGaussianEffect(generator),
+                generator.prevDouble(),
+                (double) generator.prevInt(75),
+                undoNextGaussianEffect(generator),
+                (double) generator.prevInt()};
+
+        int LIMIT = 102_960; //lcd(9, 55, 624)
+        double[] expected = Stream.generate(supplier)
+                .flatMapToDouble(DoubleStream::of)
+                .limit(LIMIT)
+                .toArray();
+        double[] actual = Stream.generate(reverseSupplier)
+                .flatMapToDouble(DoubleStream::of)
+                .limit(LIMIT)
+                .toArray();
+
+        assertThat(reverseArray(actual), equalTo(expected));
+
+        double[] expected2 = Stream.generate(supplier)
+                .flatMapToDouble(DoubleStream::of)
+                .limit(LIMIT)
+                .toArray();
+
+        assertThat(expected2, equalTo(expected));
+    }
+
+    @Test
+    public void testNextPrevMixedCallsNoGaussian() {
+        //the gaussian breaks things up for some random generators
+        Supplier<double[]> supplier = () -> new double[]{
+                (double) generator.nextInt(),
+                (double) generator.nextInt(75),
+                generator.nextDouble(),
+                (double) generator.nextFloat(),
+                generator.nextBoolean() ? 1d : 0d,
+                generator.nextLong(),
+                generator.nextInt(90)};
+
+        Supplier<double[]> reverseSupplier = () -> new double[]{
+                generator.prevInt(90),
+                generator.prevLong(),
+                generator.prevBoolean() ? 1d : 0d,
+                (double) generator.prevFloat(),
+                generator.prevDouble(),
+                (double) generator.prevInt(75),
+                (double) generator.prevInt()};
+
+        int LIMIT = 240_240; //lcd(7, 55, 624)
+        double[] expected = Stream.generate(supplier)
+                .flatMapToDouble(DoubleStream::of)
+                .limit(LIMIT)
+                .toArray();
+        double[] actual = Stream.generate(reverseSupplier)
+                .flatMapToDouble(DoubleStream::of)
+                .limit(LIMIT)
+                .toArray();
+
+        assertThat(reverseArray(actual), equalTo(expected));
+
+        double[] expected2 = Stream.generate(supplier)
+                .flatMapToDouble(DoubleStream::of)
+                .limit(LIMIT)
+                .toArray();
+
+        assertThat(expected2, equalTo(expected));
     }
 
     @Test

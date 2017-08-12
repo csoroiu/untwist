@@ -110,10 +110,28 @@ public abstract class ReverseBitsStreamGenerator extends BitsStreamGenerator imp
         return (low | high) * 0x1.0p-52d;
     }
 
+    @Override
+    public void clear() {
+        super.clear();
+        shouldReverseGaussian = false;
+    }
+
+    private boolean shouldReverseGaussian;
 
     @Override
-    public double prevGaussian() {
-        //FIXME
-        throw new UnsupportedOperationException();
+    public double nextGaussian() {
+        shouldReverseGaussian = !shouldReverseGaussian;
+        return super.nextGaussian();
+    }
+
+    @Override
+    public void undoNextGaussian() {
+        if (shouldReverseGaussian) {
+            prevDouble();
+            prevDouble();
+            clear();
+        } else {
+            shouldReverseGaussian = true;
+        }
     }
 }

@@ -3,6 +3,7 @@ package ro.derbederos.untwist;
 import com.tngtech.java.junit.dataprovider.DataProvider;
 import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -31,6 +32,7 @@ public class MersenneTwisterPy3kTest extends
         return new int[]{0x456, 0x345, 0x234, 0x123};
     }
 
+    @Override
     @Test
     public void testSet32BitSeedIntVsLongVsArray() {
         super.testSet32BitSeedIntVsLongVsArray();
@@ -172,5 +174,19 @@ public class MersenneTwisterPy3kTest extends
         byte[] actual = new byte[expected.length];
         generator.nextBytes(actual, 2, expected.length - 3);
         assertThat(actual, equalTo(expected));
+    }
+
+    @Override
+    @Test
+    @Ignore
+    public void testNextPrevMixedCalls() {
+        super.testNextPrevMixedCalls();
+    }
+
+    @Override
+    @Test
+    @Ignore
+    public void testNextPrevMixedCallsNoGaussian() {
+        super.testNextPrevMixedCallsNoGaussian();
     }
 }

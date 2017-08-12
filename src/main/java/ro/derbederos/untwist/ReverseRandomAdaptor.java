@@ -68,6 +68,7 @@ public class ReverseRandomAdaptor extends Random implements RandomGenerator {
 
     @Override
     public synchronized double nextGaussian() {
-        return randomGenerator.prevGaussian();
+        randomGenerator.undoNextGaussian();
+        return -1;
     }
 }
