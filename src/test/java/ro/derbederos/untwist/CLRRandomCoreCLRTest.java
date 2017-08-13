@@ -23,9 +23,9 @@ import static ro.derbederos.untwist.Utils.toByteList;
 public class CLRRandomCoreCLRTest {
 
     @Rule
-    public ExpectedException expectedException = ExpectedException.none();
+    public final ExpectedException expectedException = ExpectedException.none();
 
-    private static CLRRandom rand = new CLRRandom(-55);
+    private static final CLRRandom rand = new CLRRandom(-55);
 
     // https://github.com/dotnet/coreclr/blob/master/tests/src/Common/CoreCLRTestLibrary/Generator.cs
     private int newInt32WithCondition(Predicate<Integer> loopCondition) {

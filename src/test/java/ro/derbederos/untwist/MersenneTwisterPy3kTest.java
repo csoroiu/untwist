@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.function.IntSupplier;
 import java.util.function.LongSupplier;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -52,7 +53,7 @@ public class MersenneTwisterPy3kTest extends
     public void testNextIntExactValue() {
         int[] expected = {2131728873, -149450095, -2087059751, 1068585415, 1209760669,
                 -425486438, 783461773, -80805226, 1545398317, -1623044361};
-        int[] actual = generateIntArray(expected.length, () -> generator.nextInt());
+        int[] actual = generateIntArray(expected.length, (IntSupplier) generator::nextInt);
 
         assertThat(actual, equalTo(expected));
     }
@@ -72,7 +73,7 @@ public class MersenneTwisterPy3kTest extends
         long[] expected = {-641883268277364247L, 4589539412615495385L, -1827450334891770979L, -347055802232427123L,
                 -6970922448906819539L, 2488676750358164198L, -8896639325777151682L, -6782370575323180803L,
                 5196967370074779647L, -5701509883458360255L};
-        long[] actual = generateLongArray(expected.length, () -> generator.nextLong());
+        long[] actual = generateLongArray(expected.length, (LongSupplier) generator::nextLong);
 
         assertThat(actual, equalTo(expected));
 
@@ -84,7 +85,7 @@ public class MersenneTwisterPy3kTest extends
         double[] expected = {0.4963318106919783, 0.5140685308635192, 0.2816693551907965, 0.18241391316939937,
                 0.35981608645696583, 0.632311993352409, 0.4229770415850893, 0.44843774760013033,
                 0.8226690238842976, 0.03549077131539968};
-        double[] actual = generateDoubleArray(expected.length, () -> generator.nextDouble());
+        double[] actual = generateDoubleArray(expected.length, generator::nextDouble);
 
         assertThat(actual, equalTo(expected));
 
@@ -96,7 +97,7 @@ public class MersenneTwisterPy3kTest extends
         double[] expected = {0.4963318109512329, 0.5140685439109802, 0.28166934847831726, 0.18241390585899353,
                 0.3598160743713379, 0.632311999797821, 0.4229770302772522, 0.44843775033950806,
                 0.8226690292358398, 0.035490769892930984};
-        double[] actual = generateDoubleArray(expected.length, () -> generator.nextFloat());
+        double[] actual = generateDoubleArray(expected.length, generator::nextFloat);
 
         assertThat(actual, equalTo(expected));
     }
@@ -106,7 +107,7 @@ public class MersenneTwisterPy3kTest extends
     public void testNextBooleanExactValue() {
         boolean[] expected = {false, true, true, false, false, true, false, true, false, true,
                 true, false, false, true, false, true, true, false, false, true};
-        boolean[] actual = generateBooleanArray(expected.length, () -> generator.nextBoolean());
+        boolean[] actual = generateBooleanArray(expected.length, generator::nextBoolean);
 
         assertThat(actual, equalTo(expected));
     }

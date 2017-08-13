@@ -52,7 +52,7 @@ public class CLRRandom implements ReverseRandomGenerator {
 
     private int inext;
     private int inextp;
-    private int[] seedArray = new int[56];
+    private final int[] seedArray = new int[56];
     private double nextGaussian = Double.NaN;
 
     /**

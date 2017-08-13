@@ -3,6 +3,9 @@ package ro.derbederos.untwist;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.function.IntSupplier;
+import java.util.function.LongSupplier;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.lessThan;
@@ -285,14 +288,14 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
                 0.70694291, 0.85212760, 0.86074305, 0.33163422, 0.85739792, 0.59908488, 0.74566046, 0.72157152
         };
 
-        for (int i = 0; i < refInt.length; ++i) {
+        for (long expectedInt : refInt) {
             int r = mt.nextInt();
-            assertEquals(refInt[i], (r & 0x7FFFFFFFL) | ((r < 0) ? 0x80000000L : 0x0L));
+            assertEquals(expectedInt, (r & 0x7FFFFFFFL) | ((r < 0) ? 0x80000000L : 0x0L));
         }
 
-        for (int i = 0; i < refDouble.length; ++i) {
+        for (double expectedDouble : refDouble) {
             int r = mt.nextInt();
-            assertEquals(refDouble[i],
+            assertEquals(expectedDouble,
                     ((r & 0x7FFFFFFFL) | ((r < 0) ? 0x80000000L : 0x0L)) / 4294967296.0,
                     1.0e-8);
         }
@@ -319,7 +322,7 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
     public void testNextIntExactValue() {
         int[] expected = {1067595299, 955945823, 477289528, -187748513, -65990820,
                 -950634582, -939387601, 227628506, 810200273, -1703677129};
-        int[] actual = generateIntArray(expected.length, () -> generator.nextInt());
+        int[] actual = generateIntArray(expected.length, (IntSupplier) generator::nextInt);
 
         assertThat(actual, equalTo(expected));
     }
@@ -339,7 +342,7 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
         long[] expected = {4585286895524287327L, 2049942917590495071L, -283428410391890006L, -4034639024335268390L,
                 3479783678336561975L, -7450508202106930608L, 2777755793631454906L, -212579503956395170L,
                 -1852405656238365422L, 7617599339294041110L};
-        long[] actual = generateLongArray(expected.length, () -> generator.nextLong());
+        long[] actual = generateLongArray(expected.length, (LongSupplier) generator::nextLong);
 
         assertThat(actual, equalTo(expected));
 
@@ -351,7 +354,7 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
         double[] expected = {0.24856889579554609, 0.11112762922475317, 0.9846353199878801, 0.7812817700654102,
                 0.18863945608335353, 0.59610715143395, 0.1505824378799958, 0.9884760419459966,
                 0.8995808921747299, 0.41295087732558855};
-        double[] actual = generateDoubleArray(expected.length, () -> generator.nextDouble());
+        double[] actual = generateDoubleArray(expected.length, generator::nextDouble);
 
         assertThat(actual, equalTo(expected));
 
@@ -362,7 +365,7 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
     public void testNextFloatExactValue() {
         float[] expected = {0.24856889F, 0.2225734F, 0.111127615F, 0.9562863F, 0.98463523F,
                 0.77866304F, 0.7812817F, 0.05299878F, 0.1886394F, 0.6033317F};
-        float[] actual = generateFloatArray(expected.length, () -> generator.nextFloat());
+        float[] actual = generateFloatArray(expected.length, generator::nextFloat);
 
         assertThat(actual, equalTo(expected));
     }
@@ -372,7 +375,7 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
     public void testNextBooleanExactValue() {
         boolean[] expected = {false, false, false, true, true, true, true, false, false, true,
                 true, true, false, false, true, false, true, true, false, false};
-        boolean[] actual = generateBooleanArray(expected.length, () -> generator.nextBoolean());
+        boolean[] actual = generateBooleanArray(expected.length, generator::nextBoolean);
 
         assertThat(actual, equalTo(expected));
     }

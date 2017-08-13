@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
+import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
@@ -29,12 +30,12 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
         extends RandomGeneratorAbstractTest {
 
     @Rule
-    public ExpectedException expectedException = ExpectedException.none();
+    public final ExpectedException expectedException = ExpectedException.none();
 
     /**
      * RandomGenerator under test
      */
-    protected T generator;
+    protected final T generator;
 
     /**
      * Initialize generator and randomData instance in superclass.
@@ -134,26 +135,26 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
 
     @Test
     public void testNextPrevInt() {
-        int[] expected = generateIntArray(2459, () -> generator.nextInt());
-        int[] actual = generateIntArray(2459, () -> generator.prevInt());
+        int[] expected = generateIntArray(2459, (IntSupplier) generator::nextInt);
+        int[] actual = generateIntArray(2459, (IntSupplier) generator::prevInt);
 
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = generateIntArray(2467, () -> generator.nextInt());
-        actual = generateIntArray(2467, () -> generator.prevInt());
+        expected = generateIntArray(2467, (IntSupplier) generator::nextInt);
+        actual = generateIntArray(2467, (IntSupplier) generator::prevInt);
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testPrevNextInt() {
-        int[] expected = generateIntArray(2459, () -> generator.prevInt());
-        int[] actual = generateIntArray(2459, () -> generator.nextInt());
+        int[] expected = generateIntArray(2459, (IntSupplier) generator::prevInt);
+        int[] actual = generateIntArray(2459, (IntSupplier) generator::nextInt);
 
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = generateIntArray(2467, () -> generator.prevInt());
-        actual = generateIntArray(2467, () -> generator.nextInt());
+        expected = generateIntArray(2467, (IntSupplier) generator::prevInt);
+        actual = generateIntArray(2467, (IntSupplier) generator::nextInt);
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
@@ -188,104 +189,104 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
 
     @Test
     public void testNextPrevLong() {
-        long[] expected = generateLongArray(2459, () -> generator.nextLong());
-        long[] actual = generateLongArray(2459, () -> generator.prevLong());
+        long[] expected = generateLongArray(2459, generator::nextLong);
+        long[] actual = generateLongArray(2459, generator::prevLong);
 
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = generateLongArray(2467, () -> generator.nextLong());
-        actual = generateLongArray(2467, () -> generator.prevLong());
+        expected = generateLongArray(2467, generator::nextLong);
+        actual = generateLongArray(2467, generator::prevLong);
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testPrevNextLong() {
-        long[] expected = generateLongArray(2459, () -> generator.prevLong());
-        long[] actual = generateLongArray(2459, () -> generator.nextLong());
+        long[] expected = generateLongArray(2459, generator::prevLong);
+        long[] actual = generateLongArray(2459, generator::nextLong);
 
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = generateLongArray(2467, () -> generator.prevLong());
-        actual = generateLongArray(2467, () -> generator.nextLong());
+        expected = generateLongArray(2467, generator::prevLong);
+        actual = generateLongArray(2467, generator::nextLong);
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     public void testNextPrevDouble() {
-        double[] expected = generateDoubleArray(2459, () -> generator.nextDouble());
-        double[] actual = generateDoubleArray(2459, () -> generator.prevDouble());
+        double[] expected = generateDoubleArray(2459, generator::nextDouble);
+        double[] actual = generateDoubleArray(2459, generator::prevDouble);
 
         DoubleStream.of(expected).forEach((t) -> assertThat(t, between(0.0, 1.0)));
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = generateDoubleArray(2467, () -> generator.nextDouble());
-        actual = generateDoubleArray(2467, () -> generator.prevDouble());
+        expected = generateDoubleArray(2467, generator::nextDouble);
+        actual = generateDoubleArray(2467, generator::prevDouble);
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testPrevNextDouble() {
-        double[] expected = generateDoubleArray(2459, () -> generator.prevDouble());
-        double[] actual = generateDoubleArray(2459, () -> generator.nextDouble());
+        double[] expected = generateDoubleArray(2459, generator::prevDouble);
+        double[] actual = generateDoubleArray(2459, generator::nextDouble);
 
         DoubleStream.of(expected).forEach((t) -> assertThat(t, between(0.0, 1.0)));
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = generateDoubleArray(2467, () -> generator.prevDouble());
-        actual = generateDoubleArray(2467, () -> generator.nextDouble());
+        expected = generateDoubleArray(2467, generator::prevDouble);
+        actual = generateDoubleArray(2467, generator::nextDouble);
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     public void testNextPrevFloat() {
-        float[] expected = generateFloatArray(2459, () -> generator.nextFloat());
-        float[] actual = generateFloatArray(2459, () -> generator.prevFloat());
+        float[] expected = generateFloatArray(2459, generator::nextFloat);
+        float[] actual = generateFloatArray(2459, generator::prevFloat);
 
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = generateFloatArray(2467, () -> generator.nextFloat());
-        actual = generateFloatArray(2467, () -> generator.prevFloat());
+        expected = generateFloatArray(2467, generator::nextFloat);
+        actual = generateFloatArray(2467, generator::prevFloat);
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testPrevNextFloat() {
-        float[] expected = generateFloatArray(2459, () -> generator.prevFloat());
-        float[] actual = generateFloatArray(2459, () -> generator.nextFloat());
+        float[] expected = generateFloatArray(2459, generator::prevFloat);
+        float[] actual = generateFloatArray(2459, generator::nextFloat);
 
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = generateFloatArray(2467, () -> generator.prevFloat());
-        actual = generateFloatArray(2467, () -> generator.nextFloat());
+        expected = generateFloatArray(2467, generator::prevFloat);
+        actual = generateFloatArray(2467, generator::nextFloat);
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testNextPrevBoolean() {
-        boolean[] expected = generateBooleanArray(2459, () -> generator.nextBoolean());
-        boolean[] actual = generateBooleanArray(2459, () -> generator.prevBoolean());
+        boolean[] expected = generateBooleanArray(2459, generator::nextBoolean);
+        boolean[] actual = generateBooleanArray(2459, generator::prevBoolean);
 
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = generateBooleanArray(2467, () -> generator.nextBoolean());
-        actual = generateBooleanArray(2467, () -> generator.prevBoolean());
+        expected = generateBooleanArray(2467, generator::nextBoolean);
+        actual = generateBooleanArray(2467, generator::prevBoolean);
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testPrevNextBoolean() {
-        boolean[] expected = generateBooleanArray(2459, () -> generator.prevBoolean());
-        boolean[] actual = generateBooleanArray(2459, () -> generator.nextBoolean());
+        boolean[] expected = generateBooleanArray(2459, generator::prevBoolean);
+        boolean[] actual = generateBooleanArray(2459, generator::nextBoolean);
 
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = generateBooleanArray(2467, () -> generator.prevBoolean());
-        actual = generateBooleanArray(2467, () -> generator.nextBoolean());
+        expected = generateBooleanArray(2467, generator::prevBoolean);
+        actual = generateBooleanArray(2467, generator::nextBoolean);
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }

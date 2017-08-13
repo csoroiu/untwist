@@ -5,10 +5,6 @@ import org.junit.Ignore;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.DoubleSupplier;
-import java.util.function.IntSupplier;
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
 
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;

@@ -5,6 +5,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.IntSummaryStatistics;
+import java.util.function.IntSupplier;
 import java.util.stream.IntStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -55,7 +56,7 @@ public class CLRRandomTest extends ReverseRandomGeneratorAbstractTest<CLRRandom>
     @Test
     public void testNextIntIsPositiveNumber() {
         boolean result = IntStream
-                .generate(() -> generator.nextInt())
+                .generate(generator::nextInt)
                 .limit(429_496_730)
                 .allMatch((i) -> 0 <= i && i < Integer.MAX_VALUE);
         assertThat(result, equalTo(true));
@@ -137,7 +138,7 @@ public class CLRRandomTest extends ReverseRandomGeneratorAbstractTest<CLRRandom>
     public void testNextIntExactValue() {
         int[] expected = {683762528, 1373746042, 128503505, 1360364556, 1897922134,
                 90664323, 789505134, 235596161, 356723453, 608884583};
-        int[] actual = generateIntArray(expected.length, () -> generator.nextInt());
+        int[] actual = generateIntArray(expected.length, (IntSupplier) generator::nextInt);
 
         assertThat(actual, equalTo(expected));
     }
@@ -148,7 +149,7 @@ public class CLRRandomTest extends ReverseRandomGeneratorAbstractTest<CLRRandom>
         long[] expected = {7160971568492367569L, -8931728783750763133L, -1986638387611489539L, -2925306645117407511L,
                 6258300555690268542L, -554966206143487861L, 3824004281963357759L, -2002195686033151106L,
                 -777744680147937180L, 7928930161609697530L};
-        long[] actual = generateLongArray(expected.length, () -> generator.nextLong());
+        long[] actual = generateLongArray(expected.length, generator::nextLong);
 
         assertThat(actual, equalTo(expected));
 
@@ -160,7 +161,7 @@ public class CLRRandomTest extends ReverseRandomGeneratorAbstractTest<CLRRandom>
         double[] expected = {0.31840173914954145, 0.6397003506495154, 0.05983910758972127, 0.6334691106497632,
                 0.8837888645398378, 0.04221886538072436, 0.3676419772057058, 0.10970801166710817,
                 0.1661123024141939, 0.2835339788736468};
-        double[] actual = generateDoubleArray(expected.length, () -> generator.nextDouble());
+        double[] actual = generateDoubleArray(expected.length, generator::nextDouble);
 
         assertThat(actual, equalTo(expected));
 
@@ -171,7 +172,7 @@ public class CLRRandomTest extends ReverseRandomGeneratorAbstractTest<CLRRandom>
     public void testNextFloatExactValue() {
         float[] expected = {0.31840175F, 0.63970035F, 0.059839107F, 0.6334691F, 0.8837889F,
                 0.042218864F, 0.367642F, 0.10970801F, 0.1661123F, 0.283534F};
-        float[] actual = generateFloatArray(expected.length, () -> generator.nextFloat());
+        float[] actual = generateFloatArray(expected.length, generator::nextFloat);
 
         assertThat(actual, equalTo(expected));
     }
@@ -181,7 +182,7 @@ public class CLRRandomTest extends ReverseRandomGeneratorAbstractTest<CLRRandom>
     public void testNextBooleanExactValue() {
         boolean[] expected = {false, true, false, true, true, false, false, false, false, false,
                 true, false, false, true, false, true, false, true, true, false};
-        boolean[] actual = generateBooleanArray(expected.length, () -> generator.nextBoolean());
+        boolean[] actual = generateBooleanArray(expected.length, generator::nextBoolean);
 
         assertThat(actual, equalTo(expected));
     }

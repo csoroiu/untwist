@@ -22,7 +22,7 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
     private final static long addend = 0x1L;
     private final static long mask = (1L << 32) - 1;
 
-    private final boolean coprocEnabled;
+    private final boolean coprocessorEnabled;
 
     private long seed;
 
@@ -62,37 +62,37 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
     /**
      * Creates a new random number generator using a single int seed.
      *
-     * @param seed          the initial seed (32 bits integer).
-     * @param coprocEnabled flag that enables the offsetting by <code>0.5</code> of the generated floating number.
+     * @param seed               the initial seed (32 bits integer).
+     * @param coprocessorEnabled flag that enables the offsetting by <code>0.5</code> of the generated floating number.
      * @see #setSeed(int)
      */
-    protected TurboPascalRandom(int seed, boolean coprocEnabled) {
+    protected TurboPascalRandom(int seed, boolean coprocessorEnabled) {
         setSeed(seed);
-        this.coprocEnabled = coprocEnabled;
+        this.coprocessorEnabled = coprocessorEnabled;
     }
 
     /**
      * Creates a new random number generator using an int array seed.
      *
-     * @param seed          the initial seed (32 bits integers array).
-     * @param coprocEnabled flag that enables the offsetting by <code>0.5</code> of the generated floating number.
+     * @param seed               the initial seed (32 bits integers array).
+     * @param coprocessorEnabled flag that enables the offsetting by <code>0.5</code> of the generated floating number.
      * @see #setSeed(int[])
      */
-    protected TurboPascalRandom(int[] seed, boolean coprocEnabled) {
+    protected TurboPascalRandom(int[] seed, boolean coprocessorEnabled) {
         setSeed(seed);
-        this.coprocEnabled = coprocEnabled;
+        this.coprocessorEnabled = coprocessorEnabled;
     }
 
     /**
      * Creates a new random number generator using a single long seed.
      *
-     * @param seed          the initial seed (64 bits integer).
-     * @param coprocEnabled flag that enables the offsetting by <code>0.5</code> of the generated floating number.
+     * @param seed               the initial seed (64 bits integer).
+     * @param coprocessorEnabled flag that enables the offsetting by <code>0.5</code> of the generated floating number.
      * @see #setSeed(long)
      */
-    protected TurboPascalRandom(long seed, boolean coprocEnabled) {
+    protected TurboPascalRandom(long seed, boolean coprocessorEnabled) {
         setSeed(seed);
-        this.coprocEnabled = coprocEnabled;
+        this.coprocessorEnabled = coprocessorEnabled;
     }
 
     /**
@@ -190,7 +190,7 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
     @Override
     public double nextDouble() {
         long nextInt = next(32) & 0xFFFFFFFFL;
-        if (coprocEnabled) {
+        if (coprocessorEnabled) {
             // in turbo pascal the seed was 32 bit signed integer
             return (int) nextInt / (double) (1L << 32) + 0.5;
         } else {
@@ -207,7 +207,7 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
     @Override
     public double prevDouble() {
         long prevInt = prev(32) & 0xFFFFFFFFL;
-        if (coprocEnabled) {
+        if (coprocessorEnabled) {
             // in turbo pascal the seed was 32 bit signed integer
             return (int) prevInt / (double) (1L << 32) + 0.5;
         } else {

@@ -1,13 +1,14 @@
 package ro.derbederos.untwist;
 
+import org.apache.commons.math3.random.RandomGenerator;
+
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.Random;
 import java.util.function.*;
 
 public class ArrayUtils {
 
-    private static int[] getPermutation(int n, int steps, Random randomizer) {
+    private static int[] getPermutation(int n, int steps, RandomGenerator randomizer) {
         int[] perm = new int[n];
         for (int i = 0; i < n; i++) {
             perm[i] = i;
@@ -25,7 +26,7 @@ public class ArrayUtils {
         return perm;
     }
 
-    public static int[] getTree(int n, Random randomizer) {
+    public static int[] getTree(int n, RandomGenerator randomizer) {
         // http://algs4.cs.princeton.edu/41graph/GraphGenerator.java.html
         // https://en.wikipedia.org/wiki/Pr%C3%BCfer_sequence
         int[] perm = getPermutation(n, randomizer);
@@ -38,12 +39,12 @@ public class ArrayUtils {
         return tree;
     }
 
-    public static int[] getPermutation(int n, Random randomizer) {
+    public static int[] getPermutation(int n, RandomGenerator randomizer) {
         // http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
         return getPermutation(n, 1, randomizer);
     }
 
-    public static int[] getPermutationInsideOut(int n, Random randomizer) {
+    public static int[] getPermutationInsideOut(int n, RandomGenerator randomizer) {
         // http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
         int[] perm = new int[n];
         for (int i = 1; i < n; i++) {
@@ -63,7 +64,7 @@ public class ArrayUtils {
         v[i - 1] = tmp;
     }
 
-    public static void rotate(int[] v, int from, int to) {
+    public static void rotateRight(int[] v, int from, int to) {
         int tmp = v[to - 1];
         int i;
         for (i = to - 1; i > from; i--) {
@@ -83,11 +84,11 @@ public class ArrayUtils {
         return result;
     }
 
-    public static float[] generateFloatArray(int size, Supplier<Float> supplier) {
+    public static float[] generateFloatArray(int size, DoubleSupplier supplier) {
         Objects.requireNonNull(supplier);
         float[] result = new float[size];
         for (int i = 0; i < result.length; i++) {
-            result[i] = supplier.get();
+            result[i] = (float) supplier.getAsDouble();
         }
         return result;
     }

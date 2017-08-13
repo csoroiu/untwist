@@ -40,7 +40,7 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
     }
 
     private static void rethrowUnchecked(final Throwable ex) {
-        ReversibleJdkRandom.<RuntimeException>rethrow(ex);
+        ReversibleJdkRandom.rethrow(ex);
     }
 
     @SuppressWarnings("unchecked")

@@ -1,8 +1,8 @@
 package ro.derbederos.untwist;
 
+import org.apache.commons.math3.random.JDKRandomGenerator;
+import org.apache.commons.math3.random.RandomGenerator;
 import org.junit.Test;
-
-import java.util.Random;
 
 import static ro.derbederos.untwist.ArrayUtils.getTree;
 
@@ -10,7 +10,7 @@ public class ArrayUtilsTest {
 
     @Test
     public void testRandomTree() {
-        Random r = new Random(123456789013L);
+        RandomGenerator r = new JDKRandomGenerator();
         int maxDepth = 0;
         for (int i = 0; i < 1000; i++) {
             int[] tree = getTree(10000, r);
