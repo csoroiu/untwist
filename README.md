@@ -1,4 +1,6 @@
 # untwist
+[![Maven Central][maven-tasks-svg]][maven-tasks-link]
+[![Javadoc][javadoc-svg]][javadoc-link]
 [![Build Status][build-status-svg]][build-status-link]
 [![License][license-svg]][license-link]
 
@@ -19,5 +21,9 @@ Enjoy using them!
 
 [build-status-svg]: https://travis-ci.org/csoroiu/untwist.svg?branch=master
 [build-status-link]: https://travis-ci.org/csoroiu/untwist
+[javadoc-svg]: http://javadoc.io/badge/ro.derbederos/untwist.svg?color=red
+[javadoc-link]: http://javadoc.io/doc/ro.derbederos/untwist
 [license-svg]: https://img.shields.io/badge/license-Apache2-blue.svg
 [license-link]: https://raw.githubusercontent.com/csoroiu/untwist/master/LICENSE
+[maven-tasks-svg]: https://img.shields.io/maven-central/v/ro.derbederos/untwist.svg
+[maven-tasks-link]: https://maven-badges.herokuapp.com/maven-central/ro.derbederos/untwist
