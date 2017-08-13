@@ -256,6 +256,9 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
         return temper(mt[mti++]) >>> (32 - bits);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected int prev(int bits) {
         int result = temper(mt[--mti]) >>> (32 - bits);

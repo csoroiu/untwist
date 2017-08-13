@@ -27,7 +27,6 @@ public class JDKRandomPy3kCompat extends Random implements RandomGenerator {
     }
 
     @Override
-    @Deprecated
     public float nextFloat() {
         return (float) nextDouble();
     }

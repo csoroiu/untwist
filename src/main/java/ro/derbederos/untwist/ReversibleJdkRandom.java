@@ -6,6 +6,9 @@ import java.security.PrivilegedExceptionAction;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * This class extends the random class and ads methods for generating random values in reverse.
+ */
 public class ReversibleJdkRandom extends Random implements ReverseRandomGenerator {
     private static final long serialVersionUID = 1L;
 
@@ -61,22 +64,36 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setSeed(int seed) {
         setSeed((long) seed);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setSeed(int[] seed) {
         setSeed(RandomUtils.convertToLong(seed));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public synchronized void setSeed(long seed) {
         clear();
         super.setSeed(seed);
     }
 
+    /**
+     * Returns the seed used by this generator.
+     *
+     * @return the seed (which can be used with {@link #setSeed(long)}.
+     */
     public long getSeed() {
         return (seedRef.get() ^ multiplier) & mask;
     }
@@ -95,7 +112,7 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
     }
 
     /**
-     * Works as a complete reverse of nextBytes. It will drop the first bits of the prevInt, and not the last.
+     * {@inheritDoc}
      */
     @Override
     public void prevBytes(byte[] bytes) {
@@ -117,11 +134,17 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int prevInt() {
         return prev(32);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int prevInt(int bound) {
         if (bound <= 0) {
@@ -140,21 +163,33 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
         return k;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long prevLong() {
         return prev(32) + ((long) (prev(32)) << 32);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean prevBoolean() {
         return prev(1) != 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public float prevFloat() {
         return prev(24) / ((float) (1 << 24));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double prevDouble() {
         return (prev(27) + ((long) (prev(26)) << 27)) * DOUBLE_UNIT;
@@ -171,6 +206,9 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
     private boolean shouldReverseGaussian;
     private boolean hasNextGaussian;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double nextGaussian() {
         shouldReverseGaussian = !shouldReverseGaussian;
@@ -178,6 +216,9 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
         return super.nextGaussian();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void undoNextGaussian() {
         if (shouldReverseGaussian) {

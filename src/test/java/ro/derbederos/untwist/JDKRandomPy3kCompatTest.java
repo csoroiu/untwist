@@ -108,7 +108,6 @@ public class JDKRandomPy3kCompatTest {
     }
 
     @Test
-    @SuppressWarnings("deprecation")
     public void testNextFloatExactValue() {
         double[] expected = {0.7309677600860596, 0.2405364215373993, 0.6374174356460571, 0.5504370331764221,
                 0.5975452661514282, 0.33321839570999146, 0.3851891756057739, 0.984841525554657,

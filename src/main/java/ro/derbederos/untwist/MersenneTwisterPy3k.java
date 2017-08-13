@@ -2,31 +2,73 @@ package ro.derbederos.untwist;
 
 import org.apache.commons.math3.exception.OutOfRangeException;
 
+/**
+ * A Mersenne Twister subclass which generates the same numbers as the Python 3 implementation.
+ * Source code uses as reference is part of the files:
+ * <ul>
+ * <li><a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.</li>
+ * <li><a href="https://svn.python.org/projects/python/trunk/Lib/random.py">random.py</a>.</li>
+ * </ul>
+ */
 public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Creates a new random number generator.
+     * <p>The instance is initialized using the current time plus the
+     * system identity hash code of this instance as the seed.</p>
+     */
     public MersenneTwisterPy3k() {
         super();
     }
 
+    /**
+     * Creates a new random number generator using a single int seed.
+     *
+     * @param seed the initial seed (32 bits integer).
+     * @see #setSeed(int)
+     */
     public MersenneTwisterPy3k(int seed) {
         this(new int[]{seed});
     }
 
+    /**
+     * Creates a new random number generator using an int array seed.
+     *
+     * @param seed the initial seed (32 bits integers array), if null
+     *             the seed of the generator will be related to the current time.
+     * @see #setSeed(int[])
+     */
     public MersenneTwisterPy3k(int[] seed) {
         super(seed);
     }
 
+    /**
+     * Creates a new random number generator using a single long seed.
+     *
+     * @param seed the initial seed (64 bits integer).
+     * @see #setSeed(long)
+     */
     public MersenneTwisterPy3k(long seed) {
         super(seed);
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * It calls {@link #setSeed(int[])}.
+     */
     @Override
     public void setSeed(int seed) {
-        super.setSeed(new int[]{seed});
+        setSeed(new int[]{seed});
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * It calls {@link #setSeed(int[])}.
+     */
     @Override
     public void setSeed(long seed) {
         final int high = (int) (seed >>> 32);
@@ -37,6 +79,12 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Reverses the bytes in the <code>seed</code>array and calls <code>super.setSeed(int[])</code>
+     * Python Mersenne Twister uses a different byte ordering for the seed array.
+     */
     @Override
     public void setSeed(int[] seed) {
         // for python compatibility where the seed is a number (big integer)
@@ -44,29 +92,54 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
         super.setSeed(reverseArray(seed));
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Source code: <code>random_random</code> method in the file
+     * <a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.
+     */
     @Override
-    // http://svn.python.org/projects/python/trunk/Modules/_randommodule.c # random_random
     public double nextDouble() {
         return (((long) (next(27)) << 26) + next(26)) * 0x1.0p-53;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Source code: <code>random_random</code> method in the file
+     * <a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.
+     */
     @Override
     public double prevDouble() {
         return (prev(26) + ((long) (prev(27)) << 26)) * 0x1.0p-53;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * It simply calls {@link #nextDouble()} and does a cast.
+     */
     @Override
-    @Deprecated
     public float nextFloat() {
         return (float) nextDouble();
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * It simply calls {@link #prevDouble()} and does a cast.
+     */
     @Override
-    @Deprecated
     public float prevFloat() {
         return (float) prevDouble();
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Source code: <code>_randbelow</code> method in the file
+     * <a href="https://svn.python.org/projects/python/trunk/Lib/random.py">random.py</a>.
+     */
     @Override
     public int nextInt(int n) throws IllegalArgumentException {
         if (n > 0) {
@@ -80,6 +153,12 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
         throw new IllegalArgumentException("n must be strictly positive");
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Source code: <code>_randbelow</code> method in the file
+     * <a href="https://svn.python.org/projects/python/trunk/Lib/random.py">random.py</a>.
+     */
     @Override
     public int prevInt(int n) throws IllegalArgumentException {
         if (n > 0) {
@@ -93,6 +172,14 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
         throw new IllegalArgumentException("n must be strictly positive");
     }
 
+    /**
+     * {@inheritDoc}
+     * Algorithm for {@link #nextLong()} is similar to the one for {@link #nextBytes(byte[])}
+     * when called for 8 bytes.
+     * <p>
+     * Source code: <code>random_getrandbits</code> method in the file
+     * <a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.
+     */
     @Override
     public long nextLong() {
         final long low = ((long) next(32)) & 0xFFFFFFFFL;
@@ -100,6 +187,14 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
         return high | low;
     }
 
+    /**
+     * {@inheritDoc}
+     * Algorithm for {@link #prevLong()} is similar to the one for {@link #prevBytes(byte[])}
+     * when called for 8 bytes.
+     * <p>
+     * Source code: <code>random_getrandbits</code> method in the file
+     * <a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.
+     */
     @Override
     public long prevLong() {
         final long high = ((long) prev(32)) << 32;
@@ -107,6 +202,12 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
         return high | low;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Source code: <code>random_getrandbits</code> method in the file
+     * <a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.
+     */
     @Override
     public void nextBytes(byte[] bytes, int start, int len) {
         if (start < 0 || start >= bytes.length) {
@@ -119,12 +220,17 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
         nextBytesFill(bytes, start, len);
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Source code: <code>random_getrandbits</code> method in the file
+     * <a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.
+     */
     @Override
     public void nextBytes(byte[] bytes) {
         nextBytesFill(bytes, 0, bytes.length);
     }
 
-    // http://svn.python.org/projects/python/trunk/Modules/_randommodule.c # random_getrandbits
     private void nextBytesFill(byte[] bytes, int start, int len) {
         int i = start;
         final int endIndex = start + len;
@@ -146,11 +252,23 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Source code: <code>random_getrandbits</code> method in the file
+     * <a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.
+     */
     @Override
     public void prevBytes(byte[] bytes) {
         prevBytesFill(bytes, 0, bytes.length);
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Source code: <code>random_getrandbits</code> method in the file
+     * <a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.
+     */
     @Override
     public void prevBytes(byte[] bytes, int start, int len) {
         if (start < 0 ||
@@ -187,8 +305,13 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Source code: <code>_randbelow</code> method in the file
+     * <a href="https://svn.python.org/projects/python/trunk/Lib/random.py">random.py</a>.
+     */
     @Override
-    // http://svn.python.org/projects/python/trunk/Modules/_randommodule.c # random_getrandbits
     public long nextLong(long n) throws IllegalArgumentException {
         if (n > 0) {
             final int bit_length = Long.SIZE - Long.numberOfLeadingZeros(n);
@@ -204,6 +327,12 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
         throw new IllegalArgumentException("n must be strictly positive");
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Source code: <code>_randbelow</code> method in the file
+     * <a href="https://svn.python.org/projects/python/trunk/Lib/random.py">random.py</a>.
+     */
     @Override
     public long prevLong(long n) throws IllegalArgumentException {
         if (n > 0) {

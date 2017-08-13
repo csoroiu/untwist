@@ -168,7 +168,6 @@ public class CLRRandomTest extends ReverseRandomGeneratorAbstractTest<CLRRandom>
 
     @Override
     @Test
-    @SuppressWarnings("deprecation")
     public void testNextFloatExactValue() {
         float[] expected = {0.31840175F, 0.63970035F, 0.059839107F, 0.6334691F, 0.8837889F,
                 0.042218864F, 0.367642F, 0.10970801F, 0.1661123F, 0.283534F};
@@ -278,13 +277,13 @@ public class CLRRandomTest extends ReverseRandomGeneratorAbstractTest<CLRRandom>
 
     @Test
     public void testStatePrevNextVsNextPrev() {
-        CLRRandom clrRandom1 = new CLRRandom(new int[]{291, 564, 837, 1110});
+        CLRRandom clrRandom1 = new CLRRandom(-0x3f97396e);
         clrRandom1.prevInt();
         clrRandom1.nextInt();
         int[] expected = clrRandom1.getState();
 
 
-        CLRRandom clrRandom2 = new CLRRandom(new int[]{291, 564, 837, 1110});
+        CLRRandom clrRandom2 = new CLRRandom(-0x3f97396e);
         clrRandom2.prevInt();
         clrRandom2.nextInt();
         int[] actual = clrRandom2.getState();

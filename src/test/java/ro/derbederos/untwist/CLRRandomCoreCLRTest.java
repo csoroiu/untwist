@@ -16,7 +16,9 @@ import static ro.derbederos.untwist.Utils.toByteList;
 
 /**
  * This class contains the tests from the CoreCLR library.
- * https://github.com/dotnet/coreclr/tree/master/tests/src/CoreMangLib/cti/system/random
+ * <p>
+ * <a href="https://github.com/dotnet/coreclr/tree/master/tests/src/CoreMangLib/cti/system/random">
+ * .NET Core Random class tests</a>
  */
 public class CLRRandomCoreCLRTest {
 
