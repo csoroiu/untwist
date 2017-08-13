@@ -20,6 +20,8 @@ import org.apache.commons.math3.exception.OutOfRangeException;
 import org.apache.commons.math3.random.BitsStreamGenerator;
 
 public abstract class ReverseBitsStreamGenerator extends BitsStreamGenerator implements ReverseRandomGenerator {
+    private static final long serialVersionUID = 1L;
+
     /**
      * {@inheritDoc}
      */

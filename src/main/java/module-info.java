@@ -1,5 +1,5 @@
 module ro.derbederos.untwist {
     exports ro.derbederos.untwist;
 
-    requires commons.math3;
+    requires transitive commons.math3;
 }

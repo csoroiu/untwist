@@ -24,6 +24,10 @@
     <artifactId>untwist</artifactId>
     <version>0.1</version>
 
+    <name>untwist</name>
+    <description>Java 8+ collection of PRNG's from CLR (.NET), FreePascal, TurboPascal, Python.</description>
+    <url>https://github.com/csoroiu/untwist</url>
+
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -31,6 +35,31 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+
+    <scm>
+        <url>https://github.com/csoroiu/untwist</url>
+        <connection>scm:git:https://github.com/csoroiu/untwist.git</connection>
+        <developerConnection>scm:git:https://github.com/csoroiu/untwist.git</developerConnection>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/csoroiu/untwist/issues</url>
+    </issueManagement>
+
+    <ciManagement>
+        <system>Travis CI</system>
+        <url>https://travis-ci.org/csoroiu/untwist</url>
+        <notifiers/>
+    </ciManagement>
+
+    <developers>
+        <developer>
+            <name>Claudiu Soroiu</name>
+            <url>https://github.com/csoroiu/</url>
+            <organization>Derbederos</organization>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
