@@ -22,7 +22,7 @@
 
     <groupId>ro.derbederos</groupId>
     <artifactId>untwist</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1</version>
 
     <licenses>
         <license>
