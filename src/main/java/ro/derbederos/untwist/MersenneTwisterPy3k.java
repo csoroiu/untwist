@@ -98,8 +98,8 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
     /**
      * {@inheritDoc}
      * <p>
-     * Reverses the bytes in the <code>seed</code>array and calls <code>super.setSeed(int[])</code>
-     * Python Mersenne Twister uses a different byte ordering for the seed array.
+     * Reverses the bytes in the {@code seed} array and calls{@code super.setSeed(int[])}.
+     * Python Mersenne Twister uses a different byte ordering for the {@code seed} array.
      */
     @Override
     public void setSeed(int[] seed) {
@@ -111,7 +111,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
     /**
      * {@inheritDoc}
      * <p>
-     * Source code: <code>random_random</code> method in the file
+     * Source code: {@code random_random} method in the file
      * <a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.
      */
     @Override
@@ -122,7 +122,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
     /**
      * {@inheritDoc}
      * <p>
-     * Source code: <code>random_random</code> method in the file
+     * Source code: {@code random_random} method in the file
      * <a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.
      */
     @Override
@@ -153,7 +153,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
     /**
      * {@inheritDoc}
      * <p>
-     * Source code: <code>_randbelow</code> method in the file
+     * Source code: {@code _randbelow} method in the file
      * <a href="https://svn.python.org/projects/python/trunk/Lib/random.py">random.py</a>.
      */
     @Override
@@ -172,7 +172,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
     /**
      * {@inheritDoc}
      * <p>
-     * Source code: <code>_randbelow</code> method in the file
+     * Source code: {@code _randbelow} method in the file
      * <a href="https://svn.python.org/projects/python/trunk/Lib/random.py">random.py</a>.
      */
     @Override
@@ -190,10 +190,11 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
 
     /**
      * {@inheritDoc}
+     * <p>
      * Algorithm for {@link #nextLong()} is similar to the one for {@link #nextBytes(byte[])}
      * when called for 8 bytes.
      * <p>
-     * Source code: <code>random_getrandbits</code> method in the file
+     * Source code: {@code random_getrandbits} method in the file
      * <a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.
      */
     @Override
@@ -205,10 +206,11 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
 
     /**
      * {@inheritDoc}
+     * <p>
      * Algorithm for {@link #prevLong()} is similar to the one for {@link #prevBytes(byte[])}
      * when called for 8 bytes.
      * <p>
-     * Source code: <code>random_getrandbits</code> method in the file
+     * Source code: {@code random_getrandbits} method in the file
      * <a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.
      */
     @Override
@@ -221,7 +223,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
     /**
      * {@inheritDoc}
      * <p>
-     * Source code: <code>random_getrandbits</code> method in the file
+     * Source code: {@code random_getrandbits} method in the file
      * <a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.
      */
     @Override
@@ -239,7 +241,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
     /**
      * {@inheritDoc}
      * <p>
-     * Source code: <code>random_getrandbits</code> method in the file
+     * Source code: {@code random_getrandbits} method in the file
      * <a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.
      */
     @Override
@@ -271,7 +273,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
     /**
      * {@inheritDoc}
      * <p>
-     * Source code: <code>random_getrandbits</code> method in the file
+     * Source code: {@code random_getrandbits} method in the file
      * <a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.
      */
     @Override
@@ -282,7 +284,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
     /**
      * {@inheritDoc}
      * <p>
-     * Source code: <code>random_getrandbits</code> method in the file
+     * Source code: {@code random_getrandbits} method in the file
      * <a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.
      */
     @Override
@@ -324,7 +326,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
     /**
      * {@inheritDoc}
      * <p>
-     * Source code: <code>_randbelow</code> method in the file
+     * Source code: {@code _randbelow} method in the file
      * <a href="https://svn.python.org/projects/python/trunk/Lib/random.py">random.py</a>.
      */
     @Override
@@ -346,7 +348,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
     /**
      * {@inheritDoc}
      * <p>
-     * Source code: <code>_randbelow</code> method in the file
+     * Source code: {@code _randbelow} method in the file
      * <a href="https://svn.python.org/projects/python/trunk/Lib/random.py">random.py</a>.
      */
     @Override

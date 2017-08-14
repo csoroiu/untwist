@@ -7,6 +7,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
+
 import time
 
 
@@ -17,6 +18,7 @@ def _signed_int(value):
     if value & 0x80000000:
         value -= 0x100000000
     return value
+
 
 class JavaRandom(object):
     """
@@ -32,16 +34,13 @@ class JavaRandom(object):
     synchronize all accesses to this class per-instance.
     """
 
-
     __seed_uniquifier = 8682522807148012
-
 
     @staticmethod
     def __next_seed_uniquifier():
         val = JavaRandom.__seed_uniquifier
         JavaRandom.__seed_uniquifier = (val * 181783497276652981) & 0xFFFFFFFFFFFFFFFF
         return JavaRandom.__seed_uniquifier
-
 
     def __init__(self, seed=None):
         """Create a new random number generator."""
@@ -59,7 +58,6 @@ class JavaRandom(object):
         self._randbelow = self.next_int
         self.seed = self.set_seed
 
-
     def get_seed(self):
         """
         Returns the seed value. The returned value can be used to build a new generator
@@ -67,11 +65,9 @@ class JavaRandom(object):
         """
         return (self.__seed ^ 0x5deece66d) & 0xFFFFFFFFFFFF  # ((1 << 48) - 1)
 
-
     def set_seed(self, seed):
         """Sets the seed for the generator."""
         self.__seed = (seed ^ 0x5deece66d) & 0xFFFFFFFFFFFF  # ((1 << 48) - 1)
-
 
     def __next(self, bits):
         """
@@ -86,10 +82,10 @@ class JavaRandom(object):
 
         return _signed_int(retval)
 
-
     def next_bytes(self, l):
         """Replace every item in `l` with a random byte."""
 
+        n = 0
         for i in range(0, len(l)):
             if not i & 3:  # not i % 4
                 n = self.next_int()
@@ -99,7 +95,6 @@ class JavaRandom(object):
                 b -= 0x100
             l[i] = b
             n >>= 8
-
 
     def next_int(self, n=None):
         """
@@ -131,7 +126,6 @@ class JavaRandom(object):
 
         return val
 
-
     def next_long(self):
         """
         Return a random long.
@@ -141,12 +135,10 @@ class JavaRandom(object):
 
         return (self.__next(32) << 32) + self.__next(32)
 
-
     def next_boolean(self):
         """Return a random bool."""
 
         return bool(self.__next(1))
-
 
     def next_float(self):
         """
@@ -158,26 +150,23 @@ class JavaRandom(object):
 
         return self.__next(24) / float(1 << 24)
 
-
     def next_double(self):
         """Return a random float in (0, 1)."""
 
         return ((self.__next(26) << 27) + self.__next(27)) / float(1 << 53)
 
-
     def getrandbits(self, k):
-        byte_arr = self.next_bytes((k + 7) // 8)
+        byte_arr = [0] * ((k + 7) // 8)
+        self.next_bytes(byte_arr)
         shift = k & 7
         byte_arr[-1] >>= shift
         return int.from_bytes(byte_arr, 'little')
-
 
     def randrange(self, start, stop=None):
         """Choose a random item from range(start, stop[, step])."""
         if stop is None:
             return self._randbelow(start)
         return start + self._randbelow(stop - start)
-
 
     def randint(self, start, stop):
         """Return random integer in range [a, b], including both end points."""

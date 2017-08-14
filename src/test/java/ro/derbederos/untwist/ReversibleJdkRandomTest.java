@@ -23,6 +23,7 @@ import java.util.function.IntSupplier;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
 import static ro.derbederos.untwist.ArrayUtils.*;
 
 public class ReversibleJdkRandomTest extends ReverseRandomGeneratorAbstractTest<ReversibleJdkRandom> {
@@ -30,6 +31,29 @@ public class ReversibleJdkRandomTest extends ReverseRandomGeneratorAbstractTest<
     @Override
     protected ReversibleJdkRandom makeGenerator() {
         return new ReversibleJdkRandom(1000);
+    }
+
+    @Test
+    public void testDefaultConstructor() {
+        long firstSeed = new ReversibleJdkRandom().getSeed();
+        long secondSeed = new ReversibleJdkRandom().getSeed();
+        assertThat(secondSeed, not(equalTo(firstSeed)));
+    }
+
+    @Test
+    public void testGetSeed() {
+        ReversibleJdkRandom generator = new ReversibleJdkRandom();
+        long seed = generator.getSeed();
+        long expected = generator.nextLong();
+
+        //do something with the generator
+        for (int i = 0; i < 100; i++) {
+            generator.nextInt();
+        }
+        generator.setSeed(seed);
+        long actual = generator.nextLong();
+
+        assertThat(actual, equalTo(expected));
     }
 
     @Test

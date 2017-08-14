@@ -37,7 +37,7 @@ public interface ReverseRandomGenerator extends RandomGenerator, Serializable {
     /**
      * The reverse of {@link #nextInt()}.
      *
-     * @return the previous pseudorandom, uniformly distributed <code>int</code> value from this
+     * @return the previous pseudorandom, uniformly distributed {@code int} value from this
      * random number generator's sequence.
      */
     int prevInt();
@@ -46,15 +46,15 @@ public interface ReverseRandomGenerator extends RandomGenerator, Serializable {
      * The reverse of {@link #nextInt(int)}.
      *
      * @param bound the bound on the random number to be returned. Must be positive.
-     * @return the previous pseudorandom, uniformly distributed <code>int</code> value between
-     * <code>0</code> (inclusive) and <code>bound</code> (exclusive).
+     * @return the previous pseudorandom, uniformly distributed {@code int} value between
+     * {@code 0} (inclusive) and {@code bound} (exclusive).
      */
     int prevInt(int bound);
 
     /**
      * The reverse of {@link #nextLong()}.
      *
-     * @return the previous pseudorandom, uniformly distributed <code>long</code> value from this
+     * @return the previous pseudorandom, uniformly distributed {@code long} value from this
      * random number generator's sequence.
      */
     long prevLong();
@@ -62,7 +62,7 @@ public interface ReverseRandomGenerator extends RandomGenerator, Serializable {
     /**
      * The reverse of {@link #nextBoolean()}.
      *
-     * @return the previous pseudorandom, uniformly distributed <code>boolean</code> value from this
+     * @return the previous pseudorandom, uniformly distributed {@code boolean} value from this
      * random number generator's sequence.
      */
     boolean prevBoolean();
@@ -70,16 +70,16 @@ public interface ReverseRandomGenerator extends RandomGenerator, Serializable {
     /**
      * The reverse of {@link #nextFloat()}.
      *
-     * @return the previous pseudorandom, uniformly distributed <code>float</code> value between
-     * <code>0.0</code> and <code>1.0</code> from this random number generator's sequence.
+     * @return the previous pseudorandom, uniformly distributed {@code float} value between
+     * {@code 0.0} and {@code 1.0} from this random number generator's sequence.
      */
     float prevFloat();
 
     /**
      * The reverse of {@link #nextDouble()}.
      *
-     * @return the previous pseudorandom, uniformly distributed <code>double</code> value between
-     * <code>0.0</code> and <code>1.0</code> from this random number generator's sequence.
+     * @return the previous pseudorandom, uniformly distributed {@code double} value between
+     * {@code 0.0} and {@code 1.0} from this random number generator's sequence.
      */
     double prevDouble();
 

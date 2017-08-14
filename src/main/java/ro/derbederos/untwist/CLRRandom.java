@@ -34,7 +34,7 @@ import java.util.Arrays;
  * <p>
  * Quote from the issue reported:
  * <i>'Knuth was very specific about the lagged Fibonacci sequence coefficient
- * (24 and 55). Somehow Microsoft mistyped the value to be 21 (this.inextp = 0x15
+ * (24 and 55). Somehow Microsoft mistyped the value to be 21 (this.iNextp = 0x15
  * in public Random(int Seed) in source code),  in place of 31 (=55-24). Due to
  * this mistype, the random number generated no longer has the guarantee on the
  * period to be longer than (2^55-1). The Knuth version of lags (24, 55) has been
@@ -66,10 +66,12 @@ public class CLRRandom implements ReverseRandomGenerator {
     private static final int MSEED = 161803398;
     private static final int MZ = 0;
 
-    private int inext;
-    private int inextp;
+    // the state of the generator
     private final int[] seedArray = new int[56];
+    private int iNext;
+    private int iNextp;
     private double nextGaussian = Double.NaN;
+    private boolean shouldReverseGaussian;
 
     /**
      * Initializes a new instance of the {@link CLRRandom} class, using a time-dependent default seed value.
@@ -130,10 +132,10 @@ public class CLRRandom implements ReverseRandomGenerator {
                 }
             }
         }
-        //.net initializes this with 0, but ++0 = ++55 (according to internalSample)
-        // 55 helps us for the prevInternalSample
-        inext = 55;
-        inextp = 21;
+        // .net initializes this with 0, but (++0) % 56 = (++55) % 56 (according to internalSample)
+        // value 55 helps us for the prevInternalSample
+        iNext = 55;
+        iNextp = 21;
         nextGaussian = Double.NaN;
         shouldReverseGaussian = false;
     }
@@ -143,10 +145,10 @@ public class CLRRandom implements ReverseRandomGenerator {
     //
 
     /**
-     * Returns a random floating-point number between <code>0.0</code> and <code>1.0</code>.
+     * Returns a random floating-point number between {@code 0.0} and {@code 1.0}.
      *
-     * @return A double-precision floating point number that is greater than or equal to <code>0.0</code>,
-     * and less than <code>1.0</code>.
+     * @return A double-precision floating point number that is greater than or equal to {@code 0.0},
+     * and less than {@code 1.0}.
      */
     protected /*virtual*/ double sample() {
         // Including this division at the end gives us significantly improved
@@ -156,10 +158,10 @@ public class CLRRandom implements ReverseRandomGenerator {
 
     /**
      * The reverse of {@link #sample()}.
-     * Returns a random floating-point number between <code>0.0</code> and <code>1.0</code>.
+     * Returns a random floating-point number between {@code 0.0} and {@code 1.0}.
      *
-     * @return A double-precision floating point number that is greater than or equal to <code>0.0</code>,
-     * and less than <code>1.0</code>.
+     * @return A double-precision floating point number that is greater than or equal to {@code 0.0},
+     * and less than {@code 1.0}.
      */
     protected /*virtual*/ double prevSample() {
         // Including this division at the end gives us significantly improved
@@ -169,8 +171,8 @@ public class CLRRandom implements ReverseRandomGenerator {
 
     private int internalSample() {
         int retVal;
-        int locINext = inext;
-        int locINextp = inextp;
+        int locINext = iNext;
+        int locINextp = iNextp;
 
         if (++locINext >= 56) {
             locINext = 1;
@@ -190,16 +192,16 @@ public class CLRRandom implements ReverseRandomGenerator {
 
         seedArray[locINext] = retVal;
 
-        inext = locINext;
-        inextp = locINextp;
+        iNext = locINext;
+        iNextp = locINextp;
 
         return retVal;
     }
 
     private int prevInternalSample() {
         int retVal;
-        int locINext = inext;
-        int locINextp = inextp;
+        int locINext = iNext;
+        int locINextp = iNextp;
 
         retVal = seedArray[locINext];
 
@@ -219,8 +221,8 @@ public class CLRRandom implements ReverseRandomGenerator {
             locINextp = 55;
         }
 
-        inext = locINext;
-        inextp = locINextp;
+        iNext = locINext;
+        iNextp = locINextp;
         return retVal;
     }
 
@@ -279,9 +281,10 @@ public class CLRRandom implements ReverseRandomGenerator {
     public void setSeed(int seed) {
         initialize(seed);
     }
+    //
 
     /**
-     * Converts the <code>int[]</code> seed to an <code>int</code> and calls {@link #setSeed(int)}.
+     * Converts the {@code int[]} seed to an {@code int} and calls {@link #setSeed(int)}.
      *
      * @param seed an array used to calculate a starting value for the pseudo-random number sequence.
      * @see RandomUtils#convertToInt(int...)
@@ -292,7 +295,7 @@ public class CLRRandom implements ReverseRandomGenerator {
     }
 
     /**
-     * Converts the <code>long</code> seed to an <code>int</code> and calls {@link #setSeed(int)}.
+     * Converts the {@code long} seed to an {@code int} and calls {@link #setSeed(int)}.
      *
      * @param seed a number used to calculate a starting value for the pseudo-random number sequence.
      * @see RandomUtils#convertToInt(int, int)
@@ -309,8 +312,8 @@ public class CLRRandom implements ReverseRandomGenerator {
      * <p>
      * <font color="red">This violates the contract of {@link RandomGenerator#nextInt()}.</font>
      *
-     * @return A 32-bit signed integer that is greater than or equal to <code>0</code>
-     * and less than <code>System.Int32.MaxValue (Integer.MAX_VALUE)</code>.
+     * @return A 32-bit signed integer that is greater than or equal to {@code 0}
+     * and less than {@code System.Int32.MaxValue (Integer.MAX_VALUE)}.
      * @see RandomGenerator#nextInt()
      */
     @Override
@@ -324,8 +327,8 @@ public class CLRRandom implements ReverseRandomGenerator {
      * <p>
      * <font color="red">This violates the contract of {@link ReverseRandomGenerator#prevInt()}</font>
      *
-     * @return A 32-bit signed integer that is greater than or equal to <code>0</code>
-     * and less than <code>System.Int32.MaxValue (Integer.MAX_VALUE)</code>.
+     * @return A 32-bit signed integer that is greater than or equal to {@code 0}
+     * and less than {@code System.Int32.MaxValue (Integer.MAX_VALUE)}.
      * @see RandomGenerator#nextInt()
      * @see ReverseRandomGenerator#prevInt()
      */
@@ -339,11 +342,11 @@ public class CLRRandom implements ReverseRandomGenerator {
      *
      * @param minValue the inclusive lower bound of the random number returned.
      * @param maxValue the exclusive upper bound of the random number returned.
-     *                 <code>maxValue</code> must be greater than or equal to <code>minValue</code>.
-     * @return a 32-bit signed integer greater than or equal to <code>minValue</code> and less than
-     * <code>maxValue</code>; that is, the range of return values includes <code>minValue</code> but
-     * not <code>maxValue</code>. If <code>minValue</code> equals <code>maxValue</code>,
-     * <code>minValue</code> is returned.
+     *                 {@code maxValue} must be greater than or equal to {@code minValue}.
+     * @return a 32-bit signed integer greater than or equal to {@code minValue} and less than
+     * {@code maxValue}; that is, the range of return values includes {@code minValue} but
+     * not {@code maxValue}. If {@code minValue} equals {@code maxValue},
+     * {@code minValue} is returned.
      */
     public int nextInt(int minValue, int maxValue) {
         if (minValue > maxValue) {
@@ -364,11 +367,11 @@ public class CLRRandom implements ReverseRandomGenerator {
      *
      * @param minValue the inclusive lower bound of the random number returned.
      * @param maxValue the exclusive upper bound of the random number returned.
-     *                 <code>maxValue</code> must be greater than or equal to <code>minValue</code>.
-     * @return a 32-bit signed integer greater than or equal to <code>minValue</code> and less than
-     * <code>maxValue</code>; that is, the range of return values includes <code>minValue</code> but
-     * not <code>maxValue</code>. If <code>minValue</code> equals <code>maxValue</code>,
-     * <code>minValue</code> is returned.
+     *                 {@code maxValue} must be greater than or equal to {@code minValue}.
+     * @return a 32-bit signed integer greater than or equal to {@code minValue} and less than
+     * {@code maxValue}; that is, the range of return values includes {@code minValue} but
+     * not {@code maxValue}. If {@code minValue} equals {@code maxValue},
+     * {@code minValue} is returned.
      */
     public int prevInt(int minValue, int maxValue) {
         if (minValue > maxValue) {
@@ -386,11 +389,11 @@ public class CLRRandom implements ReverseRandomGenerator {
     /**
      * Returns a non-negative random integer that is less than the specified maximum.
      *
-     * @param maxValue the exclusive upper bound of the random number to be generated. <code>maxValue</code> must
-     *                 be greater than or equal to <code>0</code>.
-     * @return A 32-bit signed integer that is greater than or equal to <code>0</code>, and less than <code>maxValue</code>;
-     * that is, the range of return values ordinarily includes <code>0</code> but not <code>maxValue</code>. However,
-     * if <code>maxValue</code> equals 0, <code>maxValue</code> is returned.
+     * @param maxValue the exclusive upper bound of the random number to be generated. {@code maxValue} must
+     *                 be greater than or equal to {@code 0}.
+     * @return A 32-bit signed integer that is greater than or equal to {@code 0}, and less than {@code maxValue};
+     * that is, the range of return values ordinarily includes {@code 0} but not {@code maxValue}. However,
+     * if {@code maxValue} equals {@code 0}, {@code maxValue} is returned.
      */
     @Override
     public int nextInt(int maxValue) {
@@ -404,11 +407,11 @@ public class CLRRandom implements ReverseRandomGenerator {
      * The reverse of {@link #nextInt(int)}.
      * Returns a non-negative random integer that is less than the specified maximum.
      *
-     * @param maxValue the exclusive upper bound of the random number to be generated. <code>maxValue</code> must
-     *                 be greater than or equal to <code>0</code>.
-     * @return A 32-bit signed integer that is greater than or equal to <code>0</code>, and less than <code>maxValue</code>;
-     * that is, the range of return values ordinarily includes <code>0</code> but not <code>maxValue</code>. However,
-     * if <code>maxValue</code> equals 0, <code>maxValue</code> is returned.
+     * @param maxValue the exclusive upper bound of the random number to be generated. {@code maxValue} must
+     *                 be greater than or equal to {@code 0}.
+     * @return A 32-bit signed integer that is greater than or equal to {@code 0}, and less than {@code maxValue};
+     * that is, the range of return values ordinarily includes {@code 0} but not {@code maxValue}. However,
+     * if {@code maxValue} equals 0, {@code maxValue} is returned.
      */
     @Override
     public int prevInt(int maxValue) {
@@ -419,11 +422,11 @@ public class CLRRandom implements ReverseRandomGenerator {
     }
 
     /**
-     * Returns a random floating-point number that is greater than or equal to <code>0.0</code>,
-     * and less than <code>1.0</code>.
+     * Returns a random floating-point number that is greater than or equal to {@code 0.0},
+     * and less than {@code 1.0}.
      *
-     * @return A double-precision floating point number that is greater than or equal to <code>0.0</code>,
-     * and less than <code>1.0</code>.
+     * @return A double-precision floating point number that is greater than or equal to {@code 0.0},
+     * and less than {@code 1.0}.
      */
     @Override
     public double nextDouble() {
@@ -432,11 +435,11 @@ public class CLRRandom implements ReverseRandomGenerator {
 
     /**
      * The reverse of {@link #nextDouble()}.
-     * Returns a random floating-point number that is greater than or equal to <code>0.0</code>,
-     * and less than <code>1.0</code>.
+     * Returns a random floating-point number that is greater than or equal to {@code 0.0},
+     * and less than {@code 1.0}.
      *
-     * @return A double-precision floating point number that is greater than or equal to <code>0.0</code>,
-     * and less than <code>1.0</code>.
+     * @return A double-precision floating point number that is greater than or equal to {@code 0.0},
+     * and less than {@code 1.0}.
      */
     @Override
     public double prevDouble() {
@@ -527,7 +530,7 @@ public class CLRRandom implements ReverseRandomGenerator {
 
     /**
      * Returns a random boolean.
-     * Uses the formula <code>nextInt(2) == 1</code>.
+     * Uses the formula {@code nextInt(2) == 1}.
      *
      * @return a random boolean.
      */
@@ -539,7 +542,7 @@ public class CLRRandom implements ReverseRandomGenerator {
     /**
      * The reverse of {@link #nextBoolean()}.
      * Returns a random boolean.
-     * Uses the formula <code>nextInt(2) == 1</code>.
+     * Uses the formula {@code nextInt(2) == 1}.
      *
      * @return a random boolean.
      */
@@ -550,7 +553,8 @@ public class CLRRandom implements ReverseRandomGenerator {
 
     /**
      * {@inheritDoc}
-     * It uses the implementation from {@link BitsStreamGenerator#nextGaussian()}.
+     * <p>
+     * It uses the same implementation as {@link BitsStreamGenerator#nextGaussian()}.
      */
     @Override
     public double nextGaussian() {
@@ -571,8 +575,6 @@ public class CLRRandom implements ReverseRandomGenerator {
         }
         return random;
     }
-
-    private boolean shouldReverseGaussian;
 
     /**
      * {@inheritDoc}

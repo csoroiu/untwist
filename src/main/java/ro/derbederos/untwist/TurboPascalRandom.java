@@ -18,25 +18,28 @@ package ro.derbederos.untwist;
 
 /**
  * Java implementation of the random number generator from Turbo Pascal 7/Delphi.
- * It is a <a href="https://en.wikipedia.org/wiki/Linear_congruential_generator">Linear congruential generator</a>
- * and the next seed is computed using the formula: <code>seed = (seed * 0x08088405 + 1) &amp; 0xFFFFFFFF</code>.
- * <p>
+ * It is a <a href="https://en.wikipedia.org/wiki/Linear_congruential_generator">linear congruential generator</a>
+ * and the next seed is computed using the formula:
+ * <pre>{@code seed = (seed * 0x08088405 + 1) & 0xFFFFFFFF}.</pre>
+ * The previous seed is computed using the formula:
+ * <pre>{@code seed = ((seed - 1) * 0xD94FA8CD) & 0xFFFFFFFF}.</pre>
  * In Turbo Pascal 7 there was a switch that was enabling the use of the coprocessor.
- * There is a difference of <code>0.5</code> when generating a random floating number when
- * coprocessor was disabled <code>{$N-}</code> or enabled <code>{$N+}</code>.
- * Delphi maintains compatibility with the <code>{$N-}</code> version.
- * When enabling coprocessor <code>{$N+}</code>, in Turbo Pascal 7, the values returned by random
- * function are offset-ed by <code>0.5</code> from the usual ones. If value is <code>&gt;=0.5</code>
- * then it is decreased by <code>0.5</code> else value is increased by <code>0.5</code>.
- * This seems to be a design fault, as 32 bit numbers are emulated in Turbo Pascal 7.
+ * There is a difference of {@code 0.5} when generating a random floating number when
+ * coprocessor was disabled {@code {$N-}} or enabled {@code {$N+}}.
+ * Delphi maintains compatibility with the {@code {$N-}} version.
+ * When enabling coprocessor {@code {$N+}}, in Turbo Pascal 7, the values returned by random
+ * function are offset-ed by {@code 0.5} from the usual ones. If value is {@code >=0.5}
+ * then it is decreased by {@code 0.5} else value is increased by {@code 0.5}.
+ * This seems to be a <a href="https://groups.google.com/d/msg/borland.public.delphi.language.objectpascal/_3BBDQ0X5H0/WlGuqooixE0J">
+ * design fault</a>, as 32 bit numbers are emulated in Turbo Pascal 7.
  */
 public class TurboPascalRandom extends ReverseBitsStreamGenerator {
     private static final long serialVersionUID = 1L;
 
-    private final static long multiplier = 0x08088405L;
-    private final static long invmultiplier = 0xD94FA8CDL;
-    private final static long addend = 0x1L;
-    private final static long mask = (1L << 32) - 1;
+    private static final long MULTIPLIER = 0x08088405L;
+    private static final long INVERSE_MULTIPLIER = 0xD94FA8CDL;
+    private static final long ADDEND = 0x1L;
+    private static final long MASK = (1L << 32) - 1;
 
     private final boolean coprocessorEnabled;
 
@@ -79,7 +82,7 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
      * Creates a new random number generator using a single int seed.
      *
      * @param seed               the initial seed (32 bits integer).
-     * @param coprocessorEnabled flag that enables the offsetting by <code>0.5</code> of the generated floating number.
+     * @param coprocessorEnabled flag that enables the offsetting by {@code 0.5} of the generated floating number.
      * @see #setSeed(int)
      */
     protected TurboPascalRandom(int seed, boolean coprocessorEnabled) {
@@ -91,7 +94,7 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
      * Creates a new random number generator using an int array seed.
      *
      * @param seed               the initial seed (32 bits integers array).
-     * @param coprocessorEnabled flag that enables the offsetting by <code>0.5</code> of the generated floating number.
+     * @param coprocessorEnabled flag that enables the offsetting by {@code 0.5} of the generated floating number.
      * @see #setSeed(int[])
      */
     protected TurboPascalRandom(int[] seed, boolean coprocessorEnabled) {
@@ -103,7 +106,7 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
      * Creates a new random number generator using a single long seed.
      *
      * @param seed               the initial seed (64 bits integer).
-     * @param coprocessorEnabled flag that enables the offsetting by <code>0.5</code> of the generated floating number.
+     * @param coprocessorEnabled flag that enables the offsetting by {@code 0.5} of the generated floating number.
      * @see #setSeed(long)
      */
     protected TurboPascalRandom(long seed, boolean coprocessorEnabled) {
@@ -123,7 +126,7 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
     }
 
     /**
-     * Converts the <code>int[]</code> seed to an <code>int</code> and calls {@link #setSeed(int)}.
+     * Converts the {@code int[]} seed to an {@code int} and calls {@link #setSeed(int)}.
      *
      * @param seed an array used to calculate a starting value for the pseudo-random number sequence.
      * @see RandomUtils#convertToInt(int...)
@@ -134,7 +137,7 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
     }
 
     /**
-     * Converts the <code>long</code> seed to an <code>int</code> and calls {@link #setSeed(int)}.
+     * Converts the {@code long} seed to an {@code int} and calls {@link #setSeed(int)}.
      *
      * @param seed a number used to calculate a starting value for the pseudo-random number sequence.
      * @see RandomUtils#convertToInt(int, int)
@@ -151,8 +154,8 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
      */
     @Override
     protected int next(int bits) {
-        nextSeed();
-        return (int) (seed >>> 32 - bits);
+        seed = (seed * MULTIPLIER + ADDEND) & MASK;
+        return (int) (seed >>> (32 - bits));
     }
 
     /**
@@ -160,17 +163,9 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
      */
     @Override
     protected int prev(int bits) {
-        int result = (int) (seed >>> 32 - bits);
-        prevSeed();
+        int result = (int) (seed >>> (32 - bits));
+        seed = ((seed - ADDEND) * INVERSE_MULTIPLIER) & MASK;
         return result;
-    }
-
-    private void nextSeed() {
-        seed = (seed * multiplier + addend) & mask;
-    }
-
-    private void prevSeed() {
-        seed = ((seed - addend) * invmultiplier) & mask;
     }
 
     /**

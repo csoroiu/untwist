@@ -113,8 +113,9 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
 
     /**
      * Creates a new random number generator.
-     * <p>The instance is initialized using the current time plus the
-     * system identity hash code of this instance as the seed.</p>
+     * <p>
+     * The instance is initialized using the current time plus the
+     * system identity hash code of this instance as the seed.
      */
     public ReversibleMersenneTwister() {
         setSeed(System.currentTimeMillis() + System.identityHashCode(this));
@@ -148,6 +149,12 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
         setSeed(seed);
     }
 
+    /**
+     * Part of the <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/CODES/mt19937ar.c">original code</a>.
+     * Method {@code init_genrand}.
+     *
+     * @param seed the initial seed
+     */
     private void initGenRand(int seed) {
         // we use a long masked by 0xFFFFFFFFL as a poor man unsigned int
         long longMT = seed;
@@ -170,8 +177,12 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
 
     /**
      * Reinitialize the generator as if just built with the given int seed.
-     * <p>The state of the generator is exactly the same as a new
-     * generator built with the same seed.</p>
+     * <p>
+     * The state of the generator is exactly the same as a new
+     * generator built with the same seed.
+     * <p>
+     * Part of the <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/CODES/mt19937ar.c">original code</a>.
+     * Method {@code init_genrand}.
      *
      * @param seed the initial seed (32 bits integer)
      */
@@ -182,8 +193,12 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
 
     /**
      * Reinitialize the generator as if just built with the given int array seed.
-     * <p>The state of the generator is exactly the same as a new
-     * generator built with the same seed.</p>
+     * <p>
+     * The state of the generator is exactly the same as a new
+     * generator built with the same seed.
+     * <p>
+     * Part of the <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/CODES/mt19937ar.c">original code</a>.
+     * Method {@code init_by_array}.
      *
      * @param seed the initial seed (32 bits integers array), if null
      *             the seed of the generator will be the current system time plus the
@@ -258,6 +273,10 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
      * #nextBoolean()}, {@link #nextBytes(byte[])}, {@link #nextDouble()},
      * {@link #nextFloat()}, {@link #nextGaussian()}, {@link #nextInt()},
      * {@link #next(int)} and {@link #nextLong()}.</p>
+     * <p>
+     * Part of the <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/CODES/mt19937ar.c">original code</a>.
+     * Modified version of method {@code genrand_int32} to return exactly {@code bits} bits.
+     * It is a generalization of method {@code genrand_int31}.
      *
      * @param bits number of random bits to produce
      * @return random bits generated
@@ -284,14 +303,10 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
         return result;
     }
 
-    private static int temper(int y) {
-        y ^= (y >>> 11);
-        y ^= (y << 7) & 0x9D2C5680;
-        y ^= (y << 15) & 0xEFC60000;
-        y ^= (y >>> 18);
-        return y;
-    }
-
+    /**
+     * Part of the <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/CODES/mt19937ar.c">original code</a>.
+     * The block of code which computes the next {@code mt} array from the original method {@code genrand_int32}.
+     */
     void twist() {
         for (int i = 0; i < N; i++) {
             int x = (mt[i] & 0x80000000) | (mt[(i + 1) % N] & 0x7FFFFFFF);
@@ -303,15 +318,34 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
         }
     }
 
-    // https://jazzy.id.au/2010/09/22/cracking_random_number_generators_part_3.html
-    // https://jazzy.id.au/2010/09/25/cracking_random_number_generators_part_4.html
-    // https://adriftwith.me/coding/2010/08/13/reversing-the-mersenne-twister-rng-temper-function/
+    /**
+     * Part of the <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/CODES/mt19937ar.c">original code</a>.
+     * The tempering part from the original method {@code genrand_int32}.
+     *
+     * @param y the value to temper.
+     * @return The tempered value.
+     */
+    static int temper(int y) {
+        y ^= (y >>> 11);
+        y ^= (y << 7) & 0x9D2C5680;
+        y ^= (y << 15) & 0xEFC60000;
+        y ^= (y >>> 18);
+        return y;
+    }
+
+    /**
+     * The reverse of {@link #twist()} method.
+     * <p>
+     * Source code:
+     * <a href="https://jazzy.id.au/2010/09/25/cracking_random_number_generators_part_4.html">Cracking Random Number Generators - Part 4</a>
+     * <a href="https://jazzy.id.au/2010/09/22/cracking_random_number_generators_part_3.html">Cracking Random Number Generators - Part 3</a>
+     */
     void untwist() {
         for (int i = 623; i >= 0; i--) {
             int result;
             // first we calculate the first bit
             int tmp = mt[i];
-            tmp ^= mt[(i + 397) % 624];
+            tmp ^= mt[(i + M) % N];
             // if the first bit is odd, unapply magic
             if ((tmp & 0x80000000) == 0x80000000) {
                 tmp ^= 0x9908B0DF;
@@ -320,8 +354,8 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
             result = (tmp << 1) & 0x80000000;
 
             // work out the remaining 31 bits
-            tmp = mt[(i - 1 + 624) % 624];
-            tmp ^= mt[(i + 396) % 624];
+            tmp = mt[(i - 1 + N) % N];
+            tmp ^= mt[(i + M - 1) % N];
             if ((tmp & 0x80000000) == 0x80000000) {
                 tmp ^= 0x9908B0DF;
                 // since it was odd, the last bit must have been 1
@@ -337,13 +371,21 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
         }
     }
 
-    int[] getState() {
-        return Arrays.copyOf(mt, mt.length);
-    }
-
-    @SuppressWarnings("unused")
-    private static int untemper(int y) {
-        // https://www.randombit.net/bitbashing/2009/07/21/inverting_mt19937_tempering.html
+    /**
+     * The reverse of {@link #temper(int)} method.
+     * <p>
+     * Source code/references:
+     * <ul>
+     * <li><a href="https://www.randombit.net/bitbashing/2009/07/21/inverting_mt19937_tempering.html">
+     * Inverting Mersenne Twister’s final transform</a></li>
+     * <li><a href="https://adriftwith.me/coding/2010/08/13/reversing-the-mersenne-twister-rng-temper-function/">
+     * Reversing the Mersenne Twister RNG Temper Function</a></li>
+     * </ul>
+     *
+     * @param y the value to untemper.
+     * @return The untempered value.
+     */
+    static int untemper(int y) {
         y ^= (y >>> 18);
         y ^= (y << 15) & 0xEFC60000;
         y ^= (y << 7) & 0x1680;
@@ -354,5 +396,9 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
         y ^= (y >>> 11) & 0x3FF800;
         y ^= (y >>> 11) & 0x7FF;
         return y;
+    }
+
+    int[] getState() {
+        return Arrays.copyOf(mt, mt.length);
     }
 }

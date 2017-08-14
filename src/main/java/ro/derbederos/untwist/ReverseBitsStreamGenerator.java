@@ -22,6 +22,9 @@ import org.apache.commons.math3.random.BitsStreamGenerator;
 public abstract class ReverseBitsStreamGenerator extends BitsStreamGenerator implements ReverseRandomGenerator {
     private static final long serialVersionUID = 1L;
 
+    // the state of the generator
+    private boolean shouldReverseGaussian;
+
     /**
      * {@inheritDoc}
      */
@@ -131,8 +134,8 @@ public abstract class ReverseBitsStreamGenerator extends BitsStreamGenerator imp
      * The reverse of {@link #nextLong(long)}.
      *
      * @param bound the bound on the random number to be returned. Must be positive.
-     * @return the previous pseudorandom, uniformly distributed <code>long</code> value between
-     * <code>0</code> (inclusive) and <code>bound</code> (exclusive).
+     * @return the previous pseudorandom, uniformly distributed {@code long} value between
+     * {@code 0} (inclusive) and {@code bound} <code>bound</code> (exclusive).
      */
     public long prevLong(long bound) throws IllegalArgumentException {
         if (bound <= 0) {
@@ -183,8 +186,6 @@ public abstract class ReverseBitsStreamGenerator extends BitsStreamGenerator imp
         super.clear();
         shouldReverseGaussian = false;
     }
-
-    private boolean shouldReverseGaussian;
 
     /**
      * {@inheritDoc}

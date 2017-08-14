@@ -2,10 +2,11 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
-from untwist.random_py3k import RandomPy3k
 
 import struct
 import unittest
+
+from untwist.random_py3k import RandomPy3k
 
 INT_MAX = (2 ** 31) - 1
 UINT_MAX = 2 ** 32
@@ -20,10 +21,8 @@ def int_from_bytes_list(bytes_list):
 
 
 class MersenneTwisterPy3kCompatTest(unittest.TestCase):
-
     def setUp(self):
         self.rand = RandomPy3k(1234567890)
-
 
     def test_set_seed_array(self):
         large_seed = int_from_bytes_list([1] * 2499 + [2])
@@ -34,7 +33,6 @@ class MersenneTwisterPy3kCompatTest(unittest.TestCase):
             actual.append(self.rand.randrange(1000))
         self.assertListEqual(actual, expected)
 
-
     def test_int_max_value(self):
         expected = [1977150888, 1252380877, 1363867306, 345016483,
                     952454400, 470947684, 1732771130, 1286552655,
@@ -44,10 +42,8 @@ class MersenneTwisterPy3kCompatTest(unittest.TestCase):
             actual.append(self.rand.randrange(INT_MAX))
         self.assertListEqual(actual, expected)
 
-
     def test_long_int_max_value(self):
         self.test_int_max_value()
-
 
     def test_long_long_max_value(self):
         expected = [5378934912805100368, 1481834513793674581, 2022704902811851265,
@@ -59,7 +55,6 @@ class MersenneTwisterPy3kCompatTest(unittest.TestCase):
             actual.append(self.rand.randrange(LONG_MAX))
         self.assertListEqual(actual, expected)
 
-
     def test_long_32bit(self):
         expected = [2727734613, 1904908801, 3470892473, 360581444, 1854258025,
                     1304656966, 1499749522, 3662865218, 2732253452, 3880916009]
@@ -68,7 +63,6 @@ class MersenneTwisterPy3kCompatTest(unittest.TestCase):
             actual.append(self.rand.randrange(UINT_MAX))
         self.assertListEqual(actual, expected)
 
-
     def test_16(self):
         expected = [5, 14, 7, 9, 8, 2, 14, 4, 13, 5]
         actual = []
@@ -76,10 +70,8 @@ class MersenneTwisterPy3kCompatTest(unittest.TestCase):
             actual.append(self.rand.randrange(16))
         self.assertListEqual(actual, expected)
 
-
     def test_long16(self):
         self.test_16()
-
 
     def test_9(self):
         expected = [2, 7, 3, 4, 4, 1, 7, 2, 6, 2]
@@ -87,7 +79,6 @@ class MersenneTwisterPy3kCompatTest(unittest.TestCase):
         for _ in range(10):
             actual.append(self.rand.randrange(9))
         self.assertListEqual(actual, expected)
-
 
     def test_next_bytes_asLongArray(self):
         expected = [10757869821655898960, 2963669024859614549, 4045409808013761025,
@@ -98,7 +89,6 @@ class MersenneTwisterPy3kCompatTest(unittest.TestCase):
         for _ in range(10):
             actual.append(self.rand.getrandbits(64))  # bit compatible with nextLong from Java
         self.assertListEqual(actual, expected)
-
 
     def test_double(self):
         expected = [0.9206826283274985, 0.6351002019693018, 0.4435211436398484,
@@ -119,7 +109,6 @@ class MersenneTwisterPy3kCompatTest(unittest.TestCase):
             actual.append(self.rand.getrandbits(bitsize))  # bit compatible with nextLong from Java
         self.assertListEqual(actual, expected)
 
-
     def test_float(self):
         expected = [0.9206826090812683, 0.6351001858711243, 0.4435211420059204, 0.8068844079971313,
                     0.892684817314148, 0.808130145072937, 0.254900187253952, 0.08395440876483917,
@@ -131,7 +120,6 @@ class MersenneTwisterPy3kCompatTest(unittest.TestCase):
             value = struct.unpack("f", struct.pack("f", self.rand.random()))[0]
             actual.append(value)
         self.assertListEqual(actual, expected)
-
 
     def test_boolean(self):
         expected = [True, True, True, False, False, False, True, True, True, True]

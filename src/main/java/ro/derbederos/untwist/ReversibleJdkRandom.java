@@ -16,9 +16,6 @@
 
 package ro.derbederos.untwist;
 
-import java.lang.reflect.Field;
-import java.security.AccessController;
-import java.security.PrivilegedExceptionAction;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -28,56 +25,26 @@ import java.util.concurrent.atomic.AtomicLong;
 public class ReversibleJdkRandom extends Random implements ReverseRandomGenerator {
     private static final long serialVersionUID = 1L;
 
-    private final static long multiplier = 0x5DEECE66DL;
-    private final static long invmultiplier = 0xDFE05BCB1365L;
-    private final static long addend = 0xBL;
-    private final static long mask = (1L << 48) - 1;
-    private final static double DOUBLE_UNIT = 0x1.0p-53; // 1.0 / (1L << 53)
+    private static final long MULTIPLIER = 0x5DEECE66DL;
+    private static final long INVERSE_MULTIPLIER = 0xDFE05BCB1365L;
+    private static final long ADDEND = 0xBL;
+    private static final long MASK = (1L << 48) - 1;
+    private static final double DOUBLE_UNIT = 0x1.0p-53; // 1.0 / (1L << 53)
 
-    private final AtomicLong seedRef = getReferenceToSeed();
-
-    private static final Field SEED_FIELD;
-
-    static {
-        Field seedField = null;
-        try {
-            final PrivilegedExceptionAction<Field> action =
-                    () -> {
-                        final Field f = Random.class.getDeclaredField("seed");
-                        f.setAccessible(true);
-                        return f;
-                    };
-
-            seedField = AccessController.doPrivileged(action);
-        } catch (final Exception ex) {
-            rethrowUnchecked(ex);
-        }
-        SEED_FIELD = seedField;
-    }
-
-    private static void rethrowUnchecked(final Throwable ex) {
-        ReversibleJdkRandom.rethrow(ex);
-    }
-
-    @SuppressWarnings("unchecked")
-    private static <T extends Throwable> void rethrow(final Throwable t) throws T {
-        throw (T) t;
-    }
+    // the state of the generator
+    private final AtomicLong seed = new AtomicLong();
+    private transient long tempSeed;
+    private boolean shouldReverseGaussian;
+    private boolean hasNextGaussian;
 
     public ReversibleJdkRandom() {
         super();
+        setSeed(tempSeed);
     }
 
     public ReversibleJdkRandom(long seed) {
         super(seed);
-    }
-
-    private AtomicLong getReferenceToSeed() {
-        try {
-            return (AtomicLong) SEED_FIELD.get(this);
-        } catch (IllegalAccessException ignore) {
-        }
-        return null;
+        setSeed(tempSeed);
     }
 
     /**
@@ -101,8 +68,12 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
      */
     @Override
     public synchronized void setSeed(long seed) {
-        clear();
-        super.setSeed(seed);
+        if (this.seed != null) { //work around miserable override NPE in constructor.
+            clear();
+            this.seed.set(scrambleSeed(seed));
+        } else {
+            tempSeed = seed;
+        }
     }
 
     /**
@@ -111,16 +82,45 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
      * @return the seed (which can be used with {@link #setSeed(long)}.
      */
     public long getSeed() {
-        return (seedRef.get() ^ multiplier) & mask;
+        return scrambleSeed(seed.get());
     }
 
+    private static long scrambleSeed(long seed) {
+        return (seed ^ MULTIPLIER) & MASK;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected int next(int bits) {
+        long oldSeed, nextSeed;
+        AtomicLong seed = this.seed;
+        do {
+            oldSeed = seed.get();
+            nextSeed = (oldSeed * MULTIPLIER + ADDEND) & MASK;
+        } while (!seed.compareAndSet(oldSeed, nextSeed));
+        return (int) (nextSeed >>> (48 - bits));
+    }
+
+    /**
+     * Reverse of {@link #next(int)}.
+     * The method {@code prev} is implemented by class {@code ReversibleJdkRandom} by
+     * atomically updating the seed to:
+     * <pre>{@code ((seed - 0xBL) * 0xDFE05BCB1365L) & ((1L << 48) - 1)}</pre>
+     * and returning:
+     * <pre>{@code (int)(seed >>> (48 - bits))}.</pre>
+     *
+     * @param bits random bits.
+     * @return the previous pseudorandom value from this random number
+     * generator's sequence.
+     */
     // https://github.com/votadlos/JavaCG/blob/master/JavaCG/JavaCG/JavaLCGMimic.cpp#L15
     protected int prev(int bits) {
-        final AtomicLong seed = this.seedRef;
+        final AtomicLong seed = this.seed;
         long nextSeed, prevSeed;
         do {
             nextSeed = seed.get();
-            prevSeed = (invmultiplier * (nextSeed - addend)) & mask;
+            prevSeed = ((nextSeed - ADDEND) * INVERSE_MULTIPLIER) & MASK;
         } while (!seed.compareAndSet(nextSeed, prevSeed));
         // we generate the bits from the current seed,
         // but we have updated the value of the seed with the prev one
@@ -218,9 +218,6 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
             hasNextGaussian = false;
         }
     }
-
-    private boolean shouldReverseGaussian;
-    private boolean hasNextGaussian;
 
     /**
      * {@inheritDoc}
