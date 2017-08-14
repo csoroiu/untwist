@@ -25,28 +25,27 @@ import java.util.Arrays;
  * developed by Makoto Matsumoto and Takuji Nishimura during
  * 1996-1997.
  * <p>
- * <p>This generator features an extremely long period
+ * This generator features an extremely long period
  * (2<sup>19937</sup>-1) and 623-dimensional equidistribution up to 32
  * bits accuracy. The home page for this generator is located at <a
  * href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html">
- * http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html</a>.</p>
+ * http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html</a>.
  * <p>
- * <p>This generator is described in a paper by Makoto Matsumoto and
+ * This generator is described in a paper by Makoto Matsumoto and
  * Takuji Nishimura in 1998: <a
  * href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/ARTICLES/mt.pdf">Mersenne
  * Twister: A 623-Dimensionally Equidistributed Uniform Pseudo-Random
  * Number Generator</a>, ACM Transactions on Modeling and Computer
- * Simulation, Vol. 8, No. 1, January 1998, pp 3--30</p>
+ * Simulation, Vol. 8, No. 1, January 1998, pp 3--30
  * <p>
- * <p>This class is mainly a Java port of the 2002-01-26 version of
+ * This class is mainly a Java port of the 2002-01-26 version of
  * the generator written in C by Makoto Matsumoto and Takuji
- * Nishimura. Here is their original copyright:</p>
- * <p>
- * <table border="0" width="80%" cellpadding="10" align="center" bgcolor="#E0E0E0">
+ * Nishimura. Here is their original copyright:
+ * <table border="0" width="80%" cellpadding="10" align="center" bgcolor="#E0E0E0" summary="original copyright">
  * <tr><td>Copyright (C) 1997 - 2002, Makoto Matsumoto and Takuji Nishimura,
- * All rights reserved.</td></tr>
+ * All rights reserved.
  * <p>
- * <tr><td>Redistribution and use in source and binary forms, with or without
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
  * <ol>
@@ -58,9 +57,9 @@ import java.util.Arrays;
  * <li>The names of its contributors may not be used to endorse or promote
  * products derived from this software without specific prior written
  * permission.</li>
- * </ol></td></tr>
+ * </ol>
  * <p>
- * <tr><td><strong>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+ * <strong>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
  * CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE

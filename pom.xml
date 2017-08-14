@@ -22,7 +22,7 @@
 
     <groupId>ro.derbederos</groupId>
     <artifactId>untwist</artifactId>
-    <version>0.1</version>
+    <version>0.2-SNAPSHOT</version>
 
     <name>untwist</name>
     <description>Java 8+ collection of PRNG's from CLR (.NET), FreePascal, TurboPascal, Python.</description>
@@ -100,6 +100,9 @@
                 </executions>
                 <configuration>
                     <!-- Only required when JAVA_HOME isn't at least Java 9 and when haven't configured the maven-toolchains-plugin -->
+                    <jdkToolchain>
+                        <version>9</version>
+                    </jdkToolchain>
                     <source>1.8</source>
                     <target>1.8</target>
                     <compilerArgs>
@@ -141,7 +144,9 @@
                     <!-- this seems to be an issue with javadoc which needs User-Agent set -->
                     <additionalJOption>-J-Dhttp.agent=javadoc</additionalJOption>
                     <failOnError>false</failOnError>
-                    <links/>
+                    <links>
+                        <link>http://static.javadoc.io/org.apache.commons/commons-math3/${commons-math3.version}</link>
+                    </links>
                 </configuration>
             </plugin>
         </plugins>

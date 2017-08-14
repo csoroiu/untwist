@@ -22,7 +22,7 @@ import org.apache.commons.math3.random.RandomGenerator;
 import java.util.Arrays;
 
 /**
- * A Java implementation of the .NET Random number generator.
+ * A Java implementation of the .NET random number generator.
  * <p>
  * .Net Documentation states: The current implementation of the Random class
  * is based on a modified version of Donald E. Knuth's subtractive random number
@@ -307,7 +307,7 @@ public class CLRRandom implements ReverseRandomGenerator {
     /**
      * Returns a non-negative random integer.
      * <p>
-     * <font color="red">This violates the contract of {@link RandomGenerator#nextInt()}</font>
+     * <font color="red">This violates the contract of {@link RandomGenerator#nextInt()}.</font>
      *
      * @return A 32-bit signed integer that is greater than or equal to <code>0</code>
      * and less than <code>System.Int32.MaxValue (Integer.MAX_VALUE)</code>.
@@ -443,11 +443,21 @@ public class CLRRandom implements ReverseRandomGenerator {
         return prevSample();
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * It simply calls {@link #nextDouble()} and does a cast.
+     */
     @Override
     public float nextFloat() {
         return (float) nextDouble();
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * It simply calls {@link #prevDouble()} and does a cast.
+     */
     @Override
     public float prevFloat() {
         return (float) prevDouble();

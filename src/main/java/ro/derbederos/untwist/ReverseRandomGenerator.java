@@ -60,7 +60,7 @@ public interface ReverseRandomGenerator extends RandomGenerator, Serializable {
     long prevLong();
 
     /**
-     * The revese of {@link #nextBoolean()}.
+     * The reverse of {@link #nextBoolean()}.
      *
      * @return the previous pseudorandom, uniformly distributed <code>boolean</code> value from this
      * random number generator's sequence.
@@ -68,7 +68,7 @@ public interface ReverseRandomGenerator extends RandomGenerator, Serializable {
     boolean prevBoolean();
 
     /**
-     * The revese of {@link #nextFloat()}.
+     * The reverse of {@link #nextFloat()}.
      *
      * @return the previous pseudorandom, uniformly distributed <code>float</code> value between
      * <code>0.0</code> and <code>1.0</code> from this random number generator's sequence.
@@ -76,7 +76,7 @@ public interface ReverseRandomGenerator extends RandomGenerator, Serializable {
     float prevFloat();
 
     /**
-     * The revese of {@link #nextDouble()}.
+     * The reverse of {@link #nextDouble()}.
      *
      * @return the previous pseudorandom, uniformly distributed <code>double</code> value between
      * <code>0.0</code> and <code>1.0</code> from this random number generator's sequence.
