@@ -158,6 +158,7 @@ public class CLRRandom implements ReverseRandomGenerator {
 
     /**
      * The reverse of {@link #sample()}.
+     * <p>
      * Returns a random floating-point number between {@code 0.0} and {@code 1.0}.
      *
      * @return A double-precision floating point number that is greater than or equal to {@code 0.0},
@@ -323,6 +324,7 @@ public class CLRRandom implements ReverseRandomGenerator {
 
     /**
      * The reverse of {@link #nextInt()}.
+     * <p>
      * Returns a non-negative random integer.
      * <p>
      * <font color="red">This violates the contract of {@link ReverseRandomGenerator#prevInt()}</font>
@@ -363,6 +365,7 @@ public class CLRRandom implements ReverseRandomGenerator {
 
     /**
      * The reverse of {@link #nextInt(int, int)}.
+     * <p>
      * Returns a random integer that is within a specified range.
      *
      * @param minValue the inclusive lower bound of the random number returned.
@@ -405,6 +408,7 @@ public class CLRRandom implements ReverseRandomGenerator {
 
     /**
      * The reverse of {@link #nextInt(int)}.
+     * <p>
      * Returns a non-negative random integer that is less than the specified maximum.
      *
      * @param maxValue the exclusive upper bound of the random number to be generated. {@code maxValue} must
@@ -435,6 +439,7 @@ public class CLRRandom implements ReverseRandomGenerator {
 
     /**
      * The reverse of {@link #nextDouble()}.
+     * <p>
      * Returns a random floating-point number that is greater than or equal to {@code 0.0},
      * and less than {@code 1.0}.
      *
@@ -484,6 +489,7 @@ public class CLRRandom implements ReverseRandomGenerator {
 
     /**
      * The reverse of {@link #nextBytes(byte[])}.
+     * <p>
      * Fills the elements of a specified array of bytes with random numbers.
      *
      * @param buffer an array of bytes to contain random numbers.
@@ -515,6 +521,7 @@ public class CLRRandom implements ReverseRandomGenerator {
 
     /**
      * The reverse of {@link #nextLong()}.
+     * <p>
      * Returns a 64 bit random integer (long). Unlike {@link #prevInt()}, all 2<sup>64</sup> possible
      * {@code long} values should be produced with (approximately) equal probability.
      *
@@ -541,6 +548,7 @@ public class CLRRandom implements ReverseRandomGenerator {
 
     /**
      * The reverse of {@link #nextBoolean()}.
+     * <p>
      * Returns a random boolean.
      * Uses the formula {@code nextInt(2) == 1}.
      *

@@ -14,8 +14,30 @@
 
 Also, besides their normal use, I have added functions to go backward. The **Mersenne Twister** 
 and **LCG**'s are reversible.
-I got the idea of reversing the MT from here: [Cracking Random Number Generators - Part 3](https://jazzy.id.au/2010/09/22/cracking_random_number_generators_part_3.html).
 Also, **LCG**'s and **subtractive generators** are trivial to revert.
+
+I got the idea of reversing the generators from several places, after I had to break the seed of some generator, in order to reduce the size of the archived dataset.
+
+## Disclaimer
+*There are some cases in which the reverse does not work as expected. Try not to mix next and prev versions of the methods as you might run into strange situations.*
+*Some of the situations are captured by unit tests which are currently marked as ignored.*
+*Most of the time things go well.*
+
+***Nevertheless, use it at your own risk. This library comes with no guarantees.***
+
+## Usage
+#### Maven dependency
+```xml
+<dependency>
+    <groupId>ro.derbederos</groupId>
+    <artifactId>untwist</artifactId>
+    <version>0.2</version>
+</dependency>
+```
+#### Gradle dependency
+```groovy
+compile 'ro.derbederos:untwist:0.2'
+```
 
 Enjoy using them!
 

@@ -33,6 +33,7 @@ public abstract class ReverseBitsStreamGenerator extends BitsStreamGenerator imp
 
     /**
      * The reverse of {@link #next(int)}.
+     * <p>
      * Generate previous pseudorandom number.
      * <p>
      * This method is the core generation algorithm.

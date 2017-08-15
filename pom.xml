@@ -22,7 +22,7 @@
 
     <groupId>ro.derbederos</groupId>
     <artifactId>untwist</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.2</version>
 
     <name>untwist</name>
     <description>Java 8+ collection of PRNG's from CLR (.NET), FreePascal, TurboPascal, Python.</description>
