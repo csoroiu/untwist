@@ -45,6 +45,10 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
         return ARRAY_SEED;
     }
 
+    // the below reference values are provided by the original authors
+    // for the seed array {0x123, 0x234, 0x345, 0x456}
+    // http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/CODES/mt19937ar.out
+    // {0x123, 0x234, 0x345, 0x456}
     @Test
     public void testMakotoNishimura() {
         ReversibleMersenneTwister mt = makeGenerator();
@@ -305,15 +309,15 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
         };
 
         for (long expectedInt : refInt) {
-            int r = mt.nextInt();
-            assertEquals(expectedInt, (r & 0x7FFFFFFFL) | ((r < 0) ? 0x80000000L : 0x0L));
+            long r = ((long) mt.nextInt()) & 0xFFFFFFFFL; // poor man unsigned int
+            assertEquals(expectedInt, r);
         }
 
+        // {@code genrand_real2} function from the original code
+        // {@code genrand_int32() * (1.0 / 4294967296.0)}
         for (double expectedDouble : refDouble) {
-            int r = mt.nextInt();
-            assertEquals(expectedDouble,
-                    ((r & 0x7FFFFFFFL) | ((r < 0) ? 0x80000000L : 0x0L)) / 4294967296.0,
-                    1.0e-8);
+            long r = ((long) mt.nextInt()) & 0xFFFFFFFFL; // poor man unsigned int
+            assertEquals(expectedDouble, r / 4294967296.0, 1.0e-8);
         }
     }
 
