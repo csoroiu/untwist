@@ -106,11 +106,6 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
      */
     private int mti;
 
-    // used to store the first and last element of the initial state
-    // because, either first or last element can't be restored
-    private final int[] mt_initial = new int[2];
-    private long twists;
-
     /**
      * Creates a new random number generator.
      * <p>
@@ -168,11 +163,6 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
         }
 
         clear(); // Clear normal deviate cache
-
-        // Saving initial state separately
-        mt_initial[0] = mt[0];
-        mt_initial[1] = mt[N - 1];
-        twists = 0;
     }
 
     /**
@@ -189,6 +179,8 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
     @Override
     public void setSeed(int seed) {
         initGenRand(seed);
+        fixState();
+        clear();
     }
 
     /**
@@ -245,19 +237,15 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
         }
 
         mt[0] = 0x80000000; // MSB is 1; assuring non-zero initial array
-
+        fixState();
         clear(); // Clear normal deviate cache
-
-        // Saving initial state separately
-        mt_initial[0] = mt[0];
-        mt_initial[1] = mt[N - 1];
-        twists = 0;
     }
 
     /**
      * Reinitialize the generator as if just built with the given long seed.
-     * <p>The state of the generator is exactly the same as a new
-     * generator built with the same seed.</p>
+     * <p>
+     * The state of the generator is exactly the same as a new
+     * generator built with the same seed.
      *
      * @param seed the initial seed (64 bits integer)
      */
@@ -266,13 +254,21 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
         setSeed(new int[]{(int) (seed >>> 32), (int) (seed & 0xFFFFFFFFL)});
     }
 
+    private void fixState() {
+        // fixing the state so going in reverse first
+        // and next go forward should work just fine
+        twist();
+        untwist();
+    }
+
     /**
      * Generate next pseudorandom number.
-     * <p>This method is the core generation algorithm. It is used by all the
+     * <p>
+     * This method is the core generation algorithm. It is used by all the
      * public generation methods for the various primitive types {@link
      * #nextBoolean()}, {@link #nextBytes(byte[])}, {@link #nextDouble()},
      * {@link #nextFloat()}, {@link #nextGaussian()}, {@link #nextInt()},
-     * {@link #next(int)} and {@link #nextLong()}.</p>
+     * {@link #next(int)} and {@link #nextLong()}.
      * <p>
      * Part of the <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/CODES/mt19937ar.c">original code</a>.
      * Modified version of method {@code genrand_int32} to return exactly {@code bits} bits.
@@ -312,10 +308,6 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
             int x = (mt[i] & 0x80000000) | (mt[(i + 1) % N] & 0x7FFFFFFF);
             mt[i] = mt[(i + M) % N] ^ (x >>> 1) ^ MAG01[x & 0x1];
         }
-        if (++twists == 0) {
-            mt[0] = mt_initial[0];
-            mt[N - 1] = mt_initial[1];
-        }
     }
 
     /**
@@ -344,8 +336,7 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
         for (int i = 623; i >= 0; i--) {
             int result;
             // first we calculate the first bit
-            int tmp = mt[i];
-            tmp ^= mt[(i + M) % N];
+            int tmp = mt[i] ^ mt[(i + M) % N];
             // if the first bit is odd, unapply magic
             if ((tmp & 0x80000000) == 0x80000000) {
                 tmp ^= 0x9908B0DF;
@@ -354,8 +345,7 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
             result = (tmp << 1) & 0x80000000;
 
             // work out the remaining 31 bits
-            tmp = mt[(i - 1 + N) % N];
-            tmp ^= mt[(i + M - 1) % N];
+            tmp = mt[(i - 1 + N) % N] ^ mt[(i + M - 1) % N];
             if ((tmp & 0x80000000) == 0x80000000) {
                 tmp ^= 0x9908B0DF;
                 // since it was odd, the last bit must have been 1
@@ -364,10 +354,6 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
             // extract the final 30 bits
             result |= (tmp << 1) & 0x7FFFFFFF;
             mt[i] = result;
-        }
-        if (--twists == 0) {
-            mt[0] = mt_initial[0];
-            mt[N - 1] = mt_initial[1];
         }
     }
 

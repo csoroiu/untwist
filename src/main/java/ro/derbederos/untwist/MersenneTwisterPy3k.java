@@ -32,8 +32,9 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
 
     /**
      * Creates a new random number generator.
-     * <p>The instance is initialized using the current time plus the
-     * system identity hash code of this instance as the seed.</p>
+     * <p>
+     * The instance is initialized using the current time plus the
+     * system identity hash code of this instance as the seed.
      */
     public MersenneTwisterPy3k() {
         super();
