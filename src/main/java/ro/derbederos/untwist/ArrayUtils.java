@@ -56,12 +56,11 @@ public class ArrayUtils {
     }
 
     public static int[] getPermutation(int n, RandomGenerator randomizer) {
-        // http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
         return getPermutation(n, 1, randomizer);
     }
 
     public static int[] getPermutationInsideOut(int n, RandomGenerator randomizer) {
-        // http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
+        // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_.22inside-out.22_algorithm
         int[] perm = new int[n];
         for (int i = 1; i < n; i++) {
             int j = randomizer.nextInt(i + 1);

@@ -34,14 +34,26 @@ public class FreePascalRandomTest extends ReversibleMersenneTwisterTest {
     }
 
     @Override
-    int[] getMakotoNishimuraTestSeed() {
-        return new int[]{0x456, 0x345, 0x234, 0x123};
+    @Test
+    public void testSet32BitSeedIntVsLongVsArray() {
+        super.testSet32BitSeedIntVsLongVsArray();
     }
 
     @Override
     @Test
-    public void testSet32BitSeedIntVsLongVsArray() {
-        super.testSet32BitSeedIntVsLongVsArray();
+    public void testSet64bitSeedLongVsArray() {
+        final long seedLong = 0x1234567823456789L;
+        final int[] seedArray = {0x23456789, 0x12345678};
+
+        ReverseRandomGenerator rLong = makeGenerator();
+        rLong.setSeed(seedLong);
+        int[] actualLong = generateIntArray(10, () -> rLong.nextInt(1000));
+
+        ReverseRandomGenerator rArray = makeGenerator();
+        rArray.setSeed(seedArray);
+        int[] actualArray = generateIntArray(10, () -> rArray.nextInt(1000));
+
+        assertThat("LongVsArray", actualLong, equalTo(actualArray));
     }
 
     @Override

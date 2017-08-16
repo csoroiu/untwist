@@ -21,6 +21,9 @@ import java.util.Arrays;
 
 
 /**
+ * This class is a copy of {@link org.apache.commons.math3.random.MersenneTwister}
+ * which also implements {@link ReverseRandomGenerator}.
+ * <p>
  * This class implements a powerful pseudo-random number generator
  * developed by Makoto Matsumoto and Takuji Nishimura during
  * 1996-1997.

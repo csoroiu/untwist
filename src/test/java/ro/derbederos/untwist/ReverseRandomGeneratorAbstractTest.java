@@ -380,11 +380,13 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
         assertThat(generator.nextGaussian(), equalTo(n3));
     }
 
+    @SuppressWarnings("SameReturnValue")
     private static double advanceNextGaussian(ReverseRandomGenerator generator) {
         generator.nextGaussian();
         return 0;
     }
 
+    @SuppressWarnings("SameReturnValue")
     private static double undoNextGaussianEffect(ReverseRandomGenerator generator) {
         generator.undoNextGaussian();
         return 0;

@@ -22,9 +22,11 @@ import org.apache.commons.math3.exception.OutOfRangeException;
  * A Mersenne Twister subclass which generates the same numbers as the Python 3 implementation.
  * Source code uses as reference is part of the files:
  * <ul>
- * <li><a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.</li>
- * <li><a href="https://svn.python.org/projects/python/trunk/Lib/random.py">random.py</a>.</li>
+ * <li><a href="https://github.com/python/cpython/blob/master/Modules/_randommodule.c">_randommodule.c</a>.</li>
+ * <li><a href="https://github.com/python/cpython/blob/master/Lib/random.py">random.py</a>.</li>
+ * <li><a href="https://github.com/python/cpython/blob/master/Lib/test/test_random.py">test_random.py</a>.</li>
  * </ul>
+ * Test
  */
 public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
 
@@ -92,28 +94,19 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
         if (high == 0) {
             setSeed(new int[]{(int) seed});
         } else {
-            setSeed(new int[]{high, (int) (seed & 0xFFFFFFFFL)});
+            setSeed(new int[]{(int) (seed & 0xFFFFFFFFL), high});
         }
     }
 
     /**
      * {@inheritDoc}
      * <p>
-     * Reverses the bytes in the {@code seed} array and calls{@code super.setSeed(int[])}.
-     * Python Mersenne Twister uses a different byte ordering for the {@code seed} array.
-     */
-    @Override
-    public void setSeed(int[] seed) {
-        // for python compatibility where the seed is a number (big integer)
-        // and it is big endian
-        super.setSeed(reverseArray(seed));
-    }
-
-    /**
-     * {@inheritDoc}
-     * <p>
      * Source code: {@code random_random} method in the file
-     * <a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.
+     * <a href="https://github.com/python/cpython/blob/master/Modules/_randommodule.c">_randommodule.c</a>.
+     * <p>
+     * This method is the same as {@code genrand_res53} method in the
+     * <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/CODES/mt19937ar.c">original implementation</a>
+     * of the Mersenne Twister.
      */
     @Override
     public double nextDouble() {
@@ -124,7 +117,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
      * {@inheritDoc}
      * <p>
      * Source code: {@code random_random} method in the file
-     * <a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.
+     * <a href="https://github.com/python/cpython/blob/master/Modules/_randommodule.c">_randommodule.c</a>.
      */
     @Override
     public double prevDouble() {
@@ -135,6 +128,13 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
      * {@inheritDoc}
      * <p>
      * It simply calls {@link #nextDouble()} and does a cast.
+     * <p>
+     * Source code: {@code random_random} method in the file
+     * <a href="https://github.com/python/cpython/blob/master/Modules/_randommodule.c">_randommodule.c</a>.
+     * <p>
+     * This method is the same as {@code genrand_res53} method in the
+     * <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/CODES/mt19937ar.c">original implementation</a>
+     * of the Mersenne Twister.
      */
     @Override
     public float nextFloat() {
@@ -155,7 +155,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
      * {@inheritDoc}
      * <p>
      * Source code: {@code _randbelow} method in the file
-     * <a href="https://svn.python.org/projects/python/trunk/Lib/random.py">random.py</a>.
+     * <a href="https://github.com/python/cpython/blob/master/Lib/random.py">random.py</a>.
      */
     @Override
     public int nextInt(int n) throws IllegalArgumentException {
@@ -174,7 +174,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
      * {@inheritDoc}
      * <p>
      * Source code: {@code _randbelow} method in the file
-     * <a href="https://svn.python.org/projects/python/trunk/Lib/random.py">random.py</a>.
+     * <a href="https://github.com/python/cpython/blob/master/Lib/random.py">random.py</a>.
      */
     @Override
     public int prevInt(int n) throws IllegalArgumentException {
@@ -196,7 +196,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
      * when called for 8 bytes.
      * <p>
      * Source code: {@code random_getrandbits} method in the file
-     * <a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.
+     * <a href="https://github.com/python/cpython/blob/master/Modules/_randommodule.c">_randommodule.c</a>.
      */
     @Override
     public long nextLong() {
@@ -212,7 +212,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
      * when called for 8 bytes.
      * <p>
      * Source code: {@code random_getrandbits} method in the file
-     * <a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.
+     * <a href="https://github.com/python/cpython/blob/master/Modules/_randommodule.c">_randommodule.c</a>.
      */
     @Override
     public long prevLong() {
@@ -225,7 +225,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
      * {@inheritDoc}
      * <p>
      * Source code: {@code random_getrandbits} method in the file
-     * <a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.
+     * <a href="https://github.com/python/cpython/blob/master/Modules/_randommodule.c">_randommodule.c</a>.
      */
     @Override
     public void nextBytes(byte[] bytes, int start, int len) {
@@ -243,7 +243,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
      * {@inheritDoc}
      * <p>
      * Source code: {@code random_getrandbits} method in the file
-     * <a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.
+     * <a href="https://github.com/python/cpython/blob/master/Modules/_randommodule.c">_randommodule.c</a>.
      */
     @Override
     public void nextBytes(byte[] bytes) {
@@ -275,7 +275,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
      * {@inheritDoc}
      * <p>
      * Source code: {@code random_getrandbits} method in the file
-     * <a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.
+     * <a href="https://github.com/python/cpython/blob/master/Modules/_randommodule.c">_randommodule.c</a>.
      */
     @Override
     public void prevBytes(byte[] bytes) {
@@ -286,7 +286,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
      * {@inheritDoc}
      * <p>
      * Source code: {@code random_getrandbits} method in the file
-     * <a href="http://svn.python.org/projects/python/trunk/Modules/_randommodule.c">_randommodule.c</a>.
+     * <a href="https://github.com/python/cpython/blob/master/Modules/_randommodule.c">_randommodule.c</a>.
      */
     @Override
     public void prevBytes(byte[] bytes, int start, int len) {
@@ -328,7 +328,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
      * {@inheritDoc}
      * <p>
      * Source code: {@code _randbelow} method in the file
-     * <a href="https://svn.python.org/projects/python/trunk/Lib/random.py">random.py</a>.
+     * <a href="https://github.com/python/cpython/blob/master/Lib/random.py">random.py</a>.
      */
     @Override
     public long nextLong(long n) throws IllegalArgumentException {
@@ -350,7 +350,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
      * {@inheritDoc}
      * <p>
      * Source code: {@code _randbelow} method in the file
-     * <a href="https://svn.python.org/projects/python/trunk/Lib/random.py">random.py</a>.
+     * <a href="https://github.com/python/cpython/blob/master/Lib/random.py">random.py</a>.
      */
     @Override
     public long prevLong(long n) throws IllegalArgumentException {
@@ -368,14 +368,5 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
         }
         throw new IllegalArgumentException("n must be strictly positive");
 
-    }
-
-    private static int[] reverseArray(int[] seed) {
-        int[] seedReversed = new int[seed.length];
-        int j = seed.length;
-        for (int i = 0; i < seedReversed.length; i++) {
-            seedReversed[i] = seed[--j];
-        }
-        return seedReversed;
     }
 }

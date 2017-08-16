@@ -78,14 +78,6 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
 
     /**
      * {@inheritDoc}
-     */
-    @Override
-    public void setSeed(int seed) {
-        super.setSeed(seed);
-    }
-
-    /**
-     * {@inheritDoc}
      * <p>
      * If the high 32 bits are 0, then it calls {@link #setSeed(int)}.
      * Otherwise it calls {@link #setSeed(int[])} with the low and high 32 bit numbers.
@@ -96,7 +88,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
         if (high == 0) {
             setSeed((int) seed);
         } else {
-            setSeed(new int[]{high, (int) (seed & 0xFFFFFFFFL)});
+            setSeed(new int[]{(int) (seed & 0xFFFFFFFFL), high});
         }
     }
 
@@ -110,7 +102,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
         if (seed.length == 1) {
             setSeed(seed[0]);
         } else {
-            super.setSeed(reverseArray(seed));
+            super.setSeed(seed);
         }
     }
 
@@ -118,6 +110,10 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
      * {@inheritDoc}
      * <p>
      * It uses only 32 bits to generate a double precision float number.
+     * <p>
+     * This method is the same as {@code genrand_real2} method in the
+     * <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/CODES/mt19937ar.c">original implementation</a>
+     * of theMersenne Twister.
      */
     @Override
     public double nextDouble() {
@@ -138,6 +134,10 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
      * {@inheritDoc}
      * <p>
      * It simply calls {@link #nextDouble()} and does a cast.
+     * <p>
+     * This method is the same as {@code genrand_real2} method in the
+     * <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/CODES/mt19937ar.c">original implementation</a>
+     * of theMersenne Twister.
      */
     @Override
     public float nextFloat() {
@@ -237,14 +237,5 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
         } else {
             return 0;
         }
-    }
-
-    private static int[] reverseArray(int[] seed) {
-        int[] seedReversed = new int[seed.length];
-        int j = seed.length;
-        for (int i = 0; i < seedReversed.length; i++) {
-            seedReversed[i] = seed[--j];
-        }
-        return seedReversed;
     }
 }

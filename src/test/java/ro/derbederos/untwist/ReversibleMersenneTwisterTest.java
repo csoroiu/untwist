@@ -41,10 +41,6 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
         return new ReversibleMersenneTwister(ARRAY_SEED);
     }
 
-    int[] getMakotoNishimuraTestSeed() {
-        return ARRAY_SEED;
-    }
-
     // the below reference values are provided by the original authors
     // for the seed array {0x123, 0x234, 0x345, 0x456}
     // http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/CODES/mt19937ar.out
@@ -52,7 +48,7 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
     @Test
     public void testMakotoNishimura() {
         ReversibleMersenneTwister mt = makeGenerator();
-        mt.setSeed(getMakotoNishimuraTestSeed());
+        mt.setSeed(ARRAY_SEED);
         long[] refInt = {
                 1067595299L, 955945823L, 477289528L, 4107218783L, 4228976476L, 3344332714L, 3355579695L, 227628506L,
                 810200273L, 2591290167L, 2560260675L, 3242736208L, 646746669L, 1479517882L, 4245472273L, 1143372638L,
@@ -327,6 +323,7 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
     public void testSet32BitSeedIntVsLongVsArray() {
         super.testSet32BitSeedIntVsLongVsArray();
     }
+
 
     @Override
     @Test

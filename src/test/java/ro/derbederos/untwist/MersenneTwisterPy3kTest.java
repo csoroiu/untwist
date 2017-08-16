@@ -25,6 +25,7 @@ import org.junit.runner.RunWith;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.Arrays;
 import java.util.function.IntSupplier;
 import java.util.function.LongSupplier;
 
@@ -44,15 +45,40 @@ public class MersenneTwisterPy3kTest extends
         return new MersenneTwisterPy3k(123456789013L);
     }
 
-    @Override
-    int[] getMakotoNishimuraTestSeed() {
-        return new int[]{0x456, 0x345, 0x234, 0x123};
+    @Test
+    public void testSetSeedArray() {
+        int[] largeseed = new int[625];
+        Arrays.fill(largeseed, 0x01020304);
+        largeseed[0] = 0x01020305;
+
+        MersenneTwisterPy3k generator = new MersenneTwisterPy3k(largeseed);
+        int[] expected = {208, 832, 482, 259, 706, 457, 453, 472, 266, 84};
+        int[] actual = generateIntArray(expected.length, () -> generator.nextInt(1000));
+
+        assertThat(actual, equalTo(expected));
     }
 
     @Override
     @Test
     public void testSet32BitSeedIntVsLongVsArray() {
         super.testSet32BitSeedIntVsLongVsArray();
+    }
+
+    @Override
+    @Test
+    public void testSet64bitSeedLongVsArray() {
+        final long seedLong = 0x1234567823456789L;
+        final int[] seedArray = {0x23456789, 0x12345678};
+
+        ReverseRandomGenerator rLong = makeGenerator();
+        rLong.setSeed(seedLong);
+        int[] actualLong = generateIntArray(10, () -> rLong.nextInt(1000));
+
+        ReverseRandomGenerator rArray = makeGenerator();
+        rArray.setSeed(seedArray);
+        int[] actualArray = generateIntArray(10, () -> rArray.nextInt(1000));
+
+        assertThat("LongVsArray", actualLong, equalTo(actualArray));
     }
 
     @Override
