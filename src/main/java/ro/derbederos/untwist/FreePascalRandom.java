@@ -29,8 +29,8 @@ package ro.derbederos.untwist;
  * The source code used is <a href="https://github.com/graemeg/freepascal/blob/5186987/rtl/inc/system.inc#L531">System.inc</a>
  */
 public class FreePascalRandom extends ReversibleMersenneTwister {
-    // https://github.com/graemeg/freepascal/blob/master/rtl/inc/system.inc
     // http://svn.freepascal.org/svn/fpc/trunk/rtl/inc/system.inc
+    // https://github.com/graemeg/freepascal/blob/master/rtl/inc/system.inc
     // https://github.com/graemeg/freepascal/blob/master/rtl/inc/systemh.inc
 
     private static final long serialVersionUID = 1L;

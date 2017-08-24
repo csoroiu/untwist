@@ -36,7 +36,9 @@ public class RandomUtils {
         return result;
     }
 
-    static int convertToInt(int high, int low) {
+    static int convertToInt(long input) {
+        final int high = (int) (input >>> 32);
+        final int low = (int) (input & 0xFFFFFFFFL);
         final int prime = 65521;
         return high * prime + low;
     }

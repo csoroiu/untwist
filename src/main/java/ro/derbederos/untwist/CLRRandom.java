@@ -299,13 +299,11 @@ public class CLRRandom implements ReverseRandomGenerator {
      * Converts the {@code long} seed to an {@code int} and calls {@link #setSeed(int)}.
      *
      * @param seed a number used to calculate a starting value for the pseudo-random number sequence.
-     * @see RandomUtils#convertToInt(int, int)
+     * @see RandomUtils#convertToInt(long)
      */
     @Override
     public void setSeed(long seed) {
-        final int high = (int) (seed >>> 32);
-        final int low = (int) (seed & 0xFFFFFFFFL);
-        setSeed(RandomUtils.convertToInt(high, low));
+        setSeed(RandomUtils.convertToInt(seed));
     }
 
     /**

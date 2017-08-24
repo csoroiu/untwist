@@ -24,20 +24,11 @@ import java.util.function.*;
 
 public class ArrayUtils {
 
-    private static int[] getPermutation(int n, int steps, RandomGenerator randomizer) {
-        int[] perm = new int[n];
+    @Deprecated
+    public static int[] getPermutationLegacy(int n, RandomGenerator randomizer) {
+        int[] perm = getIdentityPermutation(n);
         for (int i = 0; i < n; i++) {
-            perm[i] = i;
-        }
-        for (int k = 0; k < steps; k++) {
-            for (int i = 0; i < n; i++) {
-                int j = randomizer.nextInt(n);
-                if (i == j)
-                    continue;
-                perm[i] ^= perm[j];
-                perm[j] ^= perm[i];
-                perm[i] ^= perm[j];
-            }
+            swap(perm, i, randomizer.nextInt(n));
         }
         return perm;
     }
@@ -55,19 +46,44 @@ public class ArrayUtils {
         return tree;
     }
 
+    private static int[] getIdentityPermutation(int n) {
+        int[] perm = new int[n];
+        for (int i = 0; i < n; i++) {
+            perm[i] = i;
+        }
+        return perm;
+    }
+
     public static int[] getPermutation(int n, RandomGenerator randomizer) {
-        return getPermutation(n, 1, randomizer);
+        int[] perm = getIdentityPermutation(n);
+        shuffle(perm, randomizer);
+        return perm;
+    }
+
+    public static void shuffle(int[] source, RandomGenerator randomizer) {
+        // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm
+        for (int i = source.length; i > 1; i--) {
+            swap(source, i - 1, randomizer.nextInt(i));
+        }
     }
 
     public static int[] getPermutationInsideOut(int n, RandomGenerator randomizer) {
-        // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_.22inside-out.22_algorithm
-        int[] perm = new int[n];
-        for (int i = 1; i < n; i++) {
-            int j = randomizer.nextInt(i + 1);
-            perm[i] = perm[j];
-            perm[j] = i;
-        }
+        int[] perm = getIdentityPermutation(n);
+        shuffleInsideOut(perm, randomizer);
         return perm;
+    }
+
+    public static void shuffleInsideOut(int[] source, RandomGenerator randomizer) {
+        // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_.22inside-out.22_algorithm
+        for (int i = 0; i < source.length; i++) {
+            swap(source, i, randomizer.nextInt(i + 1));
+        }
+    }
+
+    private static void swap(int[] source, int i, int j) {
+        int tmp = source[i];
+        source[i] = source[j];
+        source[j] = tmp;
     }
 
     public static void rotateLeft(int[] v, int from, int to) {
