@@ -18,6 +18,8 @@ package ro.derbederos.untwist;
 
 import org.apache.commons.math3.exception.OutOfRangeException;
 
+import static java.lang.Integer.toUnsignedLong;
+
 /**
  * A Mersenne Twister subclass which generates the same numbers as the Python 3 implementation.
  * Source code uses as reference is part of the files:
@@ -110,7 +112,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
      */
     @Override
     public double nextDouble() {
-        return (((long) (next(27)) << 26) + next(26)) * 0x1.0p-53;
+        return (((long) (next(27)) << 26) + next(26)) * 0x1.0p-53d;
     }
 
     /**
@@ -121,7 +123,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
      */
     @Override
     public double prevDouble() {
-        return (prev(26) + ((long) (prev(27)) << 26)) * 0x1.0p-53;
+        return (prev(26) + ((long) (prev(27)) << 26)) * 0x1.0p-53d;
     }
 
     /**
@@ -200,8 +202,8 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
      */
     @Override
     public long nextLong() {
-        final long low = ((long) next(32)) & 0xFFFFFFFFL;
-        final long high = ((long) next(32)) << 32;
+        long low = toUnsignedLong(next(32));
+        long high = toUnsignedLong(next(32)) << 32;
         return high | low;
     }
 
@@ -216,8 +218,8 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
      */
     @Override
     public long prevLong() {
-        final long high = ((long) prev(32)) << 32;
-        final long low = ((long) prev(32)) & 0xFFFFFFFFL;
+        long high = toUnsignedLong(prev(32)) << 32;
+        long low = toUnsignedLong(prev(32));
         return high | low;
     }
 
@@ -336,9 +338,9 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
             final int bit_length = Long.SIZE - Long.numberOfLeadingZeros(n);
             long bits;
             do {
-                bits = ((long) next(Math.min(32, bit_length))) & 0xFFFFFFFFL;
+                bits = toUnsignedLong(next(Math.min(32, bit_length)));
                 if (bit_length > 32) {
-                    bits = bits | ((long) next(bit_length - 32)) << 32;
+                    bits = bits | toUnsignedLong(next(bit_length - 32)) << 32;
                 }
             } while (bits >= n);
             return bits;
@@ -360,9 +362,9 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
             do {
                 bits = 0;
                 if (bit_length > 32) {
-                    bits = ((long) prev(bit_length - 32)) << 32;
+                    bits = toUnsignedLong(prev(bit_length - 32)) << 32;
                 }
-                bits |= ((long) prev(Math.min(32, bit_length))) & 0xFFFFFFFFL;
+                bits |= toUnsignedLong(prev(Math.min(32, bit_length)));
             } while (bits >= n);
             return bits;
         }

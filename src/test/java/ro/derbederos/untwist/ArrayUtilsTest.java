@@ -43,13 +43,15 @@ public class ArrayUtilsTest {
     public void testRandomTree() {
         ReversibleJdkRandom randomizer = new ReversibleJdkRandom();
         int maxDepth = 0;
+        int N = 10000;
         for (int i = 0; i < 1000; i++) {
-            int[] tree = getTree(10000, randomizer);
+            int[] tree = getTree(N, randomizer);
             maxDepth = Math.max(maxDepth, assertTree(tree));
         }
         //seed = 270579156758789, depth = 30
         System.out.println("seed = " + randomizer.getSeed());
         System.out.println("maxDepth = " + maxDepth);
+        System.out.println("theoretical longest path (4.311 log n) = " + (4.311 * Math.log(N)));
     }
 
     private static int assertTree(int[] tree) {

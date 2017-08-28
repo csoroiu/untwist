@@ -19,6 +19,8 @@ package ro.derbederos.untwist;
 import org.apache.commons.math3.exception.OutOfRangeException;
 import org.apache.commons.math3.random.BitsStreamGenerator;
 
+import static java.lang.Integer.toUnsignedLong;
+
 public abstract class ReverseBitsStreamGenerator extends BitsStreamGenerator implements ReverseRandomGenerator {
     private static final long serialVersionUID = 1L;
 
@@ -126,8 +128,8 @@ public abstract class ReverseBitsStreamGenerator extends BitsStreamGenerator imp
      */
     @Override
     public long prevLong() {
-        long low = ((long) prev(32)) & 0xFFFFFFFFL;
-        long high = ((long) prev(32)) << 32;
+        long low = toUnsignedLong(prev(32));
+        long high = toUnsignedLong(prev(32)) << 32;
         return low | high;
     }
 
@@ -145,8 +147,8 @@ public abstract class ReverseBitsStreamGenerator extends BitsStreamGenerator imp
 
         long bits, val;
         do {
-            bits = ((long) prev(32)) & 0xFFFFFFFFL;
-            bits |= ((long) prev(31)) << 32;
+            bits = toUnsignedLong(prev(32));
+            bits |= toUnsignedLong(prev(31)) << 32;
             val = bits % bound;
         } while ((bits - val) + (bound - 1) < 0);
         return val;

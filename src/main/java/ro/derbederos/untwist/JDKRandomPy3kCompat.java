@@ -16,11 +16,7 @@
 
 package ro.derbederos.untwist;
 
-import org.apache.commons.math3.random.RandomGenerator;
-
-import java.util.Random;
-
-public class JDKRandomPy3kCompat extends Random implements RandomGenerator {
+public class JDKRandomPy3kCompat extends ReversibleJdkRandom {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,17 +29,12 @@ public class JDKRandomPy3kCompat extends Random implements RandomGenerator {
     }
 
     @Override
-    public void setSeed(int seed) {
-        setSeed((long) seed);
-    }
-
-    @Override
-    public void setSeed(int[] seed) {
-        setSeed(RandomUtils.convertToLong(seed));
-    }
-
-    @Override
     public float nextFloat() {
         return (float) nextDouble();
+    }
+
+    @Override
+    public float prevFloat() {
+        return (float) prevDouble();
     }
 }

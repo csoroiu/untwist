@@ -16,6 +16,8 @@
 
 package ro.derbederos.untwist;
 
+import static java.lang.Integer.toUnsignedLong;
+
 /**
  * Java implementation of the random number generator from Turbo Pascal 7/Delphi.
  * It is a <a href="https://en.wikipedia.org/wiki/Linear_congruential_generator">linear congruential generator</a>
@@ -126,6 +128,15 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
     }
 
     /**
+     * Returns the seed used by this generator.
+     *
+     * @return the seed (which can be used with {@link #setSeed(long)}.
+     */
+    public int getSeed() {
+        return (int) seed;
+    }
+
+    /**
      * Converts the {@code int[]} seed to an {@code int} and calls {@link #setSeed(int)}.
      *
      * @param seed an array used to calculate a starting value for the pseudo-random number sequence.
@@ -172,7 +183,7 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
     @Override
     public int nextInt(int n) {
         if (n > 0) {
-            long nextInt = next(32) & 0xFFFFFFFFL;
+            long nextInt = toUnsignedLong(next(32));
             return (int) ((nextInt * n) >>> 32);
         }
         throw new IllegalArgumentException("n must be strictly positive");
@@ -184,7 +195,7 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
     @Override
     public int prevInt(int n) {
         if (n > 0) {
-            long prevInt = prev(32) & 0xFFFFFFFFL;
+            long prevInt = toUnsignedLong(prev(32));
             return (int) ((prevInt * n) >>> 32);
         }
         throw new IllegalArgumentException("n must be strictly positive");
@@ -198,12 +209,13 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
      */
     @Override
     public double nextDouble() {
-        long nextInt = next(32) & 0xFFFFFFFFL;
+        int nextInt = next(32);
         if (coprocessorEnabled) {
             // in turbo pascal the seed was 32 bit signed integer
-            return (int) nextInt / (double) (1L << 32) + 0.5;
+            return nextInt * 0x1.0p-32d + 0x1p-1d; // 0x1p-1d = 0.5d
         } else {
-            return nextInt / (double) (1L << 32);
+            // delphi is performing unsigned division
+            return toUnsignedLong(nextInt) * 0x1.0p-32d;
         }
     }
 
@@ -215,12 +227,13 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
      */
     @Override
     public double prevDouble() {
-        long prevInt = prev(32) & 0xFFFFFFFFL;
+        int prevInt = prev(32);
         if (coprocessorEnabled) {
             // in turbo pascal the seed was 32 bit signed integer
-            return (int) prevInt / (double) (1L << 32) + 0.5;
+            return prevInt * 0x1.0p-32d + 0x1p-1d; // 0x1p-1d = 0.5d
         } else {
-            return prevInt / (double) (1L << 32);
+            // delphi is performing unsigned division
+            return toUnsignedLong(prevInt) * 0x1.0p-32d;
         }
     }
 

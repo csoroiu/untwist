@@ -22,6 +22,7 @@ import org.junit.Test;
 import java.util.function.IntSupplier;
 import java.util.function.LongSupplier;
 
+import static java.lang.Integer.toUnsignedLong;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.lessThan;
@@ -305,14 +306,14 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
         };
 
         for (long expectedInt : refInt) {
-            long r = ((long) mt.nextInt()) & 0xFFFFFFFFL; // poor man unsigned int
+            long r = toUnsignedLong(mt.nextInt()); // poor man unsigned int
             assertEquals(expectedInt, r);
         }
 
         // {@code genrand_real2} function from the original code
         // {@code genrand_int32() * (1.0 / 4294967296.0)}
         for (double expectedDouble : refDouble) {
-            long r = ((long) mt.nextInt()) & 0xFFFFFFFFL; // poor man unsigned int
+            long r = toUnsignedLong(mt.nextInt()); // poor man unsigned int
             assertEquals(expectedDouble, r / 4294967296.0, 1.0e-8);
         }
     }

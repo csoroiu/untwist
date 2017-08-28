@@ -20,14 +20,16 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.security.SecureRandom;
 
+import static java.lang.Integer.toUnsignedLong;
+
 public class RandomUtils {
     static long convertToLong(int... seed) {
         long result = 0;
         int endIndex = seed.length / 2 * 2;
         for (int i = 0; i < endIndex; i += 2) {
-            long hi = (long) seed[i] << 32;
-            long low = (long) seed[i + 1] & 0xFFFFFFFFL;
-            result = 4294967291L * result + hi | low;
+            long high = toUnsignedLong(seed[i]) << 32;
+            long low = toUnsignedLong(seed[i + 1]);
+            result = 4294967291L * result + high | low;
         }
         if (endIndex != seed.length) {
             long low = seed[seed.length - 1];

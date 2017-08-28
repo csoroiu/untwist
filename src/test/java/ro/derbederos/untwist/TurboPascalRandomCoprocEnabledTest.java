@@ -16,6 +16,8 @@
 
 package ro.derbederos.untwist;
 
+import org.hamcrest.Matcher;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.function.IntSupplier;
@@ -109,5 +111,16 @@ public class TurboPascalRandomCoprocEnabledTest extends ReverseBitsStreamGenerat
         boolean[] actual = generateBooleanArray(expected.length, generator::nextBoolean);
 
         assertThat(actual, equalTo(expected));
+    }
+
+    @Test
+    @Ignore
+    public void testEnabledVsDisabled() {
+        TurboPascalRandom r1 = new TurboPascalRandom(1);
+        TurboPascalRandom r2 = new TurboPascalRandom(1, true);
+        Matcher<Double> equalToMatcher = equalTo(0.5d);
+        for (long i = 0; i < 1L << 32; i++) {
+            assertThat(Math.abs(r1.nextDouble() - r2.nextDouble()), equalToMatcher);
+        }
     }
 }

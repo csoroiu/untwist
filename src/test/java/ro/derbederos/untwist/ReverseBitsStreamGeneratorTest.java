@@ -21,6 +21,7 @@ import org.junit.Test;
 import java.util.function.IntSupplier;
 import java.util.function.LongSupplier;
 
+import static java.lang.Integer.toUnsignedLong;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static ro.derbederos.untwist.ArrayUtils.*;
