@@ -24,23 +24,14 @@ import java.util.function.*;
 
 public class ArrayUtils {
 
-    @Deprecated
-    public static int[] getPermutationLegacy(int n, RandomGenerator randomizer) {
-        int[] perm = getIdentityPermutation(n);
-        for (int i = 0; i < n; i++) {
-            swap(perm, i, randomizer.nextInt(n));
-        }
-        return perm;
-    }
-
-    public static int[] getTree(int n, RandomGenerator randomizer) {
+    public static int[] getTree(int n, RandomGenerator generator) {
         // http://algs4.cs.princeton.edu/41graph/GraphGenerator.java.html
         // https://en.wikipedia.org/wiki/Pr%C3%BCfer_sequence
-        int[] perm = getPermutation(n, randomizer);
+        int[] perm = getPermutation(n, generator);
         int[] tree = new int[n];
         tree[perm[0]] = -1;
         for (int i = 1; i < n; i++) {
-            int value = randomizer.nextInt(i);
+            int value = generator.nextInt(i);
             tree[perm[i]] = perm[value];
         }
         return tree;
@@ -54,29 +45,29 @@ public class ArrayUtils {
         return perm;
     }
 
-    public static int[] getPermutation(int n, RandomGenerator randomizer) {
+    public static int[] getPermutation(int n, RandomGenerator generator) {
         int[] perm = getIdentityPermutation(n);
-        shuffle(perm, randomizer);
+        shuffle(perm, generator);
         return perm;
     }
 
-    public static void shuffle(int[] source, RandomGenerator randomizer) {
+    public static void shuffle(int[] source, RandomGenerator generator) {
         // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm
         for (int i = source.length; i > 1; i--) {
-            swap(source, i - 1, randomizer.nextInt(i));
+            swap(source, i - 1, generator.nextInt(i));
         }
     }
 
-    public static int[] getPermutationInsideOut(int n, RandomGenerator randomizer) {
+    public static int[] getPermutationInsideOut(int n, RandomGenerator generator) {
         int[] perm = getIdentityPermutation(n);
-        shuffleInsideOut(perm, randomizer);
+        shuffleInsideOut(perm, generator);
         return perm;
     }
 
-    public static void shuffleInsideOut(int[] source, RandomGenerator randomizer) {
+    public static void shuffleInsideOut(int[] source, RandomGenerator generator) {
         // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_.22inside-out.22_algorithm
         for (int i = 0; i < source.length; i++) {
-            swap(source, i, randomizer.nextInt(i + 1));
+            swap(source, i, generator.nextInt(i + 1));
         }
     }
 
@@ -152,18 +143,6 @@ public class ArrayUtils {
         for (int i = 0; i < result.length; i++) {
             result[i] = supplier.getAsBoolean();
         }
-        return result;
-    }
-
-    public static <A> A[] generateArray(IntFunction<A[]> ctor, int size, Supplier<A> supplier) {
-        Objects.requireNonNull(supplier);
-        return generateArray(ctor, size, (i) -> supplier.get());
-    }
-
-    public static <A> A[] generateArray(IntFunction<A[]> ctor, int size, IntFunction<A> generator) {
-        Objects.requireNonNull(ctor);
-        A[] result = ctor.apply(size);
-        Arrays.setAll(result, generator);
         return result;
     }
 }

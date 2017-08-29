@@ -19,19 +19,22 @@ package ro.derbederos.untwist;
 import org.hamcrest.Matcher;
 import org.junit.Ignore;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.lessThan;
-import static ro.derbederos.untwist.ArrayUtils.generateArray;
 
 @Ignore
 class Utils {
 
-    static List<Byte> toByteList(byte[] b) {
-        return Arrays.asList(generateArray(Byte[]::new, b.length, (i) -> (b[i])));
+    static List<Byte> toByteList(byte[] bytes) {
+        ArrayList<Byte> result = new ArrayList<>(bytes.length);
+        for (byte b : bytes) {
+            result.add(b);
+        }
+        return result;
     }
 
     static <T extends java.lang.Comparable<T>> Matcher<T> between(T minValue, T maxValue) {

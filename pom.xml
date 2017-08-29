@@ -25,7 +25,7 @@
     <version>0.4-SNAPSHOT</version>
 
     <name>untwist</name>
-    <description>Java 8+ collection of PRNG's from CLR (.NET), FreePascal, TurboPascal, Python.</description>
+    <description>Java 8+ collection of PRNG's from .NET, FreePascal, TurboPascal, Python.</description>
     <url>https://github.com/csoroiu/untwist</url>
 
     <licenses>

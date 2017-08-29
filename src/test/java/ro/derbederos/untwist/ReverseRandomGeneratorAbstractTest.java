@@ -30,9 +30,9 @@ import org.junit.runner.RunWith;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static java.util.Arrays.stream;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.fail;
@@ -180,7 +180,7 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
         int[] expected = generateIntArray(2459, () -> generator.nextInt(78209372));
         int[] actual = generateIntArray(2459, () -> generator.prevInt(78209372));
 
-        IntStream.of(expected).forEach((t) -> assertThat(t, between(0, 78209372)));
+        stream(expected).forEach((t) -> assertThat(t, between(0, 78209372)));
         assertThat(actual, equalTo(reverseArray(expected)));
 
         expected = generateIntArray(2467, () -> generator.nextInt(78209372));
@@ -194,7 +194,7 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
         int[] expected = generateIntArray(2459, () -> generator.prevInt(78209372));
         int[] actual = generateIntArray(2459, () -> generator.nextInt(78209372));
 
-        IntStream.of(expected).forEach((t) -> assertThat(t, between(0, 78209372)));
+        stream(expected).forEach((t) -> assertThat(t, between(0, 78209372)));
         assertThat(actual, equalTo(reverseArray(expected)));
 
         expected = generateIntArray(2467, () -> generator.prevInt(78209372));

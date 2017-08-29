@@ -24,6 +24,7 @@ import java.util.IntSummaryStatistics;
 import java.util.function.IntSupplier;
 import java.util.stream.IntStream;
 
+import static java.util.Arrays.stream;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
@@ -33,11 +34,11 @@ import static ro.derbederos.untwist.ArrayUtils.*;
 import static ro.derbederos.untwist.Utils.between;
 import static ro.derbederos.untwist.Utils.reverseArray;
 
-public class CLRRandomTest extends ReverseRandomGeneratorAbstractTest<CLRRandom> {
+public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetRandom> {
 
     @Override
-    protected CLRRandom makeGenerator() {
-        return new CLRRandom(-0x3f97396e);
+    protected DotNetRandom makeGenerator() {
+        return new DotNetRandom(-0x3f97396e);
     }
 
     @Override
@@ -55,7 +56,7 @@ public class CLRRandomTest extends ReverseRandomGeneratorAbstractTest<CLRRandom>
     }
 
     @Test
-    public void testNextIntWideRangeCLR() {
+    public void testNextIntWideRangeDotNet() {
         int lower = -0x6543210F;
         int upper = 0x456789AB;
         IntSummaryStatistics statistics = IntStream
@@ -107,7 +108,7 @@ public class CLRRandomTest extends ReverseRandomGeneratorAbstractTest<CLRRandom>
         int[] expected = generateIntArray(2459, () -> generator.nextInt(-1000, 3000));
         int[] actual = generateIntArray(2459, () -> generator.prevInt(-1000, 3000));
 
-        IntStream.of(expected).forEach((t) -> assertThat(t, between(-1000, 3000)));
+        stream(expected).forEach((t) -> assertThat(t, between(-1000, 3000)));
         assertThat(actual, equalTo(reverseArray(expected)));
 
         expected = generateIntArray(2467, () -> generator.nextInt(-1000, 3000));
@@ -121,7 +122,7 @@ public class CLRRandomTest extends ReverseRandomGeneratorAbstractTest<CLRRandom>
         int[] expected = generateIntArray(2459, () -> generator.prevInt(-1000, 3000));
         int[] actual = generateIntArray(2459, () -> generator.nextInt(-1000, 3000));
 
-        IntStream.of(expected).forEach((t) -> assertThat(t, between(-1000, 3000)));
+        stream(expected).forEach((t) -> assertThat(t, between(-1000, 3000)));
         assertThat(actual, equalTo(reverseArray(expected)));
 
         expected = generateIntArray(2467, () -> generator.prevInt(-1000, 3000));
@@ -294,16 +295,16 @@ public class CLRRandomTest extends ReverseRandomGeneratorAbstractTest<CLRRandom>
 
     @Test
     public void testStatePrevNextVsNextPrev() {
-        CLRRandom clrRandom1 = new CLRRandom(-0x3f97396e);
-        clrRandom1.prevInt();
-        clrRandom1.nextInt();
-        int[] expected = clrRandom1.getState();
+        DotNetRandom dotNetRandom1 = new DotNetRandom(-0x3f97396e);
+        dotNetRandom1.prevInt();
+        dotNetRandom1.nextInt();
+        int[] expected = dotNetRandom1.getState();
 
 
-        CLRRandom clrRandom2 = new CLRRandom(-0x3f97396e);
-        clrRandom2.prevInt();
-        clrRandom2.nextInt();
-        int[] actual = clrRandom2.getState();
+        DotNetRandom dotNetRandom2 = new DotNetRandom(-0x3f97396e);
+        dotNetRandom2.prevInt();
+        dotNetRandom2.nextInt();
+        int[] actual = dotNetRandom2.getState();
 
         //compare states
         assertThat(actual, equalTo(expected));

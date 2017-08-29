@@ -59,7 +59,7 @@ import java.util.Arrays;
  * https://github.com/dotnet/coreclr/issues/5974</a></li>
  * </ul>
  */
-public class CLRRandom implements ReverseRandomGenerator {
+public class DotNetRandom implements ReverseRandomGenerator {
     private static final long serialVersionUID = 1L;
 
     private static final int MBIG = Integer.MAX_VALUE;
@@ -74,29 +74,29 @@ public class CLRRandom implements ReverseRandomGenerator {
     private boolean shouldReverseGaussian;
 
     /**
-     * Initializes a new instance of the {@link CLRRandom} class, using a time-dependent default seed value.
+     * Initializes a new instance of the {@link DotNetRandom} class, using a time-dependent default seed value.
      */
-    public CLRRandom() {
+    public DotNetRandom() {
         setSeed(System.currentTimeMillis() + System.identityHashCode(this));
     }
 
     /**
-     * Initializes a new instance of the {@link CLRRandom} class, using the specified seed value.
+     * Initializes a new instance of the {@link DotNetRandom} class, using the specified seed value.
      *
      * @param seed the initial seed.
      * @see #setSeed(int)
      */
-    public CLRRandom(int seed) {
+    public DotNetRandom(int seed) {
         setSeed(seed);
     }
 
     /**
-     * Initializes a new instance of the {@link CLRRandom} class, using the specified seed value.
+     * Initializes a new instance of the {@link DotNetRandom} class, using the specified seed value.
      *
      * @param seed the initial seed.
      * @see #setSeed(long)
      */
-    public CLRRandom(long seed) {
+    public DotNetRandom(long seed) {
         setSeed(seed);
     }
 
@@ -273,7 +273,7 @@ public class CLRRandom implements ReverseRandomGenerator {
     //
 
     /**
-     * Initializes this instance of the {@link CLRRandom} class, using the specified seed value.
+     * Initializes this instance of the {@link DotNetRandom} class, using the specified seed value.
      *
      * @param seed a number used to calculate a starting value for the pseudo-random number sequence.
      *             If a negative number is specified, the absolute value of the number is used.

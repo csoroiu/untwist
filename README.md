@@ -8,7 +8,7 @@
 
 **Python** and **Free Pascal** use the **Mersenne Twister** as a randomization source.
 **Turbo Pascal** and  **Java** are using a **linear congruential generator (LCG)**.
-**CLR (.NET)** is using a modified version of Donald E. Knuth's **subtractive random number generator** algorithm. 
+**.NET** is using a modified version of Donald E. Knuth's **subtractive random number generator** algorithm. 
 
 **Given the same input (seed) they generate the same values as the ones in the respective languages.**
 
