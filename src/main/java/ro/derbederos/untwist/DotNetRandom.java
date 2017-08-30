@@ -288,22 +288,22 @@ public class DotNetRandom implements ReverseRandomGenerator {
      * Converts the {@code int[]} seed to an {@code int} and calls {@link #setSeed(int)}.
      *
      * @param seed an array used to calculate a starting value for the pseudo-random number sequence.
-     * @see RandomUtils#convertToInt(int...)
+     * @see SeedUtils#convertToInt(int...)
      */
     @Override
     public void setSeed(int[] seed) {
-        setSeed(RandomUtils.convertToInt(seed));
+        setSeed(SeedUtils.convertToInt(seed));
     }
 
     /**
      * Converts the {@code long} seed to an {@code int} and calls {@link #setSeed(int)}.
      *
      * @param seed a number used to calculate a starting value for the pseudo-random number sequence.
-     * @see RandomUtils#convertToInt(long)
+     * @see SeedUtils#convertToInt(long)
      */
     @Override
     public void setSeed(long seed) {
-        setSeed(RandomUtils.convertToInt(seed));
+        setSeed(SeedUtils.convertToInt(seed));
     }
 
     /**

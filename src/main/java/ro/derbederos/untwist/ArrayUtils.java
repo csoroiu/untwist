@@ -18,10 +18,6 @@ package ro.derbederos.untwist;
 
 import org.apache.commons.math3.random.RandomGenerator;
 
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.function.*;
-
 public class ArrayUtils {
 
     public static int[] getTree(int n, RandomGenerator generator) {
@@ -37,7 +33,7 @@ public class ArrayUtils {
         return tree;
     }
 
-    private static int[] getIdentityPermutation(int n) {
+    public static int[] getIdentityPermutation(int n) {
         int[] perm = new int[n];
         for (int i = 0; i < n; i++) {
             perm[i] = i;
@@ -95,54 +91,4 @@ public class ArrayUtils {
         v[i] = tmp;
     }
 
-    public static double[] generateDoubleArray(int size, DoubleSupplier supplier) {
-        Objects.requireNonNull(supplier);
-        return generateDoubleArray(size, (i) -> supplier.getAsDouble());
-    }
-
-    public static double[] generateDoubleArray(int size, IntToDoubleFunction generator) {
-        double[] result = new double[size];
-        Arrays.setAll(result, generator);
-        return result;
-    }
-
-    public static float[] generateFloatArray(int size, DoubleSupplier supplier) {
-        Objects.requireNonNull(supplier);
-        float[] result = new float[size];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = (float) supplier.getAsDouble();
-        }
-        return result;
-    }
-
-    public static long[] generateLongArray(int size, LongSupplier supplier) {
-        Objects.requireNonNull(supplier);
-        return generateLongArray(size, (i) -> supplier.getAsLong());
-    }
-
-    public static long[] generateLongArray(int size, IntToLongFunction generator) {
-        long[] result = new long[size];
-        Arrays.setAll(result, generator);
-        return result;
-    }
-
-    public static int[] generateIntArray(int size, IntSupplier supplier) {
-        Objects.requireNonNull(supplier);
-        return generateIntArray(size, (i) -> supplier.getAsInt());
-    }
-
-    public static int[] generateIntArray(int size, IntUnaryOperator generator) {
-        int[] result = new int[size];
-        Arrays.setAll(result, generator);
-        return result;
-    }
-
-    public static boolean[] generateBooleanArray(int size, BooleanSupplier supplier) {
-        Objects.requireNonNull(supplier);
-        boolean[] result = new boolean[size];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = supplier.getAsBoolean();
-        }
-        return result;
-    }
 }

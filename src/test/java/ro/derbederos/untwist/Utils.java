@@ -16,11 +16,13 @@
 
 package ro.derbederos.untwist;
 
+import org.apache.commons.math3.random.RandomGenerator;
 import org.hamcrest.Matcher;
 import org.junit.Ignore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
@@ -99,5 +101,37 @@ class Utils {
             b[j--] = tmp;
         }
         return b;
+    }
+
+    static float[] nextFloats(int size, RandomGenerator generator) {
+        float[] result = new float[size];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = generator.nextFloat();
+        }
+        return result;
+    }
+
+    static float[] prevFloats(int size, ReverseRandomGenerator generator) {
+        float[] result = new float[size];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = generator.prevFloat();
+        }
+        return result;
+    }
+
+    static boolean[] nextBooleans(int size, RandomGenerator generator) {
+        boolean[] result = new boolean[size];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = generator.nextBoolean();
+        }
+        return result;
+    }
+
+    static boolean[] prevBooleans(int size, ReverseRandomGenerator generator) {
+        boolean[] result = new boolean[size];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = generator.prevBoolean();
+        }
+        return result;
     }
 }

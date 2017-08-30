@@ -212,6 +212,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
      * Source code:
      * <a href="https://github.com/graemeg/freepascal/blob/5186987/rtl/inc/system.inc#L676">System.inc#random(int64)</a>
      */
+    @Override
     public long nextLong(long n) throws IllegalArgumentException {
         long low = toUnsignedLong(next(32));
         long high = toUnsignedLong(next(32)) & 0x7FFFFFFFL; // drop highest one bit

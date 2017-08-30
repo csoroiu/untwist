@@ -96,6 +96,7 @@ public class ArrayUtilsTest {
         Integer[] expected = new Integer[]{5, 2, 8, 4, 7, 0, 6, 1, 9, 3};
         int[] actualInt = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         List<Integer> actualInteger = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+
         shuffle(actualInt, randomizer1);
         Collections.shuffle(actualInteger, new RandomAdaptor(randomizer2));
 
@@ -121,6 +122,7 @@ public class ArrayUtilsTest {
         Integer[] expected = new Integer[]{2, 9, 3, 5, 4, 1, 8, 0, 7, 6};
         int[] actualInt = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         List<Integer> actualInteger = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+
         shuffle(actualInt, randomizer1);
         shuffle(actualInt, randomizer1);
         Collections.shuffle(actualInteger, new RandomAdaptor(randomizer2));

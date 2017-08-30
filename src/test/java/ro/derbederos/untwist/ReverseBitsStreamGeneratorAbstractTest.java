@@ -21,7 +21,8 @@ import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static ro.derbederos.untwist.ArrayUtils.generateLongArray;
+import static ro.derbederos.untwist.RandomUtils.nextLongs;
+import static ro.derbederos.untwist.RandomUtils.prevLongs;
 import static ro.derbederos.untwist.Utils.reverseArray;
 
 
@@ -47,26 +48,26 @@ public abstract class ReverseBitsStreamGeneratorAbstractTest<T extends ReverseBi
 
     @Test
     public void testNextPrevLongBound() {
-        long[] expected = generateLongArray(2459, () -> generator.nextLong(0x7ABCDEL));
-        long[] actual = generateLongArray(2459, () -> generator.prevLong(0x7ABCDEL));
+        long[] expected = nextLongs(2459, 0, 0x7ABCDEL, generator).toArray();
+        long[] actual = prevLongs(2459, 0, 0x7ABCDEL, generator).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = generateLongArray(2467, () -> generator.nextLong(0x7ABCDEL));
-        actual = generateLongArray(2467, () -> generator.prevLong(0x7ABCDEL));
+        expected = nextLongs(2467, 0, 0x7ABCDEL, generator).toArray();
+        actual = prevLongs(2467, 0, 0x7ABCDEL, generator).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testPrevNextLongBound() {
-        long[] expected = generateLongArray(2459, () -> generator.prevLong(0x7ABCDEF8FFFFFFFFL));
-        long[] actual = generateLongArray(2459, () -> generator.nextLong(0x7ABCDEF8FFFFFFFFL));
+        long[] expected = prevLongs(2459, 0, 0x7ABCDEF8FFFFFFFFL, generator).toArray();
+        long[] actual = nextLongs(2459, 0, 0x7ABCDEF8FFFFFFFFL, generator).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = generateLongArray(2467, () -> generator.prevLong(0x7ABCDEF8FFFFFFFFL));
-        actual = generateLongArray(2467, () -> generator.nextLong(0x7ABCDEF8FFFFFFFFL));
+        expected = prevLongs(2467, 0, 0x7ABCDEF8FFFFFFFFL, generator).toArray();
+        actual = nextLongs(2467, 0, 0x7ABCDEF8FFFFFFFFL, generator).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }

@@ -60,7 +60,7 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
      */
     @Override
     public void setSeed(int[] seed) {
-        setSeed(RandomUtils.convertToLong(seed));
+        setSeed(SeedUtils.convertToLong(seed));
     }
 
     /**
@@ -92,6 +92,7 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
     /**
      * {@inheritDoc}
      */
+    @Override
     protected int next(int bits) {
         long oldSeed, nextSeed;
         AtomicLong seed = this.seed;

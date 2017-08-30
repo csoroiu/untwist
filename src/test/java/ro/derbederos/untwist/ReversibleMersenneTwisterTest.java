@@ -19,15 +19,16 @@ package ro.derbederos.untwist;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.function.IntSupplier;
-import java.util.function.LongSupplier;
-
 import static java.lang.Integer.toUnsignedLong;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertEquals;
-import static ro.derbederos.untwist.ArrayUtils.*;
+import static ro.derbederos.untwist.Utils.nextBooleans;
+import static ro.derbederos.untwist.Utils.nextFloats;
+import static ro.derbederos.untwist.RandomUtils.nextDoubles;
+import static ro.derbederos.untwist.RandomUtils.nextInts;
+import static ro.derbederos.untwist.RandomUtils.nextLongs;
 
 public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbstractTest<ReversibleMersenneTwister> {
 
@@ -330,7 +331,7 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
     @Test
     public void testNextInt16ExactValue() {
         int[] expected = {3, 3, 1, 15, 15, 12, 12, 0, 3, 9};
-        int[] actual = generateIntArray(expected.length, () -> generator.nextInt(16));
+        int[] actual = nextInts(expected.length, 0, 16, generator).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -340,7 +341,7 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
     public void testNextIntExactValue() {
         int[] expected = {1067595299, 955945823, 477289528, -187748513, -65990820,
                 -950634582, -939387601, 227628506, 810200273, -1703677129};
-        int[] actual = generateIntArray(expected.length, (IntSupplier) generator::nextInt);
+        int[] actual = nextInts(expected.length, generator).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -349,7 +350,7 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
     @Test
     public void testNextLong16ExactValue() {
         long[] expected = {15L, 15L, 10L, 10L, 7L, 0L, 10L, 14L, 2L, 6L};
-        long[] actual = generateLongArray(expected.length, () -> generator.nextLong(16));
+        long[] actual = nextLongs(expected.length, 0, 16, generator).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -360,7 +361,7 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
         long[] expected = {4585286895524287327L, 2049942917590495071L, -283428410391890006L, -4034639024335268390L,
                 3479783678336561975L, -7450508202106930608L, 2777755793631454906L, -212579503956395170L,
                 -1852405656238365422L, 7617599339294041110L};
-        long[] actual = generateLongArray(expected.length, (LongSupplier) generator::nextLong);
+        long[] actual = nextLongs(expected.length, generator).toArray();
 
         assertThat(actual, equalTo(expected));
 
@@ -372,7 +373,7 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
         double[] expected = {0.24856889579554609, 0.11112762922475317, 0.9846353199878801, 0.7812817700654102,
                 0.18863945608335353, 0.59610715143395, 0.1505824378799958, 0.9884760419459966,
                 0.8995808921747299, 0.41295087732558855};
-        double[] actual = generateDoubleArray(expected.length, generator::nextDouble);
+        double[] actual = nextDoubles(expected.length, generator).toArray();
 
         assertThat(actual, equalTo(expected));
 
@@ -383,7 +384,7 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
     public void testNextFloatExactValue() {
         float[] expected = {0.24856889F, 0.2225734F, 0.111127615F, 0.9562863F, 0.98463523F,
                 0.77866304F, 0.7812817F, 0.05299878F, 0.1886394F, 0.6033317F};
-        float[] actual = generateFloatArray(expected.length, generator::nextFloat);
+        float[] actual = nextFloats(expected.length, generator);
 
         assertThat(actual, equalTo(expected));
     }
@@ -393,7 +394,7 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
     public void testNextBooleanExactValue() {
         boolean[] expected = {false, false, false, true, true, true, true, false, false, true,
                 true, true, false, false, true, false, true, true, false, false};
-        boolean[] actual = generateBooleanArray(expected.length, generator::nextBoolean);
+        boolean[] actual = nextBooleans(expected.length, generator);
 
         assertThat(actual, equalTo(expected));
     }

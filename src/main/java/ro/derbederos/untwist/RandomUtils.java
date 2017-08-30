@@ -16,60 +16,130 @@
 
 package ro.derbederos.untwist;
 
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
-import java.security.SecureRandom;
+import org.apache.commons.math3.random.BitsStreamGenerator;
+import org.apache.commons.math3.random.RandomGenerator;
 
-import static java.lang.Integer.toUnsignedLong;
+import java.nio.ByteBuffer;
+import java.security.SecureRandom;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 public class RandomUtils {
-    static long convertToLong(int... seed) {
-        long result = 0;
-        int endIndex = seed.length / 2 * 2;
-        for (int i = 0; i < endIndex; i += 2) {
-            long high = toUnsignedLong(seed[i]) << 32;
-            long low = toUnsignedLong(seed[i + 1]);
-            result = 4294967291L * result + high | low;
-        }
-        if (endIndex != seed.length) {
-            long low = seed[seed.length - 1];
-            result = 4294967291L * result + low;
-        }
-        return result;
+    public static IntStream nextInts(RandomGenerator generator) {
+        return IntStream.generate(generator::nextInt);
     }
 
-    static int convertToInt(long input) {
-        final int high = (int) (input >>> 32);
-        final int low = (int) (input & 0xFFFFFFFFL);
-        final int prime = 65521;
-        return high * prime + low;
+    public static IntStream prevInts(ReverseRandomGenerator generator) {
+        return IntStream.generate(generator::prevInt);
     }
 
-    static int convertToInt(int... seed) {
-        // The following number is the largest prime that fits
-        // in 16 bits (i.e. 2^32 - 5).
-        final int prime = 65521;
+    public static IntStream nextInts(long streamSize, RandomGenerator generator) {
+        return IntStream.generate(generator::nextInt).limit(streamSize);
+    }
 
-        int combined = 0;
-        for (int s : seed) {
-            combined = combined * prime + s;
+    public static IntStream prevInts(long streamSize, ReverseRandomGenerator generator) {
+        return IntStream.generate(generator::prevInt).limit(streamSize);
+    }
+
+    public static IntStream nextInts(int origin, int bound, RandomGenerator generator) {
+        checkRange(origin, bound);
+        return IntStream.generate(() -> generator.nextInt(bound - origin) + origin);
+    }
+
+    public static IntStream prevInts(int origin, int bound, ReverseRandomGenerator generator) {
+        checkRange(origin, bound);
+        return IntStream.generate(() -> generator.prevInt(bound - origin) + origin);
+    }
+
+    public static IntStream nextInts(long streamSize, int origin, int bound, RandomGenerator generator) {
+        checkRange(origin, bound);
+        return IntStream.generate(() -> generator.nextInt(bound - origin) + origin).limit(streamSize);
+    }
+
+    public static IntStream prevInts(long streamSize, int origin, int bound, ReverseRandomGenerator generator) {
+        checkRange(origin, bound);
+        return IntStream.generate(() -> generator.prevInt(bound - origin) + origin).limit(streamSize);
+    }
+
+    public static LongStream nextLongs(RandomGenerator generator) {
+        return LongStream.generate(generator::nextLong);
+    }
+
+    public static LongStream prevLongs(ReverseRandomGenerator generator) {
+        return LongStream.generate(generator::prevLong);
+    }
+
+    public static LongStream nextLongs(long streamSize, RandomGenerator generator) {
+        return LongStream.generate(generator::nextLong).limit(streamSize);
+    }
+
+    public static LongStream prevLongs(long streamSize, ReverseRandomGenerator generator) {
+        return LongStream.generate(generator::prevLong).limit(streamSize);
+    }
+
+    public static LongStream nextLongs(long origin, long bound, BitsStreamGenerator generator) {
+        checkRange(origin, bound);
+        return LongStream.generate(() -> generator.nextLong(bound - origin) + origin);
+    }
+
+    public static LongStream prevLongs(long origin, long bound, ReverseBitsStreamGenerator generator) {
+        checkRange(origin, bound);
+        return LongStream.generate(() -> generator.prevLong(bound - origin) + origin);
+    }
+
+    public static LongStream nextLongs(long streamSize, long origin, long bound, BitsStreamGenerator generator) {
+        checkRange(origin, bound);
+        return LongStream.generate(() -> generator.nextLong(bound - origin) + origin).limit(streamSize);
+    }
+
+    public static LongStream prevLongs(long streamSize, long origin, long bound, ReverseBitsStreamGenerator generator) {
+        checkRange(origin, bound);
+        return LongStream.generate(() -> generator.prevLong(bound - origin) + origin).limit(streamSize);
+    }
+
+    public static DoubleStream nextDoubles(RandomGenerator generator) {
+        return DoubleStream.generate(generator::nextDouble);
+    }
+
+    public static DoubleStream prevDoubles(ReverseRandomGenerator generator) {
+        return DoubleStream.generate(generator::prevDouble);
+    }
+
+    public static DoubleStream nextDoubles(long streamSize, RandomGenerator generator) {
+        return DoubleStream.generate(generator::nextDouble).limit(streamSize);
+    }
+
+    public static DoubleStream prevDoubles(long streamSize, ReverseRandomGenerator generator) {
+        return DoubleStream.generate(generator::prevDouble).limit(streamSize);
+    }
+
+    private static void checkRange(int origin, int bound) {
+        if (origin < bound && bound - origin <= 0) {
+            throw new IllegalArgumentException("range not representable as int");
         }
+    }
 
-        return combined;
+    private static void checkRange(long origin, long bound) {
+        if (origin < bound && bound - origin <= 0) {
+            throw new IllegalArgumentException("range not representable as long");
+        }
+    }
+
+    public static int generateSecureRandomIntSeed() {
+        byte[] bytes = SecureRandom.getSeed(Integer.BYTES);
+        return ByteBuffer.wrap(bytes).getInt();
     }
 
     public static long generateSecureRandomLongSeed() {
         byte[] bytes = SecureRandom.getSeed(Long.BYTES);
-        ByteBuffer buffer = ByteBuffer.wrap(bytes);
-        return buffer.getLong();
+        return ByteBuffer.wrap(bytes).getLong();
     }
 
     public static int[] generateSecureRandomIntArraySeed(int size) {
         byte[] bytes = SecureRandom.getSeed(Integer.BYTES * size);
-        ByteBuffer buffer = ByteBuffer.wrap(bytes);
-        IntBuffer intbuffer = buffer.asIntBuffer();
         int[] result = new int[size];
-        intbuffer.get(result);
+        ByteBuffer.wrap(bytes).asIntBuffer().get(result);
         return result;
     }
 }

@@ -21,10 +21,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.stream.DoubleStream;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static ro.derbederos.untwist.ArrayUtils.generateDoubleArray;
-import static ro.derbederos.untwist.ArrayUtils.generateIntArray;
+import static ro.derbederos.untwist.RandomUtils.nextDoubles;
+import static ro.derbederos.untwist.RandomUtils.nextInts;
 
 public class JDKRandomPy3kCompatTest {
     // openjdk random tests.
@@ -48,14 +50,14 @@ public class JDKRandomPy3kCompatTest {
 
         JDKRandomPy3kCompat rInt = new JDKRandomPy3kCompat();
         rInt.setSeed(seedInt);
-        int[] actualInt = generateIntArray(10, () -> rInt.nextInt(1000));
+        int[] actualInt = nextInts(10, 0, 1000, rInt).toArray();
 
         JDKRandomPy3kCompat rLong = new JDKRandomPy3kCompat(seedLong);
-        int[] actualLong = generateIntArray(10, () -> rLong.nextInt(1000));
+        int[] actualLong = nextInts(10, 0, 1000, rLong).toArray();
 
         JDKRandomPy3kCompat rArray = new JDKRandomPy3kCompat();
         rArray.setSeed(seedArray);
-        int[] actualArray = generateIntArray(10, () -> rArray.nextInt(1000));
+        int[] actualArray = nextInts(10, 0, 1000, rArray).toArray();
 
         assertThat("IntVsLong", actualInt, equalTo(actualLong));
         assertThat("LongVsArray", actualLong, equalTo(actualArray));
@@ -118,7 +120,7 @@ public class JDKRandomPy3kCompatTest {
         double[] expected = {0.730967787376657, 0.24053641567148587, 0.6374174253501083, 0.5504370051176339,
                 0.5975452777972018, 0.3332183994766498, 0.3851891847407185, 0.984841540199809,
                 0.8791825178724801, 0.9412491794821144};
-        double[] actual = generateDoubleArray(expected.length, () -> generator.nextDouble());
+        double[] actual = nextDoubles(expected.length, generator).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -128,7 +130,7 @@ public class JDKRandomPy3kCompatTest {
         double[] expected = {0.7309677600860596, 0.2405364215373993, 0.6374174356460571, 0.5504370331764221,
                 0.5975452661514282, 0.33321839570999146, 0.3851891756057739, 0.984841525554657,
                 0.8791825175285339, 0.9412491917610168};
-        double[] actual = generateDoubleArray(expected.length, () -> generator.nextFloat());
+        double[] actual = DoubleStream.generate(generator::nextFloat).limit(expected.length).toArray();
 
         assertThat(actual, equalTo(expected));
     }
