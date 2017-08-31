@@ -27,13 +27,18 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
+import java.util.IntSummaryStatistics;
 import java.util.function.Supplier;
 import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static java.util.Arrays.stream;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static org.junit.Assert.fail;
 import static ro.derbederos.untwist.RandomUtils.*;
 import static ro.derbederos.untwist.Utils.*;
@@ -148,6 +153,36 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
     }
 
     @Test
+    public void testNextIntWideRange2() {
+        int lower = -0x6543210F;
+        int upper = 0x456789AB;
+        IntSummaryStatistics statistics = IntStream
+                .generate(() -> generator.nextInt(lower, upper))
+                .limit(1_000_000)
+                .summaryStatistics();
+        assertThat(statistics.getMin(), greaterThanOrEqualTo(lower));
+        assertThat(statistics.getMax(), lessThanOrEqualTo(upper));
+        double ratio = ((double) statistics.getMax() - (double) statistics.getMin()) /
+                (((double) upper) - ((double) lower));
+        assertThat(ratio, greaterThan(0.99999));
+    }
+
+//    @Test
+//    public void testNextLongWideRange2() {
+//        long lower = -0x6543210FEDCBA987L;
+//        long upper = 0x456789ABCDEF0123L;
+//        LongSummaryStatistics statistics = LongStream
+//                .generate(() -> generator.nextLong(lower, upper))
+//                .limit(1_000_000)
+//                .summaryStatistics();
+//        assertThat(statistics.getMin(), greaterThanOrEqualTo(lower));
+//        assertThat(statistics.getMax(), lessThanOrEqualTo(upper));
+//        double ratio = ((double) statistics.getMax() - (double) statistics.getMin()) /
+//                (((double) upper) - ((double) lower));
+//        Assert.assertTrue(ratio > 0.99999);
+//    }
+
+    @Test
     public void testNextPrevInt() {
         int[] expected = nextInts(2459, generator).toArray();
         int[] actual = prevInts(2459, generator).toArray();
@@ -202,6 +237,34 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
     }
 
     @Test
+    public void testNextPrevIntRange() {
+        int[] expected = nextInts(2459, -1000, 3000, generator).toArray();
+        int[] actual = prevInts(2459, -1000, 3000, generator).toArray();
+
+        stream(expected).forEach((t) -> assertThat(t, between(-1000, 3000)));
+        assertThat(actual, equalTo(reverseArray(expected)));
+
+        expected = nextInts(2467, -1000, 5000, generator).toArray();
+        actual = prevInts(2467, -1000, 5000, generator).toArray();
+
+        assertThat(actual, equalTo(reverseArray(expected)));
+    }
+
+    @Test
+    public void testPrevNextIntRange() {
+        int[] expected = prevInts(2459, -1000, 3000, generator).toArray();
+        int[] actual = nextInts(2459, -1000, 3000, generator).toArray();
+
+        stream(expected).forEach((t) -> assertThat(t, between(-1000, 3000)));
+        assertThat(actual, equalTo(reverseArray(expected)));
+
+        expected = prevInts(2467, -1000, 5000, generator).toArray();
+        actual = nextInts(2467, -1000, 5000, generator).toArray();
+
+        assertThat(actual, equalTo(reverseArray(expected)));
+    }
+
+    @Test
     public void testNextPrevLong() {
         long[] expected = nextLongs(2459, generator).toArray();
         long[] actual = prevLongs(2459, generator).toArray();
@@ -223,6 +286,62 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
 
         expected = prevLongs(2467, generator).toArray();
         actual = nextLongs(2467, generator).toArray();
+
+        assertThat(actual, equalTo(reverseArray(expected)));
+    }
+
+    @Test
+    public void testNextPrevLongBounded() {
+        long[] expected = nextLongs(2459, 0, 78209372, generator).toArray();
+        long[] actual = prevLongs(2459, 0, 78209372, generator).toArray();
+
+        stream(expected).forEach((t) -> assertThat(t, between(0L, 78209372L)));
+        assertThat(actual, equalTo(reverseArray(expected)));
+
+        expected = nextLongs(2467, 0, 78209372, generator).toArray();
+        actual = prevLongs(2467, 0, 78209372, generator).toArray();
+
+        assertThat(actual, equalTo(reverseArray(expected)));
+    }
+
+    @Test
+    public void testPrevNextLongBounded() {
+        long[] expected = prevLongs(2459, 0, 78209372, generator).toArray();
+        long[] actual = nextLongs(2459, 0, 78209372, generator).toArray();
+
+        stream(expected).forEach((t) -> assertThat(t, between(0L, 78209372L)));
+        assertThat(actual, equalTo(reverseArray(expected)));
+
+        expected = prevLongs(2467, 0, 78209372, generator).toArray();
+        actual = nextLongs(2467, 0, 78209372, generator).toArray();
+
+        assertThat(actual, equalTo(reverseArray(expected)));
+    }
+
+    @Test
+    public void testNextPrevLongRange() {
+        long[] expected = nextLongs(2459, -1000, 3000, generator).toArray();
+        long[] actual = prevLongs(2459, -1000, 3000, generator).toArray();
+
+        stream(expected).forEach((t) -> assertThat(t, between(-1000L, 3000L)));
+        assertThat(actual, equalTo(reverseArray(expected)));
+
+        expected = nextLongs(2467, -1000, 5000, generator).toArray();
+        actual = prevLongs(2467, -1000, 5000, generator).toArray();
+
+        assertThat(actual, equalTo(reverseArray(expected)));
+    }
+
+    @Test
+    public void testPrevNextLongRange() {
+        long[] expected = prevLongs(2459, -1000, 3000, generator).toArray();
+        long[] actual = nextLongs(2459, -1000, 3000, generator).toArray();
+
+        stream(expected).forEach((t) -> assertThat(t, between(-1000L, 3000L)));
+        assertThat(actual, equalTo(reverseArray(expected)));
+
+        expected = prevLongs(2467, -1000, 5000, generator).toArray();
+        actual = nextLongs(2467, -1000, 5000, generator).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
@@ -480,6 +599,12 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
 
     @Test
     public abstract void testNextIntExactValue();
+
+    @Test
+    public abstract void testNextIntWideRangeExactValue();
+
+    @Test
+    public abstract void testNextLong16ExactValue();
 
     @Test
     public abstract void testNextLongExactValue();

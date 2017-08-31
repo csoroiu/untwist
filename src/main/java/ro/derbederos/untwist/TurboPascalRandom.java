@@ -17,6 +17,7 @@
 package ro.derbederos.untwist;
 
 import static java.lang.Integer.toUnsignedLong;
+import static java.lang.Math.abs;
 
 /**
  * Java implementation of the random number generator from Turbo Pascal 7/Delphi.
@@ -179,14 +180,22 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
 
     /**
      * {@inheritDoc}
+     * <p>
+     * Preserves compatibility with Pascal where negative values are not allowed for parameter {@code n}.
+     * Delphi allows negative values and treats {@code n} as unsigned in the computations, but the results
+     * is still a signed integer.
      */
     @Override
     public int nextInt(int n) {
         if (n > 0) {
-            long nextInt = toUnsignedLong(next(32));
-            return (int) ((nextInt * n) >>> 32);
+            return nextIntUnsigned(n);
         }
         throw new IllegalArgumentException("n must be strictly positive");
+    }
+
+    private int nextIntUnsigned(int n) {
+        long nextInt = toUnsignedLong(next(32));
+        return (int) ((nextInt * toUnsignedLong(n)) >>> 32);
     }
 
     /**
@@ -195,10 +204,50 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
     @Override
     public int prevInt(int n) {
         if (n > 0) {
-            long prevInt = toUnsignedLong(prev(32));
-            return (int) ((prevInt * n) >>> 32);
+            return prevIntUnsigned(n);
         }
         throw new IllegalArgumentException("n must be strictly positive");
+    }
+
+    private int prevIntUnsigned(int n) {
+        long prevInt = toUnsignedLong(prev(32));
+        return (int) ((prevInt * toUnsignedLong(n)) >>> 32);
+    }
+
+    /**
+     * Similar to Delphi's {@code Math.RandomRange} and returns a random integer from the range that extends between {@code from} and {@code to} (exclusive).
+     * It can handle negative ranges (where {@code from} is greater than {@code to}).
+     *
+     * @param from the least value, unless greater than {@code to}.
+     * @param to   the upper bound (exclusive), unless lower than {@code from}.
+     * @return a random integer from a specified range.
+     */
+    @Override
+    public int nextInt(int from, int to) {
+        if (from > to) {
+            return nextIntUnsigned(from - to) + to;
+        } else {
+            return nextIntUnsigned(to - from) + from;
+        }
+    }
+
+    /**
+     * The reverse of {@link #nextInt(int, int)}.
+     * <p>
+     * Returns a random integer from the range that extends between {@code from} and {@code to} (exclusive).
+     * It can handle negative ranges (where {@code from} is greater than {@code to}).
+     *
+     * @param from the least value, unless greater than {@code to}.
+     * @param to   the upper bound (exclusive), unless lower than {@code from}.
+     * @return a random integer from a specified range.
+     */
+    @Override
+    public int prevInt(int from, int to) {
+        if (from > to) {
+            return prevIntUnsigned(from - to) + to;
+        } else {
+            return prevIntUnsigned(to - from) + from;
+        }
     }
 
     /**

@@ -348,6 +348,7 @@ public class DotNetRandom implements ReverseRandomGenerator {
      * not {@code maxValue}. If {@code minValue} equals {@code maxValue},
      * {@code minValue} is returned.
      */
+    @Override
     public int nextInt(int minValue, int maxValue) {
         if (minValue > maxValue) {
             throw new IllegalArgumentException("minValue must be less than maxValue");
@@ -374,6 +375,7 @@ public class DotNetRandom implements ReverseRandomGenerator {
      * not {@code maxValue}. If {@code minValue} equals {@code maxValue},
      * {@code minValue} is returned.
      */
+    @Override
     public int prevInt(int minValue, int maxValue) {
         if (minValue > maxValue) {
             throw new IllegalArgumentException("minValue must be less than maxValue");
@@ -531,6 +533,50 @@ public class DotNetRandom implements ReverseRandomGenerator {
         long b2 = prevInt() & 0xFFFFFFL; // 24 bits
         long b1 = prevInt() & 0xFFFFL; // 16 bits
         return b1 << 48 | b2 << 24 | b3;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long nextLong(long maxValue) {
+        if (maxValue <= 0) {
+            throw new IllegalArgumentException("maxValue must be positive");
+        }
+
+        long r = nextLong();
+        long m = maxValue - 1;
+        if ((maxValue & m) == 0) {  // i.e., maxValue is a power of 2
+            r = r & m;
+        } else {
+            for (long u = r >>> 1;                // ensure nonnegative
+                 u + m - (r = u % maxValue) < 0L; // rejection check
+                 u = nextLong() >>> 1)            // retry
+                ;
+        }
+        return r;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long prevLong(long maxValue) {
+        if (maxValue <= 0) {
+            throw new IllegalArgumentException("maxValue must be positive");
+        }
+
+        long r = prevLong();
+        long m = maxValue - 1;
+        if ((maxValue & m) == 0) {  // i.e., maxValue is a power of 2
+            r = r & m;
+        } else {
+            for (long u = r >>> 1;                // ensure nonnegative
+                 u + m - (r = u % maxValue) < 0L; // rejection check
+                 u = prevLong() >>> 1)            // retry
+                ;
+        }
+        return r;
     }
 
     /**

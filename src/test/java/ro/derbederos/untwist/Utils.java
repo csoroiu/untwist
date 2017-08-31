@@ -20,24 +20,12 @@ import org.apache.commons.math3.random.RandomGenerator;
 import org.hamcrest.Matcher;
 import org.junit.Ignore;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.IntStream;
-
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.lessThan;
 
 @Ignore
 class Utils {
-
-    static List<Byte> toByteList(byte[] bytes) {
-        ArrayList<Byte> result = new ArrayList<>(bytes.length);
-        for (byte b : bytes) {
-            result.add(b);
-        }
-        return result;
-    }
 
     static <T extends java.lang.Comparable<T>> Matcher<T> between(T minValue, T maxValue) {
         return allOf(greaterThanOrEqualTo(minValue), lessThan(maxValue));

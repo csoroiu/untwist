@@ -125,6 +125,56 @@ public abstract class ReverseBitsStreamGenerator extends BitsStreamGenerator imp
 
     /**
      * {@inheritDoc}
+     * <p>
+     * For the unbounded case: uses {@link #nextInt()}.
+     * For the bounded case with representable range: uses {@link #nextInt(int)}.
+     * For the bounded case with unrepresentable range: uses {@link #nextInt()}.
+     */
+    @Override
+    public int nextInt(int origin, int bound) {
+        if (origin < bound) {
+            int n = bound - origin;
+            if (n > 0) {
+                return nextInt(n) + origin;
+            } else {  // range not representable as int
+                int r;
+                do {
+                    r = nextInt();
+                } while (r < origin || r >= bound);
+                return r;
+            }
+        } else {
+            return nextInt();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * For the unbounded case: uses {@link #prevInt()}.
+     * For the bounded case with representable range: uses {@link #prevInt(int)}.
+     * For the bounded case with unrepresentable range: uses {@link #prevInt()}.
+     */
+    @Override
+    public int prevInt(int origin, int bound) {
+        if (origin < bound) {
+            int n = bound - origin;
+            if (n > 0) {
+                return prevInt(n) + origin;
+            } else {  // range not representable as int
+                int r;
+                do {
+                    r = prevInt();
+                } while (r < origin || r >= bound);
+                return r;
+            }
+        } else {
+            return prevInt();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
      */
     @Override
     public long prevLong() {
@@ -134,12 +184,9 @@ public abstract class ReverseBitsStreamGenerator extends BitsStreamGenerator imp
     }
 
     /**
-     * The reverse of {@link #nextLong(long)}.
-     *
-     * @param bound the bound on the random number to be returned. Must be positive.
-     * @return the previous pseudorandom, uniformly distributed {@code long} value between
-     * {@code 0} (inclusive) and {@code bound} <code>bound</code> (exclusive).
+     * {@inheritDoc}
      */
+    @Override
     public long prevLong(long bound) throws IllegalArgumentException {
         if (bound <= 0) {
             throw new IllegalArgumentException("bound must be positive");

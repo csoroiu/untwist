@@ -21,14 +21,13 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.everyItem;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertTrue;
 import static ro.derbederos.untwist.Utils.between;
-import static ro.derbederos.untwist.Utils.toByteList;
 
 /**
  * This class contains the tests from the CoreCLR library.
@@ -265,34 +264,34 @@ public class DotNetRandomCoreCLRTest {
     public void testRandomNextBytes_PosTest1() {
         byte[] b = new byte[1024];
         new DotNetRandom(-55).nextBytes(b);
-        assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
+        assertTrue(verificationHelper(b));
         new DotNetRandom(0).nextBytes(b);
-        assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
+        assertTrue(verificationHelper(b));
         new DotNetRandom(Integer.MAX_VALUE).nextBytes(b);
-        assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
+        assertTrue(verificationHelper(b));
         new DotNetRandom(-1).nextBytes(b);
-        assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
+        assertTrue(verificationHelper(b));
         new DotNetRandom(Byte.MAX_VALUE).nextBytes(b);
-        assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
+        assertTrue(verificationHelper(b));
         new DotNetRandom(Byte.MIN_VALUE).nextBytes(b);
-        assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
+        assertTrue(verificationHelper(b));
     }
 
     @Test
     public void testRandomNextBytes_PosTest2() {
         byte[] b = new byte[1];
         new DotNetRandom(-55).nextBytes(b);
-        assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
+        assertTrue(verificationHelper(b));
         new DotNetRandom(0).nextBytes(b);
-        assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
+        assertTrue(verificationHelper(b));
         new DotNetRandom(Integer.MAX_VALUE).nextBytes(b);
-        assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
+        assertTrue(verificationHelper(b));
         new DotNetRandom(-1).nextBytes(b);
-        assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
+        assertTrue(verificationHelper(b));
         new DotNetRandom(Byte.MAX_VALUE).nextBytes(b);
-        assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
+        assertTrue(verificationHelper(b));
         new DotNetRandom(Byte.MIN_VALUE).nextBytes(b);
-        assertThat(toByteList(b), everyItem(greaterThanOrEqualTo((byte) -128)));
+        assertTrue(verificationHelper(b));
     }
 
     @Test
@@ -300,5 +299,9 @@ public class DotNetRandomCoreCLRTest {
         expectedException.expect(NullPointerException.class);
         DotNetRandom random = new DotNetRandom(-55);
         random.nextBytes(null);
+    }
+
+    private static boolean verificationHelper(byte[] bytes) {
+        return IntStream.range(0, bytes.length).map(i -> bytes[i]).allMatch(value -> value >= Byte.MIN_VALUE);
     }
 }

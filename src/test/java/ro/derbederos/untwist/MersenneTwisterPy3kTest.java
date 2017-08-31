@@ -102,6 +102,17 @@ public class MersenneTwisterPy3kTest extends
 
     @Override
     @Test
+    public void testNextIntWideRangeExactValue() {
+        int[] expected = {2131728873, -149450095, 1068585415, 1209760669, -425486438, 783461773, -80805226,
+                1545398317, 579440209, 1816672574, 1926025469, -761630721, 1210013257, 152431681,
+                1534102514, -451857811, -226991116, -92257937, -949255933, 997148851};
+        int[] actual = nextInts(expected.length, -1_000_000_000, Integer.MAX_VALUE, generator).toArray();
+
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Override
+    @Test
     public void testNextLong16ExactValue() {
         long[] expected = {15L, 7L, 9L, 5L, 11L, 4L, 13L, 14L, 9L, 1L};
         long[] actual = nextLongs(expected.length, 0, 16, generator).toArray();

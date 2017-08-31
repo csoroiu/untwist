@@ -247,4 +247,98 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
             shouldReverseGaussian = true;
         }
     }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * For the unbounded case: uses {@link #nextInt()}.
+     * For the bounded case with representable range: uses {@link #nextInt(int)}.
+     * For the bounded case with unrepresentable range: uses {@link #nextInt()}.
+     */
+    @Override
+    public int nextInt(int origin, int bound) {
+        if (origin < bound) {
+            int n = bound - origin;
+            if (n > 0) {
+                return nextInt(n) + origin;
+            } else {  // range not representable as int
+                int r;
+                do {
+                    r = nextInt();
+                } while (r < origin || r >= bound);
+                return r;
+            }
+        } else {
+            return nextInt();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * For the unbounded case: uses {@link #prevInt()}.
+     * For the bounded case with representable range: uses {@link #prevInt(int)}.
+     * For the bounded case with unrepresentable range: uses {@link #prevInt()}.
+     */
+    @Override
+    public int prevInt(int origin, int bound) {
+        if (origin < bound) {
+            int n = bound - origin;
+            if (n > 0) {
+                return prevInt(n) + origin;
+            } else {  // range not representable as int
+                int r;
+                do {
+                    r = prevInt();
+                } while (r < origin || r >= bound);
+                return r;
+            }
+        } else {
+            return prevInt();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long nextLong(long bound) {
+        if (bound <= 0) {
+            throw new IllegalArgumentException("bound must be positive");
+        }
+
+        long r = nextLong();
+        long m = bound - 1;
+        if ((bound & m) == 0) {  // i.e., bound is a power of 2
+            r = r & m;
+        } else {
+            for (long u = r >>> 1;                // ensure nonnegative
+                 u + m - (r = u % bound) < 0L;    // rejection check
+                 u = nextLong() >>> 1)            // retry
+                ;
+        }
+        return r;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long prevLong(long bound) {
+        if (bound <= 0) {
+            throw new IllegalArgumentException("bound must be positive");
+        }
+
+        long r = prevLong();
+        long m = bound - 1;
+        if ((bound & m) == 0) {  // i.e., bound is a power of 2
+            r = r & m;
+        } else {
+            for (long u = r >>> 1;                // ensure nonnegative
+                 u + m - (r = u % bound) < 0L;    // rejection check
+                 u = prevLong() >>> 1)            // retry
+                ;
+        }
+        return r;
+    }
 }

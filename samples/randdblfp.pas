@@ -1,4 +1,5 @@
 program randdblfp;
+{$mode objfpc}
 
 procedure testNextDouble;
 var

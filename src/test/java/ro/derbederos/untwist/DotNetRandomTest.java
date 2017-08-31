@@ -16,26 +16,19 @@
 
 package ro.derbederos.untwist;
 
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.IntSummaryStatistics;
 import java.util.stream.IntStream;
 
-import static java.util.Arrays.stream;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.lessThan;
-import static org.hamcrest.Matchers.lessThanOrEqualTo;
 import static ro.derbederos.untwist.RandomUtils.nextDoubles;
 import static ro.derbederos.untwist.RandomUtils.nextInts;
 import static ro.derbederos.untwist.RandomUtils.nextLongs;
-import static ro.derbederos.untwist.Utils.between;
 import static ro.derbederos.untwist.Utils.nextBooleans;
 import static ro.derbederos.untwist.Utils.nextFloats;
-import static ro.derbederos.untwist.Utils.reverseArray;
 
 public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetRandom> {
 
@@ -56,21 +49,6 @@ public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetR
     @Ignore
     public void testNextIntWideRange() {
         super.testNextIntWideRange();
-    }
-
-    @Test
-    public void testNextIntWideRangeDotNet() {
-        int lower = -0x6543210F;
-        int upper = 0x456789AB;
-        IntSummaryStatistics statistics = IntStream
-                .generate(() -> generator.nextInt(lower, upper + 1))
-                .limit(1_000_000)
-                .summaryStatistics();
-        assertThat(statistics.getMin(), greaterThanOrEqualTo(lower));
-        assertThat(statistics.getMax(), lessThanOrEqualTo(upper));
-        double ratio = ((double) statistics.getMax() - (double) statistics.getMin()) /
-                (((double) upper) - ((double) lower));
-        Assert.assertTrue(ratio > 0.99999);
     }
 
     @Test
@@ -106,48 +84,13 @@ public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetR
         assertThat(result, equalTo(true));
     }
 
-    private static IntStream nextIntsDotNet(long streamSize, int origin, int bound, DotNetRandom generator) {
-        return IntStream.generate(() -> generator.nextInt(origin, bound)).limit(streamSize);
-    }
-
-    private static IntStream prevIntsDotNet(long streamSize, int origin, int bound, DotNetRandom generator) {
-        return IntStream.generate(() -> generator.prevInt(origin, bound)).limit(streamSize);
-    }
-
-    @Test
-    public void testNextPrevIntRange() {
-        int[] expected = nextIntsDotNet(2459, -1000, 3000, generator).toArray();
-        int[] actual = prevIntsDotNet(2459, -1000, 3000, generator).toArray();
-
-        stream(expected).forEach((t) -> assertThat(t, between(-1000, 3000)));
-        assertThat(actual, equalTo(reverseArray(expected)));
-
-        expected = nextIntsDotNet(2467, -1000, 5000, generator).toArray();
-        actual = prevIntsDotNet(2467, -1000, 5000, generator).toArray();
-
-        assertThat(actual, equalTo(reverseArray(expected)));
-    }
-
-    @Test
-    public void testPrevNextIntRange() {
-        int[] expected = prevIntsDotNet(2459, -1000, 3000, generator).toArray();
-        int[] actual = nextIntsDotNet(2459, -1000, 3000, generator).toArray();
-
-        stream(expected).forEach((t) -> assertThat(t, between(-1000, 3000)));
-        assertThat(actual, equalTo(reverseArray(expected)));
-
-        expected = prevIntsDotNet(2467, -1000, 5000, generator).toArray();
-        actual = nextIntsDotNet(2467, -1000, 5000, generator).toArray();
-
-        assertThat(actual, equalTo(reverseArray(expected)));
-    }
-
+    @Override
     @Test
     public void testNextIntWideRangeExactValue() {
-        int[] expected = {72659689, 479570516, 1964597322, 1152315378, 835159700, 1400239888, 824890196, -84625816,
-                934767641, 1787676899, -950803732, -984901899, 1160627160, 854462981, -375650433, 751425218,
-                -869369328, -311654904, 1868174591, 1892969089};
-        int[] actual = nextIntsDotNet(expected.length, -1_000_000_000, Integer.MAX_VALUE, generator).toArray();
+        int[] expected = {72659689, 479570516, 1964597322, 1152315378, 835159700, 1400239888, 824890196,
+                -84625816, 934767641, 1787676899, -950803732, -984901899, 1160627160, 854462981,
+                -375650433, 751425218, -869369328, -311654904, 1868174591, 1892969089};
+        int[] actual = nextInts(expected.length, -1_000_000_000, Integer.MAX_VALUE, generator).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -167,6 +110,15 @@ public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetR
         int[] expected = {683762528, 1373746042, 128503505, 1360364556, 1897922134,
                 90664323, 789505134, 235596161, 356723453, 608884583};
         int[] actual = nextInts(expected.length, generator).toArray();
+
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Override
+    @Test
+    public void testNextLong16ExactValue() {
+        long[] expected = {1L, 3L, 13L, 9L, 14L, 11L, 15L, 14L, 4L, 10L};
+        long[] actual = nextLongs(expected.length, 0, 16, generator).toArray();
 
         assertThat(actual, equalTo(expected));
     }

@@ -16,7 +16,6 @@
 
 package ro.derbederos.untwist;
 
-import org.apache.commons.math3.random.BitsStreamGenerator;
 import org.apache.commons.math3.random.RandomGenerator;
 
 import java.nio.ByteBuffer;
@@ -42,24 +41,20 @@ public class RandomUtils {
         return IntStream.generate(generator::prevInt).limit(streamSize);
     }
 
-    public static IntStream nextInts(int origin, int bound, RandomGenerator generator) {
-        checkRange(origin, bound);
-        return IntStream.generate(() -> generator.nextInt(bound - origin) + origin);
+    public static IntStream nextInts(int origin, int bound, ReverseRandomGenerator generator) {
+        return IntStream.generate(() -> generator.nextInt(origin, bound));
     }
 
     public static IntStream prevInts(int origin, int bound, ReverseRandomGenerator generator) {
-        checkRange(origin, bound);
-        return IntStream.generate(() -> generator.prevInt(bound - origin) + origin);
+        return IntStream.generate(() -> generator.prevInt(origin, bound));
     }
 
-    public static IntStream nextInts(long streamSize, int origin, int bound, RandomGenerator generator) {
-        checkRange(origin, bound);
-        return IntStream.generate(() -> generator.nextInt(bound - origin) + origin).limit(streamSize);
+    public static IntStream nextInts(long streamSize, int origin, int bound, ReverseRandomGenerator generator) {
+        return IntStream.generate(() -> generator.nextInt(origin, bound)).limit(streamSize);
     }
 
     public static IntStream prevInts(long streamSize, int origin, int bound, ReverseRandomGenerator generator) {
-        checkRange(origin, bound);
-        return IntStream.generate(() -> generator.prevInt(bound - origin) + origin).limit(streamSize);
+        return IntStream.generate(() -> generator.prevInt(origin, bound)).limit(streamSize);
     }
 
     public static LongStream nextLongs(RandomGenerator generator) {
@@ -78,22 +73,22 @@ public class RandomUtils {
         return LongStream.generate(generator::prevLong).limit(streamSize);
     }
 
-    public static LongStream nextLongs(long origin, long bound, BitsStreamGenerator generator) {
+    public static LongStream nextLongs(long origin, long bound, ReverseRandomGenerator generator) {
         checkRange(origin, bound);
         return LongStream.generate(() -> generator.nextLong(bound - origin) + origin);
     }
 
-    public static LongStream prevLongs(long origin, long bound, ReverseBitsStreamGenerator generator) {
+    public static LongStream prevLongs(long origin, long bound, ReverseRandomGenerator generator) {
         checkRange(origin, bound);
         return LongStream.generate(() -> generator.prevLong(bound - origin) + origin);
     }
 
-    public static LongStream nextLongs(long streamSize, long origin, long bound, BitsStreamGenerator generator) {
+    public static LongStream nextLongs(long streamSize, long origin, long bound, ReverseRandomGenerator generator) {
         checkRange(origin, bound);
         return LongStream.generate(() -> generator.nextLong(bound - origin) + origin).limit(streamSize);
     }
 
-    public static LongStream prevLongs(long streamSize, long origin, long bound, ReverseBitsStreamGenerator generator) {
+    public static LongStream prevLongs(long streamSize, long origin, long bound, ReverseRandomGenerator generator) {
         checkRange(origin, bound);
         return LongStream.generate(() -> generator.prevLong(bound - origin) + origin).limit(streamSize);
     }
@@ -112,12 +107,6 @@ public class RandomUtils {
 
     public static DoubleStream prevDoubles(long streamSize, ReverseRandomGenerator generator) {
         return DoubleStream.generate(generator::prevDouble).limit(streamSize);
-    }
-
-    private static void checkRange(int origin, int bound) {
-        if (origin < bound && bound - origin <= 0) {
-            throw new IllegalArgumentException("range not representable as int");
-        }
     }
 
     private static void checkRange(long origin, long bound) {

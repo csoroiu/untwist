@@ -17,6 +17,7 @@
 package ro.derbederos.untwist;
 
 import static java.lang.Integer.toUnsignedLong;
+import static java.lang.Math.abs;
 
 /**
  * Java implementation of the random number generator used by FreePascal.
@@ -160,7 +161,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
      * {@inheritDoc}
      * <p>
      * Source code:
-     * <a href="https://github.com/graemeg/freepascal/blob/5186987/rtl/inc/system.inc#L668">System.inc#random(longint)</a>
+     * <a href="https://github.com/graemeg/freepascal/blob/5186987/rtl/inc/system.inc#L668">System.inc#Random(longint)</a>
      */
     @Override
     public int nextInt(int n) throws IllegalArgumentException {
@@ -175,7 +176,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
      * {@inheritDoc}
      * <p>
      * Source code:
-     * <a href="https://github.com/graemeg/freepascal/blob/5186987/rtl/inc/system.inc#L668">System.inc#random(longint)</a>
+     * <a href="https://github.com/graemeg/freepascal/blob/5186987/rtl/inc/system.inc#L668">System.inc#Random(longint)</a>
      */
     @Override
     public int prevInt(int n) throws IllegalArgumentException {
@@ -184,6 +185,72 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
         }
         long prevInt = toUnsignedLong(prev(32));
         return (int) ((prevInt * n) >>> 32);
+    }
+
+    /**
+     * Similar to FreePascal's {@code Math.RandomRange} and returns a random integer from the range that extends between {@code from} and {@code to} (exclusive).
+     * It can handle negative ranges (where {@code from} is greater than {@code to}).
+     * <p>
+     * Source code:
+     * <a href=https://github.com/graemeg/freepascal/blob/5186987/rtl/objpas/math.pp#L1325>math.pp#RandomRange(Integer, Integer)</a>
+     *
+     * @param from the least value, unless greater than {@code to}.
+     * @param to   the upper bound (exclusive), unless lower than {@code from}.
+     * @return a random integer from a specified range.
+     */
+    @Override
+    public int nextInt(int from, int to) {
+        return (int) nextLong(from, to);
+    }
+
+    /**
+     * The reverse of {@link #nextInt(int, int)}.
+     * <p>
+     * Feturns a random integer from the range that extends between {@code from} and {@code to} (exclusive).
+     * It can handle negative ranges (where {@code from} is greater than {@code to}).
+     * <p>
+     * Source code:
+     * <a href=https://github.com/graemeg/freepascal/blob/5186987/rtl/objpas/math.pp#L1325>math.pp#RandomRange(Integer, Integer)</a>
+     *
+     * @param from the least value, unless greater than {@code to}.
+     * @param to   the upper bound (exclusive), unless lower than {@code from}.
+     * @return a random integer from a specified range.
+     */
+    @Override
+    public int prevInt(int from, int to) {
+        return (int) prevLong(from, to);
+    }
+
+    /**
+     * Similar to FreePascal's {@code Math.RandomRange} and returns a random long from the range that extends between {@code from} and {@code to} (exclusive).
+     * It can handle negative ranges (where {@code from} is greater than {@code to}).
+     * <p>
+     * Source code:
+     * <a href=https://github.com/graemeg/freepascal/blob/5186987/rtl/objpas/math.pp#L1331>math.pp#RandomRange(Int64, Int64)</a>
+     *
+     * @param from the least value, unless greater than {@code to}.
+     * @param to   the upper bound (exclusive), unless lower than {@code from}.
+     * @return a random integer from a specified range.
+     */
+    long nextLong(long from, long to) {
+        return nextLong(abs(to - from)) + Math.min(from, to);
+    }
+
+    /**
+     * The reverse of {@link #nextLong(long, long)}.
+     * <p>
+     * Feturns a random long from the range that extends between {@code from} and {@code to} (exclusive).
+     * It can handle negative ranges (where {@code from} is greater than {@code to}).
+     * <p>
+     * Source code:
+     * <a href=https://github.com/graemeg/freepascal/blob/5186987/rtl/objpas/math.pp#L1325>math.pp#RandomRange(Integer, Integer)</a>
+     *
+     * @param from the least value, unless greater than {@code to}.
+     * @param to   the upper bound (exclusive), unless lower than {@code from}.
+     * @return a random integer from a specified range.
+     */
+    long prevLong(long from, long to) {
+        return prevLong(abs(to - from)) + Math.min(from, to);
     }
 
     /**

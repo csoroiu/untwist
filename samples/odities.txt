@@ -1,0 +1,10 @@
+Odities
+1. .Net nextInt generates a value between 0 and Integer.MAX_VALUE (exclusive).
+2. .Net nextInt(int) allows 0 as a bound(maxValue).
+
+3. FreePascal's nextInt(int) generates value between bound(exclusive) and 0 (exclusive) if bound is negative.
+
+4. Delphi's considers bound as unsigned even if signed and generates value
+   between 0 and the received parameter, returning it as a signed it after that.
+   (seems was done on purpose, to allow Math.RandomRange to function properly for a wide range).
+   The java implementation of nextInt(int) throws exception if bound is negative.

@@ -89,4 +89,47 @@ public interface ReverseRandomGenerator extends RandomGenerator, Serializable {
      * reverse the effect of calling the {@link #nextGaussian()}.
      */
     void undoNextGaussian();
+
+    /**
+     * Returns a random integer that is within a specified range.
+     *
+     * @param origin the least value, unless greater than bound
+     * @param bound  the upper bound (exclusive), must not equal origin
+     * @return a pseudorandom value
+     */
+    int nextInt(int origin, int bound);
+
+    /**
+     * Returns a random integer that is within a specified range.
+     *
+     * @param origin the least value, unless greater than bound
+     * @param bound  the upper bound (exclusive), must not equal origin
+     * @return the previous pseudorandom value
+     */
+    int prevInt(int origin, int bound);
+
+    /**
+     * Returns a pseudorandom, uniformly distributed {@code long} value
+     * between 0 (inclusive) and the specified value (exclusive), drawn from
+     * this random number generator's sequence.
+     *
+     * @param bound the bound on the random number to be returned.  Must be
+     *              positive.
+     * @return a pseudorandom, uniformly distributed {@code long}
+     * value between {@code 0} (inclusive) and {@code bound} (exclusive).
+     */
+    long nextLong(long bound);
+
+    /**
+     * The reverse of {@link #nextLong(long)}.
+     *
+     * @param bound the bound on the random number to be returned. Must be positive.
+     * @return the previous pseudorandom, uniformly distributed {@code long} value between
+     * {@code 0} (inclusive) and {@code bound} (exclusive).
+     */
+    long prevLong(long bound);
+
+//    long nextLong(long origin, long bound);
+//
+//    long prevLong(long origin, long bound);
 }

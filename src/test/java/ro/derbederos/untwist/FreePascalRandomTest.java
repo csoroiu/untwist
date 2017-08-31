@@ -18,15 +18,16 @@ package ro.derbederos.untwist;
 
 import org.junit.Test;
 
+import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static ro.derbederos.untwist.Utils.nextBooleans;
-import static ro.derbederos.untwist.Utils.nextFloats;
 import static ro.derbederos.untwist.RandomUtils.nextDoubles;
 import static ro.derbederos.untwist.RandomUtils.nextInts;
 import static ro.derbederos.untwist.RandomUtils.nextLongs;
+import static ro.derbederos.untwist.Utils.nextBooleans;
+import static ro.derbederos.untwist.Utils.nextFloats;
 
 public class FreePascalRandomTest extends ReversibleMersenneTwisterTest {
 
@@ -124,11 +125,22 @@ public class FreePascalRandomTest extends ReversibleMersenneTwisterTest {
     }
 
     @Test
-    public void testNextInt_NegativeValue() {
+    public void testNextInt_NegativeExactValue() {
         int[] expected = {-8, -15, -8, -4, -5, -14, -3, -15, -6, -10,
                 -10, -3, -7, -8, -7, -10, -13, -5, -1, -11,
                 -6, -14, -15, -15, -9, -12, -4, -8};
-        int[] actual = nextInts(expected.length, 0, -16, generator).toArray();
+        int[] actual = IntStream.generate(() -> generator.nextInt(-16)).limit(expected.length).toArray();
+
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Test
+    public void testNextInt_NegativeWideRangeExactValue() {
+        int[] expected = {-922588439, 1115495385, 1463004829, -877651315, -552043731, 858164198, 577624126,
+                1031595005, 574779647, -1103584447, 1201729266, 211323636, -954599819, 848277427,
+                -659487656, -700392355, 118555058, -238923432, -632969808, -1443725123, 990536006,
+                483966470, -1084035551, -802702746, -92753265, 564258807, 788455403, 289890560};
+        int[] actual = nextInts(expected.length, 1_500_000_000, -1_500_000_000, generator).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -137,7 +149,7 @@ public class FreePascalRandomTest extends ReversibleMersenneTwisterTest {
     @Test
     public void testNextInt16ExactValue() {
         int[] expected = {7, 15, 8, 3, 4, 14, 2, 15, 5, 9};
-        int[] actual = nextInts(expected.length, 0, 16, generator).toArray();
+        int[] actual = IntStream.generate(() -> generator.nextInt(16)).limit(expected.length).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -148,6 +160,17 @@ public class FreePascalRandomTest extends ReversibleMersenneTwisterTest {
         int[] expected = {2131728873, -149450095, -2087059751, 1068585415, 1209760669,
                 -425486438, 783461773, -80805226, 1545398317, -1623044361};
         int[] actual = nextInts(expected.length, generator).toArray();
+
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Override
+    @Test
+    public void testNextIntWideRangeExactValue() {
+        int[] expected = {-219591959, 1777661472, 1811113462, 397238862, 1327765389, 2087358183, -766758486,
+                580066454, 276905054, -845472133, -498169491, 558293928, -89985366, 178091724,
+                -490444948, -184714879, -796294707, 1327886319, 382992891, 1146587248};
+        int[] actual = nextInts(expected.length, -1_000_000_000, Integer.MAX_VALUE, generator).toArray();
 
         assertThat(actual, equalTo(expected));
     }

@@ -20,11 +20,11 @@ import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static ro.derbederos.untwist.Utils.nextBooleans;
-import static ro.derbederos.untwist.Utils.nextFloats;
 import static ro.derbederos.untwist.RandomUtils.nextDoubles;
 import static ro.derbederos.untwist.RandomUtils.nextInts;
 import static ro.derbederos.untwist.RandomUtils.nextLongs;
+import static ro.derbederos.untwist.Utils.nextBooleans;
+import static ro.derbederos.untwist.Utils.nextFloats;
 
 public class TurboPascalRandomTest extends ReverseBitsStreamGeneratorAbstractTest<TurboPascalRandom> {
 
@@ -55,6 +55,17 @@ public class TurboPascalRandomTest extends ReverseBitsStreamGeneratorAbstractTes
         int[] expected = {-845578675, -2088293502, -1339891317, -783150152, -964345191,
                 1941516542, 936439031, -251921196, 703152165, 1070159034};
         int[] actual = nextInts(expected.length, generator).toArray();
+
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Override
+    @Test
+    public void testNextIntWideRangeExactValue() {
+        int[] expected = {1527817682, 617118176, 1165570231, 1573567217, 1440781940, 422802816, -313748783,
+                1962868074, -484708547, -215754667, 628231149, -442848315, 1810384166, 1901073709,
+                181865279, 1381745985, -78013412, 1258659168, 1436617142, -848949435};
+        int[] actual = nextInts(expected.length, -1_000_000_000, Integer.MAX_VALUE, generator).toArray();
 
         assertThat(actual, equalTo(expected));
     }

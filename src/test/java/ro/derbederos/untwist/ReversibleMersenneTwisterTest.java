@@ -24,11 +24,11 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertEquals;
-import static ro.derbederos.untwist.Utils.nextBooleans;
-import static ro.derbederos.untwist.Utils.nextFloats;
 import static ro.derbederos.untwist.RandomUtils.nextDoubles;
 import static ro.derbederos.untwist.RandomUtils.nextInts;
 import static ro.derbederos.untwist.RandomUtils.nextLongs;
+import static ro.derbederos.untwist.Utils.nextBooleans;
+import static ro.derbederos.untwist.Utils.nextFloats;
 
 public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbstractTest<ReversibleMersenneTwister> {
 
@@ -342,6 +342,17 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
         int[] expected = {1067595299, 955945823, 477289528, -187748513, -65990820,
                 -950634582, -939387601, 227628506, 810200273, -1703677129};
         int[] actual = nextInts(expected.length, generator).toArray();
+
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Override
+    @Test
+    public void testNextIntWideRangeExactValue() {
+        int[] expected = {1067595299, 955945823, 477289528, -187748513, -65990820, -950634582, -939387601,
+                227628506, 810200273, 646746669, 1479517882, -49495023, 1143372638, -431296802,
+                1773610557, 1138697238, 1421897700, 1269916527, 1764463362, -420075249};
+        int[] actual = nextInts(expected.length, -1_000_000_000, Integer.MAX_VALUE, generator).toArray();
 
         assertThat(actual, equalTo(expected));
     }

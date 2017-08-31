@@ -22,8 +22,8 @@ import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static ro.derbederos.untwist.Utils.nextFloats;
 import static ro.derbederos.untwist.RandomUtils.nextDoubles;
+import static ro.derbederos.untwist.Utils.nextFloats;
 
 public class TurboPascalRandomCoprocEnabledTest extends TurboPascalRandomTest {
 
