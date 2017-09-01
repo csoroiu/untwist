@@ -128,8 +128,4 @@ public interface ReverseRandomGenerator extends RandomGenerator, Serializable {
      * {@code 0} (inclusive) and {@code bound} (exclusive).
      */
     long prevLong(long bound);
-
-//    long nextLong(long origin, long bound);
-//
-//    long prevLong(long origin, long bound);
 }

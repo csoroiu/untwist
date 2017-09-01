@@ -155,7 +155,7 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
      */
     private void initGenRand(int seed) {
         // we use a long masked by 0xFFFFFFFFL as a poor man unsigned int
-        long longMT = seed;
+        long longMT = Integer.toUnsignedLong(seed);
         // NB: unlike original C code, we are working with java longs, the cast below makes masking unnecessary
         mt[0] = (int) longMT;
         for (mti = 1; mti < N; ++mti) {

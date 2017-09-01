@@ -17,7 +17,6 @@
 package ro.derbederos.untwist;
 
 import static java.lang.Integer.toUnsignedLong;
-import static java.lang.Math.abs;
 
 /**
  * Java implementation of the random number generator from Turbo Pascal 7/Delphi.
