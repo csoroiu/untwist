@@ -160,16 +160,16 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
      * <a href="https://github.com/python/cpython/blob/master/Lib/random.py">random.py</a>.
      */
     @Override
-    public int nextInt(int n) throws IllegalArgumentException {
-        if (n > 0) {
-            final int bit_length = Integer.SIZE - Integer.numberOfLeadingZeros(n);
+    public int nextInt(int bound) throws IllegalArgumentException {
+        if (bound > 0) {
+            final int bit_length = Integer.SIZE - Integer.numberOfLeadingZeros(bound);
             int bits;
             do {
                 bits = next(bit_length);
-            } while (bits >= n);
+            } while (bits >= bound);
             return bits;
         }
-        throw new IllegalArgumentException("n must be strictly positive");
+        throw new IllegalArgumentException("bound must be strictly positive");
     }
 
     /**
@@ -179,16 +179,16 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
      * <a href="https://github.com/python/cpython/blob/master/Lib/random.py">random.py</a>.
      */
     @Override
-    public int prevInt(int n) throws IllegalArgumentException {
-        if (n > 0) {
-            final int bit_length = Integer.SIZE - Integer.numberOfLeadingZeros(n);
+    public int prevInt(int bound) throws IllegalArgumentException {
+        if (bound > 0) {
+            final int bit_length = Integer.SIZE - Integer.numberOfLeadingZeros(bound);
             int bits;
             do {
                 bits = prev(bit_length);
-            } while (bits >= n);
+            } while (bits >= bound);
             return bits;
         }
-        throw new IllegalArgumentException("n must be strictly positive");
+        throw new IllegalArgumentException("bound must be strictly positive");
     }
 
     /**
@@ -204,7 +204,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
     public long nextLong() {
         long low = toUnsignedLong(next(32));
         long high = toUnsignedLong(next(32)) << 32;
-        return high | low;
+        return low | high;
     }
 
     /**
@@ -220,7 +220,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
     public long prevLong() {
         long high = toUnsignedLong(prev(32)) << 32;
         long low = toUnsignedLong(prev(32));
-        return high | low;
+        return low | high;
     }
 
     /**
@@ -333,19 +333,19 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
      * <a href="https://github.com/python/cpython/blob/master/Lib/random.py">random.py</a>.
      */
     @Override
-    public long nextLong(long n) throws IllegalArgumentException {
-        if (n > 0) {
-            final int bit_length = Long.SIZE - Long.numberOfLeadingZeros(n);
+    public long nextLong(long bound) throws IllegalArgumentException {
+        if (bound > 0) {
+            final int bit_length = Long.SIZE - Long.numberOfLeadingZeros(bound);
             long bits;
             do {
                 bits = toUnsignedLong(next(Math.min(32, bit_length)));
                 if (bit_length > 32) {
                     bits = bits | toUnsignedLong(next(bit_length - 32)) << 32;
                 }
-            } while (bits >= n);
+            } while (bits >= bound);
             return bits;
         }
-        throw new IllegalArgumentException("n must be strictly positive");
+        throw new IllegalArgumentException("bound must be strictly positive");
     }
 
     /**
@@ -355,9 +355,9 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
      * <a href="https://github.com/python/cpython/blob/master/Lib/random.py">random.py</a>.
      */
     @Override
-    public long prevLong(long n) throws IllegalArgumentException {
-        if (n > 0) {
-            final int bit_length = Long.SIZE - Long.numberOfLeadingZeros(n);
+    public long prevLong(long bound) throws IllegalArgumentException {
+        if (bound > 0) {
+            final int bit_length = Long.SIZE - Long.numberOfLeadingZeros(bound);
             long bits;
             do {
                 bits = 0;
@@ -365,10 +365,10 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
                     bits = toUnsignedLong(prev(bit_length - 32)) << 32;
                 }
                 bits |= toUnsignedLong(prev(Math.min(32, bit_length)));
-            } while (bits >= n);
+            } while (bits >= bound);
             return bits;
         }
-        throw new IllegalArgumentException("n must be strictly positive");
+        throw new IllegalArgumentException("bound must be strictly positive");
 
     }
 }

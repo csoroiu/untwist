@@ -225,4 +225,13 @@ public class ReversibleJdkRandomTest extends ReverseRandomGeneratorAbstractTest<
     public void testNextPrevMixedCalls() {
         super.testNextPrevMixedCalls();
     }
+
+    @Test
+    public void testPrevLong() {
+        long expected = generator.nextLong(0x7ABCDEF8FFFFFFFFL);
+        long actual = generator.prevLong(0x7ABCDEF8FFFFFFFFL);
+
+        assertThat(expected, equalTo(6550299667129363735L));
+        assertThat(actual, equalTo(expected));
+    }
 }

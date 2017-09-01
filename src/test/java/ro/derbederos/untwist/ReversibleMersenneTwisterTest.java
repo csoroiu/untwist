@@ -572,4 +572,13 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
         //compare states
         assertThat(actual, equalTo(expected));
     }
+
+    @Test
+    public void testPrevLong() {
+        long expected = generator.nextLong(0x7ABCDEF8FFFFFFFFL);
+        long actual = generator.prevLong(0x7ABCDEF8FFFFFFFFL);
+
+        assertThat(expected, equalTo(2292643447762143663L));
+        assertThat(actual, equalTo(expected));
+    }
 }

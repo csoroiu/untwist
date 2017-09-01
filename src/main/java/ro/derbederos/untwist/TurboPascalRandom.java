@@ -185,32 +185,32 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
      * is still a signed integer.
      */
     @Override
-    public int nextInt(int n) {
-        if (n > 0) {
-            return nextIntUnsigned(n);
+    public int nextInt(int bound) {
+        if (bound > 0) {
+            return nextIntUnsigned(bound);
         }
-        throw new IllegalArgumentException("n must be strictly positive");
+        throw new IllegalArgumentException("bound must be strictly positive");
     }
 
-    private int nextIntUnsigned(int n) {
+    private int nextIntUnsigned(int bound) {
         long nextInt = toUnsignedLong(next(32));
-        return (int) ((nextInt * toUnsignedLong(n)) >>> 32);
+        return (int) ((nextInt * toUnsignedLong(bound)) >>> 32);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public int prevInt(int n) {
-        if (n > 0) {
-            return prevIntUnsigned(n);
+    public int prevInt(int bound) {
+        if (bound > 0) {
+            return prevIntUnsigned(bound);
         }
-        throw new IllegalArgumentException("n must be strictly positive");
+        throw new IllegalArgumentException("bound must be strictly positive");
     }
 
-    private int prevIntUnsigned(int n) {
+    private int prevIntUnsigned(int bound) {
         long prevInt = toUnsignedLong(prev(32));
-        return (int) ((prevInt * toUnsignedLong(n)) >>> 32);
+        return (int) ((prevInt * toUnsignedLong(bound)) >>> 32);
     }
 
     /**

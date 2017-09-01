@@ -16,7 +16,6 @@
 
 package ro.derbederos.untwist;
 
-import org.apache.commons.math3.random.BitsStreamGenerator;
 import org.apache.commons.math3.random.RandomGenerator;
 
 import java.util.Arrays;
@@ -540,21 +539,7 @@ public class DotNetRandom implements ReverseRandomGenerator {
      */
     @Override
     public long nextLong(long maxValue) {
-        if (maxValue <= 0) {
-            throw new IllegalArgumentException("maxValue must be positive");
-        }
-
-        long r = nextLong();
-        long m = maxValue - 1;
-        if ((maxValue & m) == 0) {  // i.e., maxValue is a power of 2
-            r = r & m;
-        } else {
-            for (long u = r >>> 1;                // ensure nonnegative
-                 u + m - (r = u % maxValue) < 0L; // rejection check
-                 u = nextLong() >>> 1)            // retry
-                ;
-        }
-        return r;
+        return DefaultRandomPrimitivesFactory.nextLong(maxValue, this);
     }
 
     /**
@@ -562,21 +547,7 @@ public class DotNetRandom implements ReverseRandomGenerator {
      */
     @Override
     public long prevLong(long maxValue) {
-        if (maxValue <= 0) {
-            throw new IllegalArgumentException("maxValue must be positive");
-        }
-
-        long r = prevLong();
-        long m = maxValue - 1;
-        if ((maxValue & m) == 0) {  // i.e., maxValue is a power of 2
-            r = r & m;
-        } else {
-            for (long u = r >>> 1;                // ensure nonnegative
-                 u + m - (r = u % maxValue) < 0L; // rejection check
-                 u = prevLong() >>> 1)            // retry
-                ;
-        }
-        return r;
+        return DefaultRandomPrimitivesFactory.prevLong(maxValue, this);
     }
 
     /**
@@ -587,7 +558,7 @@ public class DotNetRandom implements ReverseRandomGenerator {
      */
     @Override
     public boolean nextBoolean() {
-        return nextInt(2) == 1;
+        return DefaultRandomPrimitivesFactory.toBoolean(nextInt(2));
     }
 
     /**
@@ -600,7 +571,7 @@ public class DotNetRandom implements ReverseRandomGenerator {
      */
     @Override
     public boolean prevBoolean() {
-        return prevInt(2) == 1;
+        return DefaultRandomPrimitivesFactory.toBoolean(prevInt(2));
     }
 
     /**

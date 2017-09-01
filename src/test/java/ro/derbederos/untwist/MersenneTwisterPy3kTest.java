@@ -243,4 +243,13 @@ public class MersenneTwisterPy3kTest extends
     public void testNextPrevMixedCallsNoGaussian() {
         super.testNextPrevMixedCallsNoGaussian();
     }
+
+    @Test
+    public void testPrevLong() {
+        long expected = generator.nextLong(0x7ABCDEF8FFFFFFFFL);
+        long actual = generator.prevLong(0x7ABCDEF8FFFFFFFFL);
+
+        assertThat(expected, equalTo(2294769705264217817L));
+        assertThat(actual, equalTo(expected));
+    }
 }

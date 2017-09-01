@@ -91,7 +91,7 @@ public class ReverseBitsStreamGeneratorTest extends ReverseBitsStreamGeneratorAb
         long expected = generator.nextLong(0x7ABCDEF8FFFFFFFFL);
         long actual = generator.prevLong(0x7ABCDEF8FFFFFFFFL);
 
-        assertThat(expected, equalTo(6550299665512127023L));
+        assertThat(expected, equalTo(6550299667129363735L));
         assertThat(actual, equalTo(expected));
     }
 

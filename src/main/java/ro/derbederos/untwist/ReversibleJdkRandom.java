@@ -164,20 +164,7 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
      */
     @Override
     public int prevInt(int bound) {
-        if (bound <= 0) {
-            throw new IllegalArgumentException("bound must be positive");
-        }
-
-        if ((bound & -bound) == bound) {
-            return (int) (((long) bound * prev(31)) >> 31);
-        }
-
-        int j, k;
-        do {// limit is not power of 2
-            j = prev(31);// (seed >> 17)
-            k = j % bound; // output is(seed >> 17) modulo limit
-        } while ((j - k) + (bound - 1) < 0); // remove statistical bias
-        return k;
+        return DefaultRandomPrimitivesFactory.prevInt(bound, this);
     }
 
     /**
@@ -193,7 +180,7 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
      */
     @Override
     public boolean prevBoolean() {
-        return prev(1) != 0;
+        return DefaultRandomPrimitivesFactory.toBoolean(prev(1));
     }
 
     /**
@@ -232,6 +219,7 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
 
     /**
      * {@inheritDoc}
+     * Java uses <a href="https://en.wikipedia.org/wiki/Marsaglia_polar_method#Implementation">Marsaglia polar method</a>.
      */
     @Override
     public void undoNextGaussian() {
@@ -257,20 +245,7 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
      */
     @Override
     public int nextInt(int origin, int bound) {
-        if (origin < bound) {
-            int n = bound - origin;
-            if (n > 0) {
-                return nextInt(n) + origin;
-            } else {  // range not representable as int
-                int r;
-                do {
-                    r = nextInt();
-                } while (r < origin || r >= bound);
-                return r;
-            }
-        } else {
-            return nextInt();
-        }
+        return DefaultRandomPrimitivesFactory.nextInt(origin, bound, this);
     }
 
     /**
@@ -282,20 +257,7 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
      */
     @Override
     public int prevInt(int origin, int bound) {
-        if (origin < bound) {
-            int n = bound - origin;
-            if (n > 0) {
-                return prevInt(n) + origin;
-            } else {  // range not representable as int
-                int r;
-                do {
-                    r = prevInt();
-                } while (r < origin || r >= bound);
-                return r;
-            }
-        } else {
-            return prevInt();
-        }
+        return DefaultRandomPrimitivesFactory.prevInt(origin, bound, this);
     }
 
     /**
@@ -303,21 +265,7 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
      */
     @Override
     public long nextLong(long bound) {
-        if (bound <= 0) {
-            throw new IllegalArgumentException("bound must be positive");
-        }
-
-        long r = nextLong();
-        long m = bound - 1;
-        if ((bound & m) == 0) {  // i.e., bound is a power of 2
-            r = r & m;
-        } else {
-            for (long u = r >>> 1;                // ensure nonnegative
-                 u + m - (r = u % bound) < 0L;    // rejection check
-                 u = nextLong() >>> 1)            // retry
-                ;
-        }
-        return r;
+        return DefaultRandomPrimitivesFactory.nextLong(bound, this);
     }
 
     /**
@@ -325,20 +273,6 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
      */
     @Override
     public long prevLong(long bound) {
-        if (bound <= 0) {
-            throw new IllegalArgumentException("bound must be positive");
-        }
-
-        long r = prevLong();
-        long m = bound - 1;
-        if ((bound & m) == 0) {  // i.e., bound is a power of 2
-            r = r & m;
-        } else {
-            for (long u = r >>> 1;                // ensure nonnegative
-                 u + m - (r = u % bound) < 0L;    // rejection check
-                 u = prevLong() >>> 1)            // retry
-                ;
-        }
-        return r;
+        return DefaultRandomPrimitivesFactory.prevLong(bound, this);
     }
 }
