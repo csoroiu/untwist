@@ -31,12 +31,12 @@ I got the idea of reversing the generators from several places, after I had to b
 <dependency>
     <groupId>ro.derbederos</groupId>
     <artifactId>untwist</artifactId>
-    <version>0.3</version>
+    <version>0.4</version>
 </dependency>
 ```
 #### Gradle dependency
 ```groovy
-compile 'ro.derbederos:untwist:0.3'
+compile 'ro.derbederos:untwist:0.4'
 ```
 
 Enjoy using them!
