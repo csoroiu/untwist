@@ -28,8 +28,9 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
     private static final long MULTIPLIER = 0x5DEECE66DL;
     private static final long INVERSE_MULTIPLIER = 0xDFE05BCB1365L;
     private static final long ADDEND = 0xBL;
-    private static final long MASK = (1L << 48) - 1;
+    private static final long MASK = 0xFFFFFFFFFFFFL;     // (1L << 48) - 1
     private static final double DOUBLE_UNIT = 0x1.0p-53d; // 1.0 / (1L << 53)
+    private static final float FLOAT_UNIT = 0x1.0p-24f;   // 1.0 / (1 << 24)
 
     // the state of the generator
     private final AtomicLong seed = new AtomicLong();
@@ -188,7 +189,7 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
      */
     @Override
     public float prevFloat() {
-        return prev(24) * 0x1.0p-24f;
+        return prev(24) * FLOAT_UNIT;
     }
 
     /**

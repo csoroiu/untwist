@@ -34,6 +34,8 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
 
     private static final long serialVersionUID = 1L;
 
+    private static final double DOUBLE_UNIT = 0x1.0p-53d; // 1.0 / (1L << 53)
+
     /**
      * Creates a new random number generator.
      * <p>
@@ -112,7 +114,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
      */
     @Override
     public double nextDouble() {
-        return (((long) (next(27)) << 26) + next(26)) * 0x1.0p-53d;
+        return (((long) (next(27)) << 26) + next(26)) * DOUBLE_UNIT;
     }
 
     /**
@@ -123,7 +125,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
      */
     @Override
     public double prevDouble() {
-        return (prev(26) + ((long) (prev(27)) << 26)) * 0x1.0p-53d;
+        return (prev(26) + ((long) (prev(27)) << 26)) * DOUBLE_UNIT;
     }
 
     /**

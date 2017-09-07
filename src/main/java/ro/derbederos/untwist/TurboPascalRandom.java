@@ -22,9 +22,9 @@ import static java.lang.Integer.toUnsignedLong;
  * Java implementation of the random number generator from Turbo Pascal 7/Delphi.
  * It is a <a href="https://en.wikipedia.org/wiki/Linear_congruential_generator">linear congruential generator</a>
  * and the next seed is computed using the formula:
- * <pre>{@code seed = (seed * 0x08088405 + 1) & 0xFFFFFFFF}.</pre>
+ * <pre>{@code seed = (seed * 0x08088405 + 1) & 0xFFFFFFFFL}.</pre>
  * The previous seed is computed using the formula:
- * <pre>{@code seed = ((seed - 1) * 0xD94FA8CD) & 0xFFFFFFFF}.</pre>
+ * <pre>{@code seed = ((seed - 1) * 0xD94FA8CD) & 0xFFFFFFFFL}.</pre>
  * In Turbo Pascal 7 there was a switch that was enabling the use of the coprocessor.
  * There is a difference of {@code 0.5} when generating a random floating number when
  * coprocessor was disabled {@code {$N-}} or enabled {@code {$N+}}.
@@ -41,7 +41,8 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
     private static final long MULTIPLIER = 0x08088405L;
     private static final long INVERSE_MULTIPLIER = 0xD94FA8CDL;
     private static final long ADDEND = 0x1L;
-    private static final long MASK = (1L << 32) - 1;
+    private static final long MASK = 0xFFFFFFFFL;         // (1L << 32) - 1
+    private static final double DOUBLE_UNIT = 0x1.0p-32d; // 1.0 / (1L << 32)
 
     private final boolean coprocessorEnabled;
 
@@ -260,10 +261,10 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
         int nextInt = next(32);
         if (coprocessorEnabled) {
             // in turbo pascal the seed was 32 bit signed integer
-            return nextInt * 0x1.0p-32d + 0x1p-1d; // 0x1p-1d = 0.5d
+            return nextInt * DOUBLE_UNIT + 0x1p-1d; // 0x1p-1d = 0.5d
         } else {
             // delphi is performing unsigned division
-            return toUnsignedLong(nextInt) * 0x1.0p-32d;
+            return toUnsignedLong(nextInt) * DOUBLE_UNIT;
         }
     }
 
@@ -278,10 +279,10 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
         int prevInt = prev(32);
         if (coprocessorEnabled) {
             // in turbo pascal the seed was 32 bit signed integer
-            return prevInt * 0x1.0p-32d + 0x1p-1d; // 0x1p-1d = 0.5d
+            return prevInt * DOUBLE_UNIT + 0x1p-1d; // 0x1p-1d = 0.5d
         } else {
             // delphi is performing unsigned division
-            return toUnsignedLong(prevInt) * 0x1.0p-32d;
+            return toUnsignedLong(prevInt) * DOUBLE_UNIT;
         }
     }
 

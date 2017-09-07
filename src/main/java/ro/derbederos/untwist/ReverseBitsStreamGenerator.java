@@ -23,6 +23,9 @@ import static java.lang.Integer.toUnsignedLong;
 public abstract class ReverseBitsStreamGenerator implements ReverseRandomGenerator {
     private static final long serialVersionUID = 1L;
 
+    private static final double DOUBLE_UNIT = 0x1.0p-52d; // 1.0 / (1L << 52)
+    private static final float FLOAT_UNIT = 0x1.0p-23f;   // 1.0 / (1 << 23)
+
     /**
      * Generate next pseudorandom number.
      * <p>
@@ -276,8 +279,7 @@ public abstract class ReverseBitsStreamGenerator implements ReverseRandomGenerat
      */
     @Override
     public float nextFloat() {
-        return next(23) * 0x1.0p-23f;
-
+        return next(23) * FLOAT_UNIT;
     }
 
     /**
@@ -285,8 +287,7 @@ public abstract class ReverseBitsStreamGenerator implements ReverseRandomGenerat
      */
     @Override
     public float prevFloat() {
-        return prev(23) * 0x1.0p-23f;
-
+        return prev(23) * FLOAT_UNIT;
     }
 
     /**
@@ -296,7 +297,7 @@ public abstract class ReverseBitsStreamGenerator implements ReverseRandomGenerat
     public double nextDouble() {
         final long high = ((long) next(26)) << 26;
         final int low = next(26);
-        return (high | low) * 0x1.0p-52d;
+        return (high | low) * DOUBLE_UNIT;
     }
 
     /**
@@ -306,7 +307,7 @@ public abstract class ReverseBitsStreamGenerator implements ReverseRandomGenerat
     public double prevDouble() {
         final int low = prev(26);
         final long high = ((long) prev(26)) << 26;
-        return (low | high) * 0x1.0p-52d;
+        return (low | high) * DOUBLE_UNIT;
     }
 
 
