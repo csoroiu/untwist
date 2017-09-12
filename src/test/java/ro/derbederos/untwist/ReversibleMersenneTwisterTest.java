@@ -331,7 +331,7 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
     @Test
     public void testNextInt16ExactValue() {
         int[] expected = {3, 3, 1, 15, 15, 12, 12, 0, 3, 9};
-        int[] actual = nextInts(expected.length, 0, 16, generator).toArray();
+        int[] actual = nextInts(generator, expected.length, 0, 16).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -341,7 +341,7 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
     public void testNextIntExactValue() {
         int[] expected = {1067595299, 955945823, 477289528, -187748513, -65990820,
                 -950634582, -939387601, 227628506, 810200273, -1703677129};
-        int[] actual = nextInts(expected.length, generator).toArray();
+        int[] actual = nextInts(generator, expected.length).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -352,7 +352,7 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
         int[] expected = {1067595299, 955945823, 477289528, -187748513, -65990820, -950634582, -939387601,
                 227628506, 810200273, 646746669, 1479517882, -49495023, 1143372638, -431296802,
                 1773610557, 1138697238, 1421897700, 1269916527, 1764463362, -420075249};
-        int[] actual = nextInts(expected.length, -1_000_000_000, Integer.MAX_VALUE, generator).toArray();
+        int[] actual = nextInts(generator, expected.length, -1_000_000_000, Integer.MAX_VALUE).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -361,7 +361,7 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
     @Test
     public void testNextLong16ExactValue() {
         long[] expected = {15L, 15L, 10L, 10L, 7L, 0L, 10L, 14L, 2L, 6L};
-        long[] actual = nextLongs(expected.length, 0, 16, generator).toArray();
+        long[] actual = nextLongs(generator, expected.length, 0, 16).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -372,7 +372,7 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
         long[] expected = {4585286895524287327L, 2049942917590495071L, -283428410391890006L, -4034639024335268390L,
                 3479783678336561975L, -7450508202106930608L, 2777755793631454906L, -212579503956395170L,
                 -1852405656238365422L, 7617599339294041110L};
-        long[] actual = nextLongs(expected.length, generator).toArray();
+        long[] actual = nextLongs(generator, expected.length).toArray();
 
         assertThat(actual, equalTo(expected));
 
@@ -384,7 +384,7 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
         double[] expected = {0.24856889579554609, 0.11112762922475317, 0.9846353199878801, 0.7812817700654102,
                 0.18863945608335353, 0.59610715143395, 0.1505824378799958, 0.9884760419459966,
                 0.8995808921747299, 0.41295087732558855};
-        double[] actual = nextDoubles(expected.length, generator).toArray();
+        double[] actual = nextDoubles(generator, expected.length).toArray();
 
         assertThat(actual, equalTo(expected));
 
@@ -395,7 +395,7 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
     public void testNextFloatExactValue() {
         float[] expected = {0.24856889F, 0.2225734F, 0.111127615F, 0.9562863F, 0.98463523F,
                 0.77866304F, 0.7812817F, 0.05299878F, 0.1886394F, 0.6033317F};
-        float[] actual = nextFloats(expected.length, generator);
+        float[] actual = nextFloats(generator, expected.length);
 
         assertThat(actual, equalTo(expected));
     }
@@ -405,7 +405,7 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
     public void testNextBooleanExactValue() {
         boolean[] expected = {false, false, false, true, true, true, true, false, false, true,
                 true, true, false, false, true, false, true, true, false, false};
-        boolean[] actual = nextBooleans(expected.length, generator);
+        boolean[] actual = nextBooleans(generator, expected.length);
 
         assertThat(actual, equalTo(expected));
     }

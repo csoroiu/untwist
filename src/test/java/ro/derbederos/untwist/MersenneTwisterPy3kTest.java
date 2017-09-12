@@ -53,7 +53,7 @@ public class MersenneTwisterPy3kTest extends
 
         MersenneTwisterPy3k generator = new MersenneTwisterPy3k(largeseed);
         int[] expected = {208, 832, 482, 259, 706, 457, 453, 472, 266, 84};
-        int[] actual = nextInts(expected.length, 0, 1000, generator).toArray();
+        int[] actual = nextInts(generator, expected.length, 0, 1000).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -72,11 +72,11 @@ public class MersenneTwisterPy3kTest extends
 
         ReverseRandomGenerator rLong = makeGenerator();
         rLong.setSeed(seedLong);
-        int[] actualLong = nextInts(10, 0, 1000, rLong).toArray();
+        int[] actualLong = nextInts(rLong, 10, 0, 1000).toArray();
 
         ReverseRandomGenerator rArray = makeGenerator();
         rArray.setSeed(seedArray);
-        int[] actualArray = nextInts(10, 0, 1000, rArray).toArray();
+        int[] actualArray = nextInts(rArray, 10, 0, 1000).toArray();
 
         assertThat("LongVsArray", actualLong, equalTo(actualArray));
     }
@@ -85,7 +85,7 @@ public class MersenneTwisterPy3kTest extends
     @Test
     public void testNextInt16ExactValue() {
         int[] expected = {15, 7, 9, 5, 11, 4, 13, 14, 9, 1};
-        int[] actual = nextInts(expected.length, 0, 16, generator).toArray();
+        int[] actual = nextInts(generator, expected.length, 0, 16).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -95,7 +95,7 @@ public class MersenneTwisterPy3kTest extends
     public void testNextIntExactValue() {
         int[] expected = {2131728873, -149450095, -2087059751, 1068585415, 1209760669,
                 -425486438, 783461773, -80805226, 1545398317, -1623044361};
-        int[] actual = nextInts(expected.length, generator).toArray();
+        int[] actual = nextInts(generator, expected.length).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -106,7 +106,7 @@ public class MersenneTwisterPy3kTest extends
         int[] expected = {2131728873, -149450095, 1068585415, 1209760669, -425486438, 783461773, -80805226,
                 1545398317, 579440209, 1816672574, 1926025469, -761630721, 1210013257, 152431681,
                 1534102514, -451857811, -226991116, -92257937, -949255933, 997148851};
-        int[] actual = nextInts(expected.length, -1_000_000_000, Integer.MAX_VALUE, generator).toArray();
+        int[] actual = nextInts(generator, expected.length, -1_000_000_000, Integer.MAX_VALUE).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -115,7 +115,7 @@ public class MersenneTwisterPy3kTest extends
     @Test
     public void testNextLong16ExactValue() {
         long[] expected = {15L, 7L, 9L, 5L, 11L, 4L, 13L, 14L, 9L, 1L};
-        long[] actual = nextLongs(expected.length, 0, 16, generator).toArray();
+        long[] actual = nextLongs(generator, expected.length, 0, 16).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -126,7 +126,7 @@ public class MersenneTwisterPy3kTest extends
         long[] expected = {-641883268277364247L, 4589539412615495385L, -1827450334891770979L, -347055802232427123L,
                 -6970922448906819539L, 2488676750358164198L, -8896639325777151682L, -6782370575323180803L,
                 5196967370074779647L, -5701509883458360255L};
-        long[] actual = nextLongs(expected.length, generator).toArray();
+        long[] actual = nextLongs(generator, expected.length).toArray();
 
         assertThat(actual, equalTo(expected));
 
@@ -138,7 +138,7 @@ public class MersenneTwisterPy3kTest extends
         double[] expected = {0.4963318106919783, 0.5140685308635192, 0.2816693551907965, 0.18241391316939937,
                 0.35981608645696583, 0.632311993352409, 0.4229770415850893, 0.44843774760013033,
                 0.8226690238842976, 0.03549077131539968};
-        double[] actual = nextDoubles(expected.length, generator).toArray();
+        double[] actual = nextDoubles(generator, expected.length).toArray();
 
         assertThat(actual, equalTo(expected));
 
@@ -160,7 +160,7 @@ public class MersenneTwisterPy3kTest extends
     public void testNextBooleanExactValue() {
         boolean[] expected = {false, true, true, false, false, true, false, true, false, true,
                 true, false, false, true, false, true, true, false, false, true};
-        boolean[] actual = nextBooleans(expected.length, generator);
+        boolean[] actual = nextBooleans(generator, expected.length);
 
         assertThat(actual, equalTo(expected));
     }
@@ -169,7 +169,7 @@ public class MersenneTwisterPy3kTest extends
     public void testNextLongVsIntRangeIntMaxValue() {
         ReversibleMersenneTwister generator1 = makeGenerator();
         ReversibleMersenneTwister generator2 = makeGenerator();
-        long[] expected = nextLongs(700, 0, Integer.MAX_VALUE, generator2).toArray();
+        long[] expected = nextLongs(generator2, 700, 0, Integer.MAX_VALUE).toArray();
         long[] actual = LongStream.generate(() -> generator1.nextInt(Integer.MAX_VALUE)).limit(700).toArray();
 
         assertThat(actual, equalTo(expected));
@@ -179,7 +179,7 @@ public class MersenneTwisterPy3kTest extends
     public void testNextLongVsByteArray() {
         ReversibleMersenneTwister generator1 = makeGenerator();
         ReversibleMersenneTwister generator2 = makeGenerator();
-        long[] expected = nextLongs(700, generator1).toArray();
+        long[] expected = nextLongs(generator1, 700).toArray();
 
         byte[] b = new byte[8];
         long[] actual = LongStream.generate(() -> {
@@ -244,6 +244,7 @@ public class MersenneTwisterPy3kTest extends
         super.testNextPrevMixedCallsNoGaussian();
     }
 
+    @Override
     @Test
     public void testPrevLong() {
         long expected = generator.nextLong(0x7ABCDEF8FFFFFFFFL);

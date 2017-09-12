@@ -53,6 +53,7 @@ public abstract class ReverseBitsStreamGenerator implements ReverseRandomGenerat
     /**
      * {@inheritDoc}
      */
+    @Override
     public void nextBytes(byte[] bytes) {
         nextBytesFill(bytes, 0, bytes.length);
     }
@@ -178,7 +179,7 @@ public abstract class ReverseBitsStreamGenerator implements ReverseRandomGenerat
      */
     @Override
     public int nextInt(int bound) {
-        return DefaultRandomPrimitivesFactory.nextInt(bound, this);
+        return DefaultRandomPrimitivesFactory.nextInt(this, bound);
     }
 
     /**
@@ -194,7 +195,7 @@ public abstract class ReverseBitsStreamGenerator implements ReverseRandomGenerat
      */
     @Override
     public int prevInt(int bound) {
-        return DefaultRandomPrimitivesFactory.prevInt(bound, this);
+        return DefaultRandomPrimitivesFactory.prevInt(this, bound);
     }
 
     /**
@@ -206,7 +207,7 @@ public abstract class ReverseBitsStreamGenerator implements ReverseRandomGenerat
      */
     @Override
     public int nextInt(int origin, int bound) {
-        return DefaultRandomPrimitivesFactory.nextInt(origin, bound, this);
+        return DefaultRandomPrimitivesFactory.nextInt(this, origin, bound);
     }
 
     /**
@@ -218,7 +219,7 @@ public abstract class ReverseBitsStreamGenerator implements ReverseRandomGenerat
      */
     @Override
     public int prevInt(int origin, int bound) {
-        return DefaultRandomPrimitivesFactory.prevInt(origin, bound, this);
+        return DefaultRandomPrimitivesFactory.prevInt(this, origin, bound);
     }
 
 
@@ -247,7 +248,7 @@ public abstract class ReverseBitsStreamGenerator implements ReverseRandomGenerat
      */
     @Override
     public long nextLong(long bound) throws IllegalArgumentException {
-        return DefaultRandomPrimitivesFactory.nextLong(bound, this);
+        return DefaultRandomPrimitivesFactory.nextLong(this, bound);
     }
 
     /**
@@ -255,7 +256,7 @@ public abstract class ReverseBitsStreamGenerator implements ReverseRandomGenerat
      */
     @Override
     public long prevLong(long bound) throws IllegalArgumentException {
-        return DefaultRandomPrimitivesFactory.prevLong(bound, this);
+        return DefaultRandomPrimitivesFactory.prevLong(this, bound);
     }
 
     /**

@@ -22,7 +22,7 @@ class DefaultRandomPrimitivesFactory {
         return n != 0;
     }
 
-    static int nextInt(int bound, ReverseRandomGenerator generator) {
+    static int nextInt(ReverseRandomGenerator generator, int bound) {
         if (bound <= 0) {
             throw new IllegalArgumentException("bound must be strictly positive");
         }
@@ -32,15 +32,16 @@ class DefaultRandomPrimitivesFactory {
         if ((bound & m) == 0)  // i.e., bound is a power of 2
             r = (int) ((bound * (long) r) >> 31);
         else {
-            for (int u = r;                       // ensure nonnegative
-                 u - (r = u % bound) + m < 0;     // rejection check
-                 u = generator.nextInt() >>> 1)   // retry
-                ;
+            // reject over-represented candidates
+            int u = r;
+            while (u - (r = u % bound) + m < 0) {
+                u = generator.nextInt() >>> 1;
+            }
         }
         return r;
     }
 
-    static int prevInt(int bound, ReverseRandomGenerator generator) {
+    static int prevInt(ReverseRandomGenerator generator, int bound) {
         if (bound <= 0) {
             throw new IllegalArgumentException("bound must be strictly positive");
         }
@@ -50,15 +51,16 @@ class DefaultRandomPrimitivesFactory {
         if ((bound & m) == 0)  // i.e., bound is a power of 2
             r = (int) ((bound * (long) r) >> 31);
         else {
-            for (int u = r;                       // ensure nonnegative
-                 u - (r = u % bound) + m < 0;     // rejection check
-                 u = generator.prevInt() >>> 1)   // retry
-                ;
+            // reject over-represented candidates
+            int u = r;
+            while (u - (r = u % bound) + m < 0) {
+                u = generator.prevInt() >>> 1;
+            }
         }
         return r;
     }
 
-    static int nextInt(int origin, int bound, ReverseRandomGenerator generator) {
+    static int nextInt(ReverseRandomGenerator generator, int origin, int bound) {
         if (origin < bound) {
             int n = bound - origin;
             if (n > 0) {
@@ -75,7 +77,7 @@ class DefaultRandomPrimitivesFactory {
         }
     }
 
-    static int prevInt(int origin, int bound, ReverseRandomGenerator generator) {
+    static int prevInt(ReverseRandomGenerator generator, int origin, int bound) {
         if (origin < bound) {
             int n = bound - origin;
             if (n > 0) {
@@ -92,7 +94,7 @@ class DefaultRandomPrimitivesFactory {
         }
     }
 
-    static long nextLong(long bound, ReverseRandomGenerator generator) {
+    static long nextLong(ReverseRandomGenerator generator, long bound) {
         if (bound <= 0) {
             throw new IllegalArgumentException("bound must be strictly positive");
         }
@@ -102,15 +104,16 @@ class DefaultRandomPrimitivesFactory {
         if ((bound & m) == 0) {  // i.e., bound is a power of 2
             r = r & m;
         } else {
-            for (long u = r >>> 1;                // ensure nonnegative
-                 u + m - (r = u % bound) < 0L;    // rejection check
-                 u = generator.nextLong() >>> 1)  // retry
-                ;
+            // reject over-represented candidates
+            long u = r >>> 1;
+            while (u + m - (r = u % bound) < 0L) {
+                u = generator.nextLong() >>> 1;
+            }
         }
         return r;
     }
 
-    static long prevLong(long bound, ReverseRandomGenerator generator) {
+    static long prevLong(ReverseRandomGenerator generator, long bound) {
         if (bound <= 0) {
             throw new IllegalArgumentException("bound must be strictly positive");
         }
@@ -120,10 +123,11 @@ class DefaultRandomPrimitivesFactory {
         if ((bound & m) == 0) {  // i.e., bound is a power of 2
             r = r & m;
         } else {
-            for (long u = r >>> 1;                // ensure nonnegative
-                 u + m - (r = u % bound) < 0L;    // rejection check
-                 u = generator.prevLong() >>> 1)  // retry
-                ;
+            // reject over-represented candidates
+            long u = r >>> 1;
+            while (u + m - (r = u % bound) < 0L) {
+                u = generator.prevLong() >>> 1;
+            }
         }
         return r;
     }

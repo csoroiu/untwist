@@ -50,14 +50,14 @@ public class JDKRandomPy3kCompatTest {
 
         JDKRandomPy3kCompat rInt = new JDKRandomPy3kCompat();
         rInt.setSeed(seedInt);
-        int[] actualInt = nextInts(10, 0, 1000, rInt).toArray();
+        int[] actualInt = nextInts(rInt, 10, 0, 1000).toArray();
 
         JDKRandomPy3kCompat rLong = new JDKRandomPy3kCompat(seedLong);
-        int[] actualLong = nextInts(10, 0, 1000, rLong).toArray();
+        int[] actualLong = nextInts(rLong, 10, 0, 1000).toArray();
 
         JDKRandomPy3kCompat rArray = new JDKRandomPy3kCompat();
         rArray.setSeed(seedArray);
-        int[] actualArray = nextInts(10, 0, 1000, rArray).toArray();
+        int[] actualArray = nextInts(rArray, 10, 0, 1000).toArray();
 
         assertThat("IntVsLong", actualInt, equalTo(actualLong));
         assertThat("LongVsArray", actualLong, equalTo(actualArray));
@@ -120,7 +120,7 @@ public class JDKRandomPy3kCompatTest {
         double[] expected = {0.730967787376657, 0.24053641567148587, 0.6374174253501083, 0.5504370051176339,
                 0.5975452777972018, 0.3332183994766498, 0.3851891847407185, 0.984841540199809,
                 0.8791825178724801, 0.9412491794821144};
-        double[] actual = nextDoubles(expected.length, generator).toArray();
+        double[] actual = nextDoubles(generator, expected.length).toArray();
 
         assertThat(actual, equalTo(expected));
     }

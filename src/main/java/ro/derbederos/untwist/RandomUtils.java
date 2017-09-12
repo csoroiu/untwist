@@ -33,28 +33,28 @@ public class RandomUtils {
         return IntStream.generate(generator::prevInt);
     }
 
-    public static IntStream nextInts(long streamSize, RandomGenerator generator) {
-        return IntStream.generate(generator::nextInt).limit(streamSize);
+    public static IntStream nextInts(RandomGenerator generator, long streamSize) {
+        return nextInts(generator).limit(streamSize);
     }
 
-    public static IntStream prevInts(long streamSize, ReverseRandomGenerator generator) {
-        return IntStream.generate(generator::prevInt).limit(streamSize);
+    public static IntStream prevInts(ReverseRandomGenerator generator, long streamSize) {
+        return prevInts(generator).limit(streamSize);
     }
 
-    public static IntStream nextInts(int origin, int bound, ReverseRandomGenerator generator) {
+    public static IntStream nextInts(ReverseRandomGenerator generator, int origin, int bound) {
         return IntStream.generate(() -> generator.nextInt(origin, bound));
     }
 
-    public static IntStream prevInts(int origin, int bound, ReverseRandomGenerator generator) {
+    public static IntStream prevInts(ReverseRandomGenerator generator, int origin, int bound) {
         return IntStream.generate(() -> generator.prevInt(origin, bound));
     }
 
-    public static IntStream nextInts(long streamSize, int origin, int bound, ReverseRandomGenerator generator) {
-        return IntStream.generate(() -> generator.nextInt(origin, bound)).limit(streamSize);
+    public static IntStream nextInts(ReverseRandomGenerator generator, long streamSize, int origin, int bound) {
+        return nextInts(generator, origin, bound).limit(streamSize);
     }
 
-    public static IntStream prevInts(long streamSize, int origin, int bound, ReverseRandomGenerator generator) {
-        return IntStream.generate(() -> generator.prevInt(origin, bound)).limit(streamSize);
+    public static IntStream prevInts(ReverseRandomGenerator generator, long streamSize, int origin, int bound) {
+        return prevInts(generator, origin, bound).limit(streamSize);
     }
 
     public static LongStream nextLongs(RandomGenerator generator) {
@@ -65,30 +65,30 @@ public class RandomUtils {
         return LongStream.generate(generator::prevLong);
     }
 
-    public static LongStream nextLongs(long streamSize, RandomGenerator generator) {
-        return LongStream.generate(generator::nextLong).limit(streamSize);
+    public static LongStream nextLongs(RandomGenerator generator, long streamSize) {
+        return nextLongs(generator).limit(streamSize);
     }
 
-    public static LongStream prevLongs(long streamSize, ReverseRandomGenerator generator) {
-        return LongStream.generate(generator::prevLong).limit(streamSize);
+    public static LongStream prevLongs(ReverseRandomGenerator generator, long streamSize) {
+        return prevLongs(generator).limit(streamSize);
     }
 
-    public static LongStream nextLongs(long origin, long bound, ReverseRandomGenerator generator) {
+    public static LongStream nextLongs(ReverseRandomGenerator generator, long origin, long bound) {
         checkRange(origin, bound);
         return LongStream.generate(() -> generator.nextLong(bound - origin) + origin);
     }
 
-    public static LongStream prevLongs(long origin, long bound, ReverseRandomGenerator generator) {
+    public static LongStream prevLongs(ReverseRandomGenerator generator, long origin, long bound) {
         checkRange(origin, bound);
         return LongStream.generate(() -> generator.prevLong(bound - origin) + origin);
     }
 
-    public static LongStream nextLongs(long streamSize, long origin, long bound, ReverseRandomGenerator generator) {
+    public static LongStream nextLongs(ReverseRandomGenerator generator, long streamSize, long origin, long bound) {
         checkRange(origin, bound);
         return LongStream.generate(() -> generator.nextLong(bound - origin) + origin).limit(streamSize);
     }
 
-    public static LongStream prevLongs(long streamSize, long origin, long bound, ReverseRandomGenerator generator) {
+    public static LongStream prevLongs(ReverseRandomGenerator generator, long streamSize, long origin, long bound) {
         checkRange(origin, bound);
         return LongStream.generate(() -> generator.prevLong(bound - origin) + origin).limit(streamSize);
     }
@@ -101,11 +101,11 @@ public class RandomUtils {
         return DoubleStream.generate(generator::prevDouble);
     }
 
-    public static DoubleStream nextDoubles(long streamSize, RandomGenerator generator) {
+    public static DoubleStream nextDoubles(RandomGenerator generator, long streamSize) {
         return DoubleStream.generate(generator::nextDouble).limit(streamSize);
     }
 
-    public static DoubleStream prevDoubles(long streamSize, ReverseRandomGenerator generator) {
+    public static DoubleStream prevDoubles(ReverseRandomGenerator generator, long streamSize) {
         return DoubleStream.generate(generator::prevDouble).limit(streamSize);
     }
 

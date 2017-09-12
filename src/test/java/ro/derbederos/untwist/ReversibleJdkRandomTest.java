@@ -140,7 +140,7 @@ public class ReversibleJdkRandomTest extends ReverseRandomGeneratorAbstractTest<
     @Test
     public void testNextInt16ExactValue() {
         int[] expected = {11, 3, 9, 7, 15, 0, 0, 13, 7, 5};
-        int[] actual = nextInts(expected.length, 0, 16, generator).toArray();
+        int[] actual = nextInts(generator, expected.length, 0, 16).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -150,7 +150,7 @@ public class ReversibleJdkRandomTest extends ReverseRandomGeneratorAbstractTest<
     public void testNextIntExactValue() {
         int[] expected = {-1244746321, 1060493871, -1826063944, 1976922248, -230127712,
                 68408698, 169247282, -735843605, 2089114528, 1533708900};
-        int[] actual = nextInts(expected.length, generator).toArray();
+        int[] actual = nextInts(generator, expected.length).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -161,7 +161,7 @@ public class ReversibleJdkRandomTest extends ReverseRandomGeneratorAbstractTest<
         int[] expected = {1060493871, 1976922248, -230127712, 68408698, 169247282, -735843605, 2089114528,
                 1533708900, 1914424759, 186842318, 1764582767, 36964004, -109536649, 1518828482,
                 -648782117, -153007291, 1530083386, 584942498, 1009710484, -97496543};
-        int[] actual = nextInts(expected.length, -1_000_000_000, Integer.MAX_VALUE, generator).toArray();
+        int[] actual = nextInts(generator, expected.length, -1_000_000_000, Integer.MAX_VALUE).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -170,7 +170,7 @@ public class ReversibleJdkRandomTest extends ReverseRandomGeneratorAbstractTest<
     @Test
     public void testNextLong16ExactValue() {
         long[] expected = {15L, 8L, 10L, 11L, 4L, 14L, 15L, 6L, 4L, 2L};
-        long[] actual = nextLongs(expected.length, 0, 16, generator).toArray();
+        long[] actual = nextLongs(generator, expected.length, 0, 16).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -181,7 +181,7 @@ public class ReversibleJdkRandomTest extends ReverseRandomGeneratorAbstractTest<
         long[] expected = {-5346144739450824145L, -7842884917907853176L, -988390996874898054L, 726911540391045867L,
                 8972678576892185188L, 8222391730744523982L, -7363680848376404625L, -8294095627538487754L,
                 -6307709242837825884L, -470456323649602622L};
-        long[] actual = nextLongs(expected.length, generator).toArray();
+        long[] actual = nextLongs(generator, expected.length).toArray();
 
         assertThat(actual, equalTo(expected));
 
@@ -193,7 +193,7 @@ public class ReversibleJdkRandomTest extends ReverseRandomGeneratorAbstractTest<
         double[] expected = {0.7101849056320707, 0.574836350385667, 0.9464192094792073, 0.039405954311386604,
                 0.4864098780914311, 0.4457367367074283, 0.6008140654988429, 0.550376169584217,
                 0.6580583901495688, 0.9744965039734514};
-        double[] actual = nextDoubles(expected.length, generator).toArray();
+        double[] actual = nextDoubles(generator, expected.length).toArray();
 
         assertThat(actual, equalTo(expected));
 
@@ -204,7 +204,7 @@ public class ReversibleJdkRandomTest extends ReverseRandomGeneratorAbstractTest<
     public void testNextFloatExactValue() {
         float[] expected = {0.7101849F, 0.24691546F, 0.5748363F, 0.46028805F, 0.9464192F,
                 0.015927613F, 0.039405942F, 0.828673F, 0.48640984F, 0.3570944F};
-        float[] actual = nextFloats(expected.length, generator);
+        float[] actual = nextFloats(generator, expected.length);
 
         assertThat(actual, equalTo(expected));
     }
@@ -214,7 +214,7 @@ public class ReversibleJdkRandomTest extends ReverseRandomGeneratorAbstractTest<
     public void testNextBooleanExactValue() {
         boolean[] expected = {true, false, true, false, true, false, false, true, false, false,
                 false, false, true, false, true, true, true, false, true, false};
-        boolean[] actual = nextBooleans(expected.length, generator);
+        boolean[] actual = nextBooleans(generator, expected.length);
 
         assertThat(actual, equalTo(expected));
     }

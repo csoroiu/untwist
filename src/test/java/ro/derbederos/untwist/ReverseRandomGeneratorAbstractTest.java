@@ -80,15 +80,15 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
 
         ReverseRandomGenerator rInt = makeGenerator();
         rInt.setSeed(seedInt);
-        int[] actualInt = nextInts(10, 0, 1000, rInt).toArray();
+        int[] actualInt = nextInts(rInt, 10, 0, 1000).toArray();
 
         ReverseRandomGenerator rLong = makeGenerator();
         rLong.setSeed(seedLong);
-        int[] actualLong = nextInts(10, 0, 1000, rLong).toArray();
+        int[] actualLong = nextInts(rLong, 10, 0, 1000).toArray();
 
         ReverseRandomGenerator rArray = makeGenerator();
         rArray.setSeed(seedArray);
-        int[] actualArray = nextInts(10, 0, 1000, rArray).toArray();
+        int[] actualArray = nextInts(rArray, 10, 0, 1000).toArray();
 
         assertThat("IntVsLong", actualInt, equalTo(actualLong));
         assertThat("LongVsArray", actualLong, equalTo(actualArray));
@@ -101,11 +101,11 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
 
         ReverseRandomGenerator rLong = makeGenerator();
         rLong.setSeed(seedLong);
-        int[] actualLong = nextInts(10, 0, 1000, rLong).toArray();
+        int[] actualLong = nextInts(rLong, 10, 0, 1000).toArray();
 
         ReverseRandomGenerator rArray = makeGenerator();
         rArray.setSeed(seedArray);
-        int[] actualArray = nextInts(10, 0, 1000, rArray).toArray();
+        int[] actualArray = nextInts(rArray, 10, 0, 1000).toArray();
 
         assertThat("LongVsArray", actualLong, equalTo(actualArray));
     }
@@ -184,242 +184,242 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
 
     @Test
     public void testNextPrevInt() {
-        int[] expected = nextInts(2459, generator).toArray();
-        int[] actual = prevInts(2459, generator).toArray();
+        int[] expected = nextInts(generator, 2459).toArray();
+        int[] actual = prevInts(generator, 2459).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = nextInts(2467, generator).toArray();
-        actual = prevInts(2467, generator).toArray();
+        expected = nextInts(generator, 2467).toArray();
+        actual = prevInts(generator, 2467).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testPrevNextInt() {
-        int[] expected = prevInts(2459, generator).toArray();
-        int[] actual = nextInts(2459, generator).toArray();
+        int[] expected = prevInts(generator, 2459).toArray();
+        int[] actual = nextInts(generator, 2459).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = prevInts(2467, generator).toArray();
-        actual = nextInts(2467, generator).toArray();
+        expected = prevInts(generator, 2467).toArray();
+        actual = nextInts(generator, 2467).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testNextPrevIntBounded() {
-        int[] expected = nextInts(2459, 0, 78209372, generator).toArray();
-        int[] actual = prevInts(2459, 0, 78209372, generator).toArray();
+        int[] expected = nextInts(generator, 2459, 0, 78209372).toArray();
+        int[] actual = prevInts(generator, 2459, 0, 78209372).toArray();
 
         stream(expected).forEach((t) -> assertThat(t, between(0, 78209372)));
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = nextInts(2467, 0, 78209372, generator).toArray();
-        actual = prevInts(2467, 0, 78209372, generator).toArray();
+        expected = nextInts(generator, 2467, 0, 78209372).toArray();
+        actual = prevInts(generator, 2467, 0, 78209372).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testPrevNextIntBounded() {
-        int[] expected = prevInts(2459, 0, 78209372, generator).toArray();
-        int[] actual = nextInts(2459, 0, 78209372, generator).toArray();
+        int[] expected = prevInts(generator, 2459, 0, 78209372).toArray();
+        int[] actual = nextInts(generator, 2459, 0, 78209372).toArray();
 
         stream(expected).forEach((t) -> assertThat(t, between(0, 78209372)));
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = prevInts(2467, 0, 78209372, generator).toArray();
-        actual = nextInts(2467, 0, 78209372, generator).toArray();
+        expected = prevInts(generator, 2467, 0, 78209372).toArray();
+        actual = nextInts(generator, 2467, 0, 78209372).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testNextPrevIntRange() {
-        int[] expected = nextInts(2459, -1000, 3000, generator).toArray();
-        int[] actual = prevInts(2459, -1000, 3000, generator).toArray();
+        int[] expected = nextInts(generator, 2459, -1000, 3000).toArray();
+        int[] actual = prevInts(generator, 2459, -1000, 3000).toArray();
 
         stream(expected).forEach((t) -> assertThat(t, between(-1000, 3000)));
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = nextInts(2467, -1000, 5000, generator).toArray();
-        actual = prevInts(2467, -1000, 5000, generator).toArray();
+        expected = nextInts(generator, 2467, -1000, 5000).toArray();
+        actual = prevInts(generator, 2467, -1000, 5000).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testPrevNextIntRange() {
-        int[] expected = prevInts(2459, -1000, 3000, generator).toArray();
-        int[] actual = nextInts(2459, -1000, 3000, generator).toArray();
+        int[] expected = prevInts(generator, 2459, -1000, 3000).toArray();
+        int[] actual = nextInts(generator, 2459, -1000, 3000).toArray();
 
         stream(expected).forEach((t) -> assertThat(t, between(-1000, 3000)));
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = prevInts(2467, -1000, 5000, generator).toArray();
-        actual = nextInts(2467, -1000, 5000, generator).toArray();
+        expected = prevInts(generator, 2467, -1000, 5000).toArray();
+        actual = nextInts(generator, 2467, -1000, 5000).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testNextPrevLong() {
-        long[] expected = nextLongs(2459, generator).toArray();
-        long[] actual = prevLongs(2459, generator).toArray();
+        long[] expected = nextLongs(generator, 2459).toArray();
+        long[] actual = prevLongs(generator, 2459).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = nextLongs(2467, generator).toArray();
-        actual = prevLongs(2467, generator).toArray();
+        expected = nextLongs(generator, 2467).toArray();
+        actual = prevLongs(generator, 2467).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testPrevNextLong() {
-        long[] expected = prevLongs(2459, generator).toArray();
-        long[] actual = nextLongs(2459, generator).toArray();
+        long[] expected = prevLongs(generator, 2459).toArray();
+        long[] actual = nextLongs(generator, 2459).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = prevLongs(2467, generator).toArray();
-        actual = nextLongs(2467, generator).toArray();
+        expected = prevLongs(generator, 2467).toArray();
+        actual = nextLongs(generator, 2467).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testNextPrevLongBounded() {
-        long[] expected = nextLongs(2459, 0, 78209372, generator).toArray();
-        long[] actual = prevLongs(2459, 0, 78209372, generator).toArray();
+        long[] expected = nextLongs(generator, 2459, 0, 78209372).toArray();
+        long[] actual = prevLongs(generator, 2459, 0, 78209372).toArray();
 
         stream(expected).forEach((t) -> assertThat(t, between(0L, 78209372L)));
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = nextLongs(2467, 0, 78209372, generator).toArray();
-        actual = prevLongs(2467, 0, 78209372, generator).toArray();
+        expected = nextLongs(generator, 2467, 0, 78209372).toArray();
+        actual = prevLongs(generator, 2467, 0, 78209372).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testPrevNextLongBounded() {
-        long[] expected = prevLongs(2459, 0, 78209372, generator).toArray();
-        long[] actual = nextLongs(2459, 0, 78209372, generator).toArray();
+        long[] expected = prevLongs(generator, 2459, 0, 78209372).toArray();
+        long[] actual = nextLongs(generator, 2459, 0, 78209372).toArray();
 
         stream(expected).forEach((t) -> assertThat(t, between(0L, 78209372L)));
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = prevLongs(2467, 0, 78209372, generator).toArray();
-        actual = nextLongs(2467, 0, 78209372, generator).toArray();
+        expected = prevLongs(generator, 2467, 0, 78209372).toArray();
+        actual = nextLongs(generator, 2467, 0, 78209372).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testNextPrevLongRange() {
-        long[] expected = nextLongs(2459, -1000, 3000, generator).toArray();
-        long[] actual = prevLongs(2459, -1000, 3000, generator).toArray();
+        long[] expected = nextLongs(generator, 2459, -1000, 3000).toArray();
+        long[] actual = prevLongs(generator, 2459, -1000, 3000).toArray();
 
         stream(expected).forEach((t) -> assertThat(t, between(-1000L, 3000L)));
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = nextLongs(2467, -1000, 5000, generator).toArray();
-        actual = prevLongs(2467, -1000, 5000, generator).toArray();
+        expected = nextLongs(generator, 2467, -1000, 5000).toArray();
+        actual = prevLongs(generator, 2467, -1000, 5000).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testPrevNextLongRange() {
-        long[] expected = prevLongs(2459, -1000, 3000, generator).toArray();
-        long[] actual = nextLongs(2459, -1000, 3000, generator).toArray();
+        long[] expected = prevLongs(generator, 2459, -1000, 3000).toArray();
+        long[] actual = nextLongs(generator, 2459, -1000, 3000).toArray();
 
         stream(expected).forEach((t) -> assertThat(t, between(-1000L, 3000L)));
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = prevLongs(2467, -1000, 5000, generator).toArray();
-        actual = nextLongs(2467, -1000, 5000, generator).toArray();
+        expected = prevLongs(generator, 2467, -1000, 5000).toArray();
+        actual = nextLongs(generator, 2467, -1000, 5000).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     public void testNextPrevDouble() {
-        double[] expected = nextDoubles(2459, generator).toArray();
-        double[] actual = prevDoubles(2459, generator).toArray();
+        double[] expected = nextDoubles(generator, 2459).toArray();
+        double[] actual = prevDoubles(generator, 2459).toArray();
 
         DoubleStream.of(expected).forEach((t) -> assertThat(t, between(0.0, 1.0)));
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = nextDoubles(2467, generator).toArray();
-        actual = prevDoubles(2467, generator).toArray();
+        expected = nextDoubles(generator, 2467).toArray();
+        actual = prevDoubles(generator, 2467).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testPrevNextDouble() {
-        double[] expected = prevDoubles(2459, generator).toArray();
-        double[] actual = nextDoubles(2459, generator).toArray();
+        double[] expected = prevDoubles(generator, 2459).toArray();
+        double[] actual = nextDoubles(generator, 2459).toArray();
 
         DoubleStream.of(expected).forEach((t) -> assertThat(t, between(0.0, 1.0)));
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = prevDoubles(2467, generator).toArray();
-        actual = nextDoubles(2467, generator).toArray();
+        expected = prevDoubles(generator, 2467).toArray();
+        actual = nextDoubles(generator, 2467).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     public void testNextPrevFloat() {
-        float[] expected = nextFloats(2459, generator);
-        float[] actual = prevFloats(2459, generator);
+        float[] expected = nextFloats(generator, 2459);
+        float[] actual = prevFloats(generator, 2459);
 
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = nextFloats(2467, generator);
-        actual = prevFloats(2467, generator);
+        expected = nextFloats(generator, 2467);
+        actual = prevFloats(generator, 2467);
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testPrevNextFloat() {
-        float[] expected = prevFloats(2459, generator);
-        float[] actual = nextFloats(2459, generator);
+        float[] expected = prevFloats(generator, 2459);
+        float[] actual = nextFloats(generator, 2459);
 
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = prevFloats(2467, generator);
-        actual = nextFloats(2467, generator);
+        expected = prevFloats(generator, 2467);
+        actual = nextFloats(generator, 2467);
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testNextPrevBoolean() {
-        boolean[] expected = nextBooleans(2459, generator);
-        boolean[] actual = prevBooleans(2459, generator);
+        boolean[] expected = nextBooleans(generator, 2459);
+        boolean[] actual = prevBooleans(generator, 2459);
 
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = nextBooleans(2467, generator);
-        actual = prevBooleans(2467, generator);
+        expected = nextBooleans(generator, 2467);
+        actual = prevBooleans(generator, 2467);
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testPrevNextBoolean() {
-        boolean[] expected = prevBooleans(2459, generator);
-        boolean[] actual = nextBooleans(2459, generator);
+        boolean[] expected = prevBooleans(generator, 2459);
+        boolean[] actual = nextBooleans(generator, 2459);
 
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = prevBooleans(2467, generator);
-        actual = nextBooleans(2467, generator);
+        expected = prevBooleans(generator, 2467);
+        actual = nextBooleans(generator, 2467);
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }

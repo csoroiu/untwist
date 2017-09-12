@@ -91,7 +91,7 @@ class Utils {
         return b;
     }
 
-    static float[] nextFloats(int size, RandomGenerator generator) {
+    static float[] nextFloats(RandomGenerator generator, int size) {
         float[] result = new float[size];
         for (int i = 0; i < result.length; i++) {
             result[i] = generator.nextFloat();
@@ -99,7 +99,7 @@ class Utils {
         return result;
     }
 
-    static float[] prevFloats(int size, ReverseRandomGenerator generator) {
+    static float[] prevFloats(ReverseRandomGenerator generator, int size) {
         float[] result = new float[size];
         for (int i = 0; i < result.length; i++) {
             result[i] = generator.prevFloat();
@@ -107,7 +107,7 @@ class Utils {
         return result;
     }
 
-    static boolean[] nextBooleans(int size, RandomGenerator generator) {
+    static boolean[] nextBooleans(RandomGenerator generator, int size) {
         boolean[] result = new boolean[size];
         for (int i = 0; i < result.length; i++) {
             result[i] = generator.nextBoolean();
@@ -115,7 +115,7 @@ class Utils {
         return result;
     }
 
-    static boolean[] prevBooleans(int size, ReverseRandomGenerator generator) {
+    static boolean[] prevBooleans(ReverseRandomGenerator generator, int size) {
         boolean[] result = new boolean[size];
         for (int i = 0; i < result.length; i++) {
             result[i] = generator.prevBoolean();

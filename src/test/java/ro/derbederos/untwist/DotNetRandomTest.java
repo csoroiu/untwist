@@ -90,7 +90,7 @@ public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetR
         int[] expected = {72659689, 479570516, 1964597322, 1152315378, 835159700, 1400239888, 824890196,
                 -84625816, 934767641, 1787676899, -950803732, -984901899, 1160627160, 854462981,
                 -375650433, 751425218, -869369328, -311654904, 1868174591, 1892969089};
-        int[] actual = nextInts(expected.length, -1_000_000_000, Integer.MAX_VALUE, generator).toArray();
+        int[] actual = nextInts(generator, expected.length, -1_000_000_000, Integer.MAX_VALUE).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -99,7 +99,7 @@ public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetR
     @Test
     public void testNextInt16ExactValue() {
         int[] expected = {5, 10, 0, 10, 14, 0, 5, 1, 2, 4};
-        int[] actual = nextInts(expected.length, 0, 16, generator).toArray();
+        int[] actual = nextInts(generator, expected.length, 0, 16).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -109,7 +109,7 @@ public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetR
     public void testNextIntExactValue() {
         int[] expected = {683762528, 1373746042, 128503505, 1360364556, 1897922134,
                 90664323, 789505134, 235596161, 356723453, 608884583};
-        int[] actual = nextInts(expected.length, generator).toArray();
+        int[] actual = nextInts(generator, expected.length).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -118,7 +118,7 @@ public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetR
     @Test
     public void testNextLong16ExactValue() {
         long[] expected = {1L, 3L, 13L, 9L, 14L, 11L, 15L, 14L, 4L, 10L};
-        long[] actual = nextLongs(expected.length, 0, 16, generator).toArray();
+        long[] actual = nextLongs(generator, expected.length, 0, 16).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -129,7 +129,7 @@ public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetR
         long[] expected = {7160971568492367569L, -8931728783750763133L, -1986638387611489539L, -2925306645117407511L,
                 6258300555690268542L, -554966206143487861L, 3824004281963357759L, -2002195686033151106L,
                 -777744680147937180L, 7928930161609697530L};
-        long[] actual = nextLongs(expected.length, generator).toArray();
+        long[] actual = nextLongs(generator, expected.length).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -137,10 +137,10 @@ public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetR
     @Override
     @Test
     public void testNextDoubleExactValue() {
-        double[] expected = {0.31840173914954145, 0.6397003506495154, 0.05983910758972127, 0.6334691106497632,
-                0.8837888645398378, 0.04221886538072436, 0.3676419772057058, 0.10970801166710817,
-                0.1661123024141939, 0.2835339788736468};
-        double[] actual = nextDoubles(expected.length, generator).toArray();
+        double[] expected = {0.31840173914954145, 0.63970035064951536, 0.059839107589721267, 0.63346911064976319,
+                0.88378886453983785, 0.042218865380724363, 0.36764197720570579, 0.10970801166710817,
+                0.16611230241419389, 0.28353397887364679};
+        double[] actual = nextDoubles(generator, expected.length).toArray();
 
         assertThat(actual, equalTo(expected));
 
@@ -151,7 +151,7 @@ public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetR
     public void testNextFloatExactValue() {
         float[] expected = {0.31840175F, 0.63970035F, 0.059839107F, 0.6334691F, 0.8837889F,
                 0.042218864F, 0.367642F, 0.10970801F, 0.1661123F, 0.283534F};
-        float[] actual = nextFloats(expected.length, generator);
+        float[] actual = nextFloats(generator, expected.length);
 
         assertThat(actual, equalTo(expected));
     }
@@ -161,7 +161,7 @@ public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetR
     public void testNextBooleanExactValue() {
         boolean[] expected = {false, true, false, true, true, false, false, false, false, false,
                 true, false, false, true, false, true, false, true, true, false};
-        boolean[] actual = nextBooleans(expected.length, generator);
+        boolean[] actual = nextBooleans(generator, expected.length);
 
         assertThat(actual, equalTo(expected));
     }

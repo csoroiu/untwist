@@ -165,7 +165,7 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
      */
     @Override
     public int prevInt(int bound) {
-        return DefaultRandomPrimitivesFactory.prevInt(bound, this);
+        return DefaultRandomPrimitivesFactory.prevInt(this, bound);
     }
 
     /**
@@ -246,7 +246,7 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
      */
     @Override
     public int nextInt(int origin, int bound) {
-        return DefaultRandomPrimitivesFactory.nextInt(origin, bound, this);
+        return DefaultRandomPrimitivesFactory.nextInt(this, origin, bound);
     }
 
     /**
@@ -258,7 +258,7 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
      */
     @Override
     public int prevInt(int origin, int bound) {
-        return DefaultRandomPrimitivesFactory.prevInt(origin, bound, this);
+        return DefaultRandomPrimitivesFactory.prevInt(this, origin, bound);
     }
 
     /**
@@ -266,7 +266,7 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
      */
     @Override
     public long nextLong(long bound) {
-        return DefaultRandomPrimitivesFactory.nextLong(bound, this);
+        return DefaultRandomPrimitivesFactory.nextLong(this, bound);
     }
 
     /**
@@ -274,6 +274,6 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
      */
     @Override
     public long prevLong(long bound) {
-        return DefaultRandomPrimitivesFactory.prevLong(bound, this);
+        return DefaultRandomPrimitivesFactory.prevLong(this, bound);
     }
 }

@@ -48,26 +48,26 @@ public abstract class ReverseBitsStreamGeneratorAbstractTest<T extends ReverseBi
 
     @Test
     public void testNextPrevLongBound() {
-        long[] expected = nextLongs(2459, 0, 0x7ABCDEL, generator).toArray();
-        long[] actual = prevLongs(2459, 0, 0x7ABCDEL, generator).toArray();
+        long[] expected = nextLongs(generator, 2459, 0, 0x7ABCDEL).toArray();
+        long[] actual = prevLongs(generator, 2459, 0, 0x7ABCDEL).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = nextLongs(2467, 0, 0x7ABCDEL, generator).toArray();
-        actual = prevLongs(2467, 0, 0x7ABCDEL, generator).toArray();
+        expected = nextLongs(generator, 2467, 0, 0x7ABCDEL).toArray();
+        actual = prevLongs(generator, 2467, 0, 0x7ABCDEL).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testPrevNextLongBound() {
-        long[] expected = prevLongs(2459, 0, 0x7ABCDEF8FFFFFFFFL, generator).toArray();
-        long[] actual = nextLongs(2459, 0, 0x7ABCDEF8FFFFFFFFL, generator).toArray();
+        long[] expected = prevLongs(generator, 2459, 0, 0x7ABCDEF8FFFFFFFFL).toArray();
+        long[] actual = nextLongs(generator, 2459, 0, 0x7ABCDEF8FFFFFFFFL).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = prevLongs(2467, 0, 0x7ABCDEF8FFFFFFFFL, generator).toArray();
-        actual = nextLongs(2467, 0, 0x7ABCDEF8FFFFFFFFL, generator).toArray();
+        expected = prevLongs(generator, 2467, 0, 0x7ABCDEF8FFFFFFFFL).toArray();
+        actual = nextLongs(generator, 2467, 0, 0x7ABCDEF8FFFFFFFFL).toArray();
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }

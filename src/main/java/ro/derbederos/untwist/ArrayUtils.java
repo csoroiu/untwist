@@ -20,10 +20,10 @@ import org.apache.commons.math3.random.RandomGenerator;
 
 public class ArrayUtils {
 
-    public static int[] getTree(int n, RandomGenerator generator) {
+    public static int[] getTree(RandomGenerator generator, int n) {
         // http://algs4.cs.princeton.edu/41graph/GraphGenerator.java.html
         // https://en.wikipedia.org/wiki/Pr%C3%BCfer_sequence
-        int[] perm = getPermutation(n, generator);
+        int[] perm = getPermutation(generator, n);
         int[] tree = new int[n];
         tree[perm[0]] = -1;
         for (int i = 1; i < n; i++) {
@@ -41,26 +41,26 @@ public class ArrayUtils {
         return perm;
     }
 
-    public static int[] getPermutation(int n, RandomGenerator generator) {
+    public static int[] getPermutation(RandomGenerator generator, int n) {
         int[] perm = getIdentityPermutation(n);
-        shuffle(perm, generator);
+        shuffle(generator, perm);
         return perm;
     }
 
-    public static void shuffle(int[] source, RandomGenerator generator) {
+    public static void shuffle(RandomGenerator generator, int[] source) {
         // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm
         for (int i = source.length; i > 1; i--) {
             swap(source, i - 1, generator.nextInt(i));
         }
     }
 
-    public static int[] getPermutationInsideOut(int n, RandomGenerator generator) {
+    public static int[] getPermutationInsideOut(RandomGenerator generator, int n) {
         int[] perm = getIdentityPermutation(n);
-        shuffleInsideOut(perm, generator);
+        shuffleInsideOut(generator, perm);
         return perm;
     }
 
-    public static void shuffleInsideOut(int[] source, RandomGenerator generator) {
+    public static void shuffleInsideOut(RandomGenerator generator, int[] source) {
         // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_.22inside-out.22_algorithm
         for (int i = 0; i < source.length; i++) {
             swap(source, i, generator.nextInt(i + 1));
@@ -90,5 +90,4 @@ public class ArrayUtils {
         }
         v[i] = tmp;
     }
-
 }

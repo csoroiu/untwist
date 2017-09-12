@@ -45,7 +45,7 @@ public class ArrayUtilsTest {
         int maxDepth = 0;
         int N = 10000;
         for (int i = 0; i < 1000; i++) {
-            int[] tree = getTree(N, randomizer);
+            int[] tree = getTree(randomizer, N);
             maxDepth = Math.max(maxDepth, assertTree(tree));
         }
         //seed = 270579156758789, depth = 30
@@ -74,7 +74,7 @@ public class ArrayUtilsTest {
     @Test
     public void testGetPermutationModern() {
         int[] expected = new int[]{5, 2, 8, 4, 7, 0, 6, 1, 9, 3};
-        int[] actual = getPermutation(10, generator);
+        int[] actual = getPermutation(generator, 10);
 
         assertThat(actual, equalTo(expected));
     }
@@ -83,7 +83,7 @@ public class ArrayUtilsTest {
     public void testShuffleModern() {
         int[] expected = new int[]{5, 2, 8, 4, 7, 0, 6, 1, 9, 3};
         int[] actual = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-        shuffle(actual, generator);
+        shuffle(generator, actual);
 
         assertThat(actual, equalTo(expected));
     }
@@ -97,7 +97,7 @@ public class ArrayUtilsTest {
         int[] actualInt = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         List<Integer> actualInteger = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
 
-        shuffle(actualInt, randomizer1);
+        shuffle(randomizer1, actualInt);
         Collections.shuffle(actualInteger, new RandomAdaptor(randomizer2));
 
         assertThat(stream(actualInt).boxed().toArray(), equalTo(actualInteger.toArray(new Integer[actualInt.length])));
@@ -108,8 +108,8 @@ public class ArrayUtilsTest {
     public void testShuffleModernTwoCalls() {
         int[] expected = new int[]{2, 9, 3, 5, 4, 1, 8, 0, 7, 6};
         int[] actual = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-        shuffle(actual, generator);
-        shuffle(actual, generator);
+        shuffle(generator, actual);
+        shuffle(generator, actual);
 
         assertThat(actual, equalTo(expected));
     }
@@ -123,8 +123,8 @@ public class ArrayUtilsTest {
         int[] actualInt = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         List<Integer> actualInteger = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
 
-        shuffle(actualInt, randomizer1);
-        shuffle(actualInt, randomizer1);
+        shuffle(randomizer1, actualInt);
+        shuffle(randomizer1, actualInt);
         Collections.shuffle(actualInteger, new RandomAdaptor(randomizer2));
         Collections.shuffle(actualInteger, new RandomAdaptor(randomizer2));
 
@@ -135,7 +135,7 @@ public class ArrayUtilsTest {
     @Test
     public void testGetPermutationInsideOut() {
         int[] expected = new int[]{3, 4, 7, 2, 9, 8, 5, 1, 0, 6};
-        int[] actual = getPermutationInsideOut(10, generator);
+        int[] actual = getPermutationInsideOut(generator, 10);
 
         assertThat(actual, equalTo(expected));
     }
@@ -144,7 +144,7 @@ public class ArrayUtilsTest {
     public void testShuffleInsideOut() {
         int[] expected = new int[]{3, 4, 7, 2, 9, 8, 5, 1, 0, 6};
         int[] actual = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-        shuffleInsideOut(actual, generator);
+        shuffleInsideOut(generator, actual);
 
         assertThat(actual, equalTo(expected));
     }

@@ -50,11 +50,11 @@ public class FreePascalRandomTest extends ReversibleMersenneTwisterTest {
 
         ReverseRandomGenerator rLong = makeGenerator();
         rLong.setSeed(seedLong);
-        int[] actualLong = nextInts(10, 0, 1000, rLong).toArray();
+        int[] actualLong = nextInts(rLong, 10, 0, 1000).toArray();
 
         ReverseRandomGenerator rArray = makeGenerator();
         rArray.setSeed(seedArray);
-        int[] actualArray = nextInts(10, 0, 1000, rArray).toArray();
+        int[] actualArray = nextInts(rArray, 10, 0, 1000).toArray();
 
         assertThat("LongVsArray", actualLong, equalTo(actualArray));
     }
@@ -140,7 +140,7 @@ public class FreePascalRandomTest extends ReversibleMersenneTwisterTest {
                 1031595005, 574779647, -1103584447, 1201729266, 211323636, -954599819, 848277427,
                 -659487656, -700392355, 118555058, -238923432, -632969808, -1443725123, 990536006,
                 483966470, -1084035551, -802702746, -92753265, 564258807, 788455403, 289890560};
-        int[] actual = nextInts(expected.length, 1_500_000_000, -1_500_000_000, generator).toArray();
+        int[] actual = nextInts(generator, expected.length, 1_500_000_000, -1_500_000_000).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -159,7 +159,7 @@ public class FreePascalRandomTest extends ReversibleMersenneTwisterTest {
     public void testNextIntExactValue() {
         int[] expected = {2131728873, -149450095, -2087059751, 1068585415, 1209760669,
                 -425486438, 783461773, -80805226, 1545398317, -1623044361};
-        int[] actual = nextInts(expected.length, generator).toArray();
+        int[] actual = nextInts(generator, expected.length).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -170,7 +170,7 @@ public class FreePascalRandomTest extends ReversibleMersenneTwisterTest {
         int[] expected = {-219591959, 1777661472, 1811113462, 397238862, 1327765389, 2087358183, -766758486,
                 580066454, 276905054, -845472133, -498169491, 558293928, -89985366, 178091724,
                 -490444948, -184714879, -796294707, 1327886319, 382992891, 1146587248};
-        int[] actual = nextInts(expected.length, -1_000_000_000, Integer.MAX_VALUE, generator).toArray();
+        int[] actual = nextInts(generator, expected.length, -1_000_000_000, Integer.MAX_VALUE).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -179,7 +179,7 @@ public class FreePascalRandomTest extends ReversibleMersenneTwisterTest {
     @Test
     public void testNextLong16ExactValue() {
         long[] expected = {9L, 9L, 13L, 13L, 13L, 6L, 14L, 13L, 15L, 1L};
-        long[] actual = nextLongs(expected.length, 0, 16, generator).toArray();
+        long[] actual = nextLongs(generator, expected.length, 0, 16).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -190,7 +190,7 @@ public class FreePascalRandomTest extends ReversibleMersenneTwisterTest {
         long[] expected = {-641883268277364247L, 4589539412615495385L, -1827450334891770979L, -347055802232427123L,
                 -6970922448906819539L, 2488676750358164198L, -8896639325777151682L, -6782370575323180803L,
                 5196967370074779647L, -5701509883458360255L};
-        long[] actual = nextLongs(expected.length, generator).toArray();
+        long[] actual = nextLongs(generator, expected.length).toArray();
 
         assertThat(actual, equalTo(expected));
 
@@ -202,7 +202,7 @@ public class FreePascalRandomTest extends ReversibleMersenneTwisterTest {
         double[] expected = {0.4963318055961281, 0.965203438187018, 0.5140685348305851, 0.2487994299735874,
                 0.2816693552304059, 0.9009337187744677, 0.1824139088857919, 0.9811860672198236,
                 0.35981608484871686, 0.6221055367495865};
-        double[] actual = nextDoubles(expected.length, generator).toArray();
+        double[] actual = nextDoubles(generator, expected.length).toArray();
 
         assertThat(actual, equalTo(expected));
 
@@ -213,7 +213,7 @@ public class FreePascalRandomTest extends ReversibleMersenneTwisterTest {
     public void testNextFloatExactValue() {
         float[] expected = {0.4963318F, 0.96520346F, 0.51406854F, 0.24879943F, 0.28166935F,
                 0.90093374F, 0.1824139F, 0.9811861F, 0.35981607F, 0.62210554F};
-        float[] actual = nextFloats(expected.length, generator);
+        float[] actual = nextFloats(generator, expected.length);
 
         assertThat(actual, equalTo(expected));
     }
@@ -223,7 +223,7 @@ public class FreePascalRandomTest extends ReversibleMersenneTwisterTest {
     public void testNextBooleanExactValue() {
         boolean[] expected = {false, true, true, false, false, true, false, true, false, true,
                 true, false, false, true, false, true, true, false, false, true};
-        boolean[] actual = nextBooleans(expected.length, generator);
+        boolean[] actual = nextBooleans(generator, expected.length);
 
         assertThat(actual, equalTo(expected));
     }

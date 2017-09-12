@@ -46,7 +46,7 @@ public class TurboPascalRandomCoprocEnabledTest extends TurboPascalRandomTest {
         double[] expected = {0.30312337283976376, 0.013781279791146517, 0.18803224223665893, 0.31765864603221416,
                 0.27547088847495615, 0.9520445461384952, 0.718031702330336, 0.44134502578526735,
                 0.6637153711635619, 0.7491658166982234};
-        double[] actual = nextDoubles(expected.length, generator).toArray();
+        double[] actual = nextDoubles(generator, expected.length).toArray();
 
         assertThat(actual, equalTo(expected));
     }
@@ -56,7 +56,7 @@ public class TurboPascalRandomCoprocEnabledTest extends TurboPascalRandomTest {
     public void testNextFloatExactValue() {
         float[] expected = {0.30312338F, 0.013781279F, 0.18803224F, 0.31765863F, 0.27547088F,
                 0.95204455F, 0.7180317F, 0.44134504F, 0.66371536F, 0.74916583F};
-        float[] actual = nextFloats(expected.length, generator);
+        float[] actual = nextFloats(generator, expected.length);
 
         assertThat(actual, equalTo(expected));
     }
