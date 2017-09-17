@@ -25,9 +25,9 @@ import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.lessThan;
 
 @Ignore
-class Utils {
+public class Utils {
 
-    static <T extends java.lang.Comparable<T>> Matcher<T> between(T minValue, T maxValue) {
+    public static <T extends java.lang.Comparable<T>> Matcher<T> between(T minValue, T maxValue) {
         return allOf(greaterThanOrEqualTo(minValue), lessThan(maxValue));
     }
 

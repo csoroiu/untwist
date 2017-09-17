@@ -340,9 +340,9 @@ public abstract class ReverseBitsStreamGenerator implements ReverseRandomGenerat
             final double x = nextDouble();
             final double y = nextDouble();
             final double alpha = 2 * Math.PI * x;
-            final double r = Math.sqrt(-2 * Math.log(y));
-            random = r * Math.cos(alpha);
-            nextGaussian = r * Math.sin(alpha);
+            final double r = StrictMath.sqrt(-2 * StrictMath.log(y));
+            random = r * StrictMath.cos(alpha);
+            nextGaussian = r * StrictMath.sin(alpha);
         } else {
             // use the second element of the pair already generated
             random = nextGaussian;

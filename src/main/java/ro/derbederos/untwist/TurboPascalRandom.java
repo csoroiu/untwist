@@ -305,4 +305,40 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
     public float prevFloat() {
         return (float) prevDouble();
     }
+
+    /**
+     * Similar to FreePascal's {@code Math.RandG(0, 1)} and returns the next pseudorandom, Gaussian ("normally") distributed
+     * {@code double} value with mean {@code 1.0} and standard deviation {@code 1.0} from this random number generator's sequence.
+     * <p>
+     * FreePascal and Delphi use <a href="https://en.wikipedia.org/wiki/Marsaglia_polar_method#Implementation">Marsaglia polar method</a>.
+     *
+     * @return the next pseudorandom, Gaussian ("normally") distributed {@code double} value with mean {@code 1.0}
+     * and standard deviation {@code 1.0} from this random number generator's sequence.
+     */
+    @Override
+    public double nextGaussian() {
+        // Marsaglia-Bray algorithm, which generates 2 values at a time, one is dropped (multiplier * u2)
+        double u1, u2, s2;
+        do {
+            u1 = 2 * nextDouble() - 1; // between -1 and 1
+            u2 = 2 * nextDouble() - 1; // between -1 and 1
+            s2 = u1 * u1 + u2 * u2;
+        } while (s2 >= 1);
+        double multiplier = StrictMath.sqrt(-2 * StrictMath.log(s2) / s2);
+        return multiplier * u1;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void undoNextGaussian() {
+        double v1, v2, s;
+        do {
+            v1 = 2 * prevDouble() - 1; // between -1 and 1
+            v2 = 2 * prevDouble() - 1; // between -1 and 1
+            s = v1 * v1 + v2 * v2;
+        } while (s >= 1 || s == 0);
+        clear();
+    }
 }

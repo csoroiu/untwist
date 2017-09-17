@@ -16,10 +16,15 @@
 
 package ro.derbederos.untwist;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.security.SecureRandom;
+
 import static java.lang.Integer.toUnsignedLong;
 
-class SeedUtils {
-    static long convertToLong(int... seed) {
+public class SeedUtils {
+
+    public static long convertToLong(int... seed) {
         long result = 0;
         int endIndex = seed.length / 2 * 2;
         for (int i = 0; i < endIndex; i += 2) {
@@ -34,14 +39,14 @@ class SeedUtils {
         return result;
     }
 
-    static int convertToInt(long input) {
+    public static int convertToInt(long input) {
         final int high = (int) (input >>> 32);
         final int low = (int) (input & 0xFFFFFFFFL);
         final int prime = 65521;
         return high * prime + low;
     }
 
-    static int convertToInt(int... seed) {
+    public static int convertToInt(int... seed) {
         // The following number is the largest prime that fits
         // in 16 bits (i.e. 2^32 - 5).
         final int prime = 65521;
@@ -52,5 +57,22 @@ class SeedUtils {
         }
 
         return combined;
+    }
+
+    public static int generateSecureRandomIntSeed() {
+        byte[] bytes = SecureRandom.getSeed(Integer.BYTES);
+        return ByteBuffer.wrap(bytes).getInt();
+    }
+
+    public static long generateSecureRandomLongSeed() {
+        byte[] bytes = SecureRandom.getSeed(Long.BYTES);
+        return ByteBuffer.wrap(bytes).getLong();
+    }
+
+    public static int[] generateSecureRandomIntArraySeed(int size) {
+        byte[] bytes = SecureRandom.getSeed(Integer.BYTES * size);
+        int[] result = new int[size];
+        ByteBuffer.wrap(bytes).order(ByteOrder.nativeOrder()).asIntBuffer().get(result);
+        return result;
     }
 }

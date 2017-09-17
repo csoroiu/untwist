@@ -18,8 +18,6 @@ package ro.derbederos.untwist;
 
 import org.apache.commons.math3.random.RandomGenerator;
 
-import java.nio.ByteBuffer;
-import java.security.SecureRandom;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
@@ -113,22 +111,5 @@ public class RandomUtils {
         if (origin < bound && bound - origin <= 0) {
             throw new IllegalArgumentException("range not representable as long");
         }
-    }
-
-    public static int generateSecureRandomIntSeed() {
-        byte[] bytes = SecureRandom.getSeed(Integer.BYTES);
-        return ByteBuffer.wrap(bytes).getInt();
-    }
-
-    public static long generateSecureRandomLongSeed() {
-        byte[] bytes = SecureRandom.getSeed(Long.BYTES);
-        return ByteBuffer.wrap(bytes).getLong();
-    }
-
-    public static int[] generateSecureRandomIntArraySeed(int size) {
-        byte[] bytes = SecureRandom.getSeed(Integer.BYTES * size);
-        int[] result = new int[size];
-        ByteBuffer.wrap(bytes).asIntBuffer().get(result);
-        return result;
     }
 }

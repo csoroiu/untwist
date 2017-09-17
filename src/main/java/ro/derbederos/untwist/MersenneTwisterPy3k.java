@@ -371,6 +371,5 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
             return bits;
         }
         throw new IllegalArgumentException("bound must be strictly positive");
-
     }
 }
