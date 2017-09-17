@@ -21,7 +21,6 @@ import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.fail;
 import static ro.derbederos.untwist.RandomUtils.nextDoubles;
 import static ro.derbederos.untwist.RandomUtils.nextInts;
 import static ro.derbederos.untwist.RandomUtils.nextLongs;
@@ -130,15 +129,5 @@ public class TurboPascalRandomTest extends ReverseBitsStreamGeneratorAbstractTes
     @Ignore
     public void testNextPrevMixedCalls() {
         super.testNextPrevMixedCalls();
-    }
-
-    @Test
-    public void testRandG() {
-        System.out.println(generator.nextDouble());
-        System.out.println(generator.nextDouble());
-        System.out.println(generator.nextGaussian());
-        System.out.println(generator.nextGaussian());
-        System.out.println(generator.nextGaussian());
-        fail();
     }
 }
