@@ -16,7 +16,6 @@
 
 package ro.derbederos.untwist;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.stream.IntStream;
@@ -243,12 +242,5 @@ public class FreePascalRandomTest extends ReversibleMersenneTwisterTest {
 
         assertThat(expected, equalTo(8581488768577411561L));
         assertThat(actual, equalTo(expected));
-    }
-
-    @Override
-    @Test
-    @Ignore
-    public void testNextPrevMixedCalls() {
-        super.testNextPrevMixedCalls();
     }
 }

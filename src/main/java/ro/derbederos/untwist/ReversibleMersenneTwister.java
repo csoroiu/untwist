@@ -22,62 +22,6 @@ import java.io.IOException;
 import java.io.Serializable;
 
 
-/**
- * This class is a MersenneTwister which also implements {@link ReverseRandomGenerator}.
- * <p>
- * This class implements a powerful pseudo-random number generator
- * developed by Makoto Matsumoto and Takuji Nishimura during
- * 1996-1997.
- * <p>
- * This generator features an extremely long period
- * (2<sup>19937</sup>-1) and 623-dimensional equidistribution up to 32
- * bits accuracy. The home page for this generator is located at <a
- * href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html">
- * http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html</a>.
- * <p>
- * This generator is described in a paper by Makoto Matsumoto and
- * Takuji Nishimura in 1998: <a
- * href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/ARTICLES/mt.pdf">Mersenne
- * Twister: A 623-Dimensionally Equidistributed Uniform Pseudo-Random
- * Number Generator</a>, ACM Transactions on Modeling and Computer
- * Simulation, Vol. 8, No. 1, January 1998, pp 3--30
- * <p>
- * This class is mainly a Java port of the 2002-01-26 version of
- * the generator written in C by Makoto Matsumoto and Takuji
- * Nishimura. Here is their original copyright:
- * <table border="0" width="80%" cellpadding="10" align="center" bgcolor="#E0E0E0" summary="original copyright">
- * <tr><td>Copyright (C) 1997 - 2002, Makoto Matsumoto and Takuji Nishimura,
- * All rights reserved.
- * <p>
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * <ol>
- * <li>Redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer.</li>
- * <li>Redistributions in binary form must reproduce the above copyright
- * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the distribution.</li>
- * <li>The names of its contributors may not be used to endorse or promote
- * products derived from this software without specific prior written
- * permission.</li>
- * </ol>
- * <p>
- * <strong>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
- * CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
- * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
- * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
- * OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
- * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
- * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
- * DAMAGE.</strong></td></tr>
- * </table>
- */
 public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implements Serializable {
 
     /**
@@ -168,8 +112,6 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
             longMT = (1812433253L * (longMT ^ (longMT >>> 30)) + mti) & 0xFFFFFFFFL;
             mt[mti] = (int) longMT;
         }
-
-        clear(); // Clear normal deviate cache
     }
 
     /**
@@ -183,11 +125,9 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
      *
      * @param seed the initial seed (32 bits integer)
      */
-    @Override
     public void setSeed(int seed) {
         initGenRand(seed);
         fixState();
-        clear();
     }
 
     /**
@@ -203,7 +143,6 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
      *             the seed of the generator will be the current system time plus the
      *             system identity hash code of this instance
      */
-    @Override
     public void setSeed(int[] seed) {
 
         if (seed == null) {
@@ -245,7 +184,6 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
 
         mt[0] = 0x80000000; // MSB is 1; assuring non-zero initial array
         fixState();
-        clear(); // Clear normal deviate cache
     }
 
     /**
@@ -256,7 +194,6 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
      *
      * @param seed the initial seed (64 bits integer)
      */
-    @Override
     public void setSeed(long seed) {
         setSeed(new int[]{(int) (seed >>> 32), (int) (seed & 0xFFFFFFFFL)});
     }

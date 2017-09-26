@@ -232,13 +232,6 @@ public class MersenneTwisterPy3kTest extends ReversibleMersenneTwisterTest {
     @Override
     @Test
     @Ignore
-    public void testNextPrevMixedCalls() {
-        super.testNextPrevMixedCalls();
-    }
-
-    @Override
-    @Test
-    @Ignore
     public void testNextPrevMixedCallsNoGaussian() {
         super.testNextPrevMixedCallsNoGaussian();
     }

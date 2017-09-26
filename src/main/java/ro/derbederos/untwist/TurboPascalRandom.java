@@ -37,7 +37,6 @@ import static java.lang.Integer.toUnsignedLong;
  */
 public class TurboPascalRandom extends ReverseBitsStreamGenerator
         implements ReverseNormalizedGaussianSampler {
-    private static final long serialVersionUID = 1L;
 
     private static final long MULTIPLIER = 0x08088405L;
     private static final long INVERSE_MULTIPLIER = 0xD94FA8CDL;
@@ -61,28 +60,6 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator
     }
 
     /**
-     * Creates a new random number generator using an int array seed.
-     * Delphi compatible.
-     *
-     * @param seed the initial seed (32 bits integers array).
-     * @see #setSeed(int[])
-     */
-    public TurboPascalRandom(int[] seed) {
-        this(seed, false);
-    }
-
-    /**
-     * Creates a new random number generator using a single long seed.
-     * Delphi compatible.
-     *
-     * @param seed the initial seed (64 bits integer).
-     * @see #setSeed(long)
-     */
-    public TurboPascalRandom(long seed) {
-        this(seed, false);
-    }
-
-    /**
      * Creates a new random number generator using a single int seed.
      *
      * @param seed               the initial seed (32 bits integer).
@@ -95,38 +72,12 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator
     }
 
     /**
-     * Creates a new random number generator using an int array seed.
-     *
-     * @param seed               the initial seed (32 bits integers array).
-     * @param coprocessorEnabled flag that enables the offsetting by {@code 0.5} of the generated floating number.
-     * @see #setSeed(int[])
-     */
-    protected TurboPascalRandom(int[] seed, boolean coprocessorEnabled) {
-        setSeed(seed);
-        this.coprocessorEnabled = coprocessorEnabled;
-    }
-
-    /**
-     * Creates a new random number generator using a single long seed.
-     *
-     * @param seed               the initial seed (64 bits integer).
-     * @param coprocessorEnabled flag that enables the offsetting by {@code 0.5} of the generated floating number.
-     * @see #setSeed(long)
-     */
-    protected TurboPascalRandom(long seed, boolean coprocessorEnabled) {
-        setSeed(seed);
-        this.coprocessorEnabled = coprocessorEnabled;
-    }
-
-    /**
      * Initializes this instance of the {@link TurboPascalRandom} class, using the specified seed value.
      *
      * @param seed a number used to calculate a starting value for the pseudo-random number sequence.
      */
-    @Override
     public void setSeed(int seed) {
         this.seed = seed;
-        clear();
     }
 
     /**
@@ -136,28 +87,6 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator
      */
     int getSeed() {
         return (int) seed;
-    }
-
-    /**
-     * Converts the {@code int[]} seed to an {@code int} and calls {@link #setSeed(int)}.
-     *
-     * @param seed an array used to calculate a starting value for the pseudo-random number sequence.
-     * @see SeedUtils#convertToInt(int...)
-     */
-    @Override
-    public void setSeed(int[] seed) {
-        setSeed(SeedUtils.convertToInt(seed));
-    }
-
-    /**
-     * Converts the {@code long} seed to an {@code int} and calls {@link #setSeed(int)}.
-     *
-     * @param seed a number used to calculate a starting value for the pseudo-random number sequence.
-     * @see SeedUtils#convertToInt(long)
-     */
-    @Override
-    public void setSeed(long seed) {
-        setSeed(SeedUtils.convertToInt(seed));
     }
 
     /**

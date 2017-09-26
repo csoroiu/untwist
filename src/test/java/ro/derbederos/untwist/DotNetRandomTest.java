@@ -32,7 +32,7 @@ import static ro.derbederos.untwist.RandomUtils.nextLongs;
 import static ro.derbederos.untwist.Utils.nextBooleans;
 import static ro.derbederos.untwist.Utils.nextFloats;
 
-public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetRandom> {
+public class DotNetRandomTest extends ReverseUniformRandomProviderAbstractTest<DotNetRandom> {
 
     private static final int SEED = 0xc068c692; // -0x3f97396e = 0xc068c692
 

@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * This class extends the random class and ads methods for generating random values in reverse.
  */
-public class ReversibleJavaRandom extends Random implements ReverseRandomGenerator, ReverseNormalizedGaussianSampler {
+public class ReversibleJavaRandom extends Random implements ReverseUniformRandomProvider, ReverseNormalizedGaussianSampler {
     private static final long serialVersionUID = 1L;
 
     private static final long MULTIPLIER = 0x5DEECE66DL;
@@ -30,7 +30,7 @@ public class ReversibleJavaRandom extends Random implements ReverseRandomGenerat
     private static final long ADDEND = 0xBL;
     private static final long MASK = 0xFFFFFFFFFFFFL;     // (1L << 48) - 1
     private static final double DOUBLE_UNIT = 0x1.0p-53d; // 1.0 / (1L << 53)
-    private static final float FLOAT_UNIT = 0x1.0p-24f;   // 1.0f / (1 << 24)
+    private static final float FLOAT_UNIT = 0x1.0p-24f;   // 1.0 / (1 << 24)
 
     protected static final long SEED_UNIQUIFIER_INVERSE_MULTIPLIER = -289066557591992163L;
 
@@ -54,23 +54,7 @@ public class ReversibleJavaRandom extends Random implements ReverseRandomGenerat
      * {@inheritDoc}
      */
     @Override
-    public void setSeed(int seed) {
-        setSeed((long) seed);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setSeed(int[] seed) {
-        setSeed(SeedUtils.convertToLong(seed));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @SuppressWarnings("ConstantConditions")
-    @Override
     public synchronized void setSeed(long seed) {
         if (this.seed != null) { //work around miserable override NPE in constructor.
             clear();
@@ -109,7 +93,7 @@ public class ReversibleJavaRandom extends Random implements ReverseRandomGenerat
 
     /**
      * Reverse of {@link #next(int)}.
-     * The method {@code prev} is implemented by class {@code ReversibleJdkRandom} by
+     * The method {@code prev} is implemented by class {@code ReversibleJavaRandom} by
      * atomically updating the seed to:
      * <pre>{@code ((seed - 0xBL) * 0xDFE05BCB1365L) & ((1L << 48) - 1)}</pre>
      * and returning:
@@ -278,5 +262,15 @@ public class ReversibleJavaRandom extends Random implements ReverseRandomGenerat
     @Override
     public long prevLong(long bound) {
         return DefaultRandomPrimitivesFactory.prevLong(this, bound);
+    }
+
+    @Override
+    public void prevBytes(byte[] bytes, int start, int len) {
+        //FIXME
+    }
+
+    @Override
+    public void nextBytes(byte[] bytes, int start, int len) {
+        //FIXME
     }
 }

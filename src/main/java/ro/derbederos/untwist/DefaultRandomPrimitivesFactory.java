@@ -22,7 +22,7 @@ class DefaultRandomPrimitivesFactory {
         return n != 0;
     }
 
-    static int nextInt(ReverseRandomGenerator generator, int bound) {
+    static int nextInt(ReverseUniformRandomProvider generator, int bound) {
         if (bound <= 0) {
             throw new IllegalArgumentException("bound must be strictly positive");
         }
@@ -41,7 +41,7 @@ class DefaultRandomPrimitivesFactory {
         return r;
     }
 
-    static int prevInt(ReverseRandomGenerator generator, int bound) {
+    static int prevInt(ReverseUniformRandomProvider generator, int bound) {
         if (bound <= 0) {
             throw new IllegalArgumentException("bound must be strictly positive");
         }
@@ -60,7 +60,7 @@ class DefaultRandomPrimitivesFactory {
         return r;
     }
 
-    static int nextInt(ReverseRandomGenerator generator, int origin, int bound) {
+    static int nextInt(ReverseUniformRandomProvider generator, int origin, int bound) {
         if (origin < bound) {
             int n = bound - origin;
             if (n > 0) {
@@ -77,7 +77,7 @@ class DefaultRandomPrimitivesFactory {
         }
     }
 
-    static int prevInt(ReverseRandomGenerator generator, int origin, int bound) {
+    static int prevInt(ReverseUniformRandomProvider generator, int origin, int bound) {
         if (origin < bound) {
             int n = bound - origin;
             if (n > 0) {
@@ -94,7 +94,7 @@ class DefaultRandomPrimitivesFactory {
         }
     }
 
-    static long nextLong(ReverseRandomGenerator generator, long bound) {
+    static long nextLong(ReverseUniformRandomProvider generator, long bound) {
         if (bound <= 0) {
             throw new IllegalArgumentException("bound must be strictly positive");
         }
@@ -113,7 +113,7 @@ class DefaultRandomPrimitivesFactory {
         return r;
     }
 
-    static long prevLong(ReverseRandomGenerator generator, long bound) {
+    static long prevLong(ReverseUniformRandomProvider generator, long bound) {
         if (bound <= 0) {
             throw new IllegalArgumentException("bound must be strictly positive");
         }

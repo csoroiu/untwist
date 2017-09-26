@@ -16,17 +16,9 @@
 
 package ro.derbederos.untwist;
 
-/**
- * Marker interface for a sampler that generates values from an N(0,1)
- * <a href="https://en.wikipedia.org/wiki/Normal_distribution">
- * Gaussian distribution</a>.
- */
-public interface NormalizedGaussianSampler {
+import org.apache.commons.rng.RestorableUniformRandomProvider;
 
-    /**
-     * Returns the next pseudorandom, Gaussian ("normally") distributed
-     * <code>double</code> value with mean <code>0.0</code> and standard
-     * deviation <code>1.0</code> from this random number generator's sequence.
-     */
-    double nextGaussian();
+public interface RestorableReverseUniformRandomProvider
+        extends ReverseUniformRandomProvider, RestorableUniformRandomProvider {
+
 }

@@ -16,12 +16,25 @@
 
 package ro.derbederos.untwist;
 
+import org.apache.commons.rng.sampling.distribution.NormalizedGaussianSampler;
+
 public interface ReverseNormalizedGaussianSampler extends NormalizedGaussianSampler {
 
     /**
      * {@inheritDoc}
      */
     @Override
+    default double sample() {
+        return nextGaussian();
+    }
+
+    default void undoSample() {
+        undoNextGaussian();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     double nextGaussian();
 
     /**

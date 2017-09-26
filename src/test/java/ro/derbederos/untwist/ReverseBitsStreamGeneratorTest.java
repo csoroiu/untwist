@@ -27,11 +27,11 @@ import static ro.derbederos.untwist.Utils.nextBooleans;
 import static ro.derbederos.untwist.Utils.nextFloats;
 
 
-public class ReverseBitsStreamGeneratorTest extends ReverseBitsStreamGeneratorAbstractTest<ReverseBitsStreamGenerator> {
+public class ReverseBitsStreamGeneratorTest extends ReverseBitsStreamGeneratorAbstractTest<ReverseBitsStreamGeneratorTest.TestBitStreamGenerator> {
 
     @Override
-    protected ReverseBitsStreamGenerator makeGenerator() {
-        ReverseBitsStreamGenerator generator = new TestBitStreamGenerator();
+    protected TestBitStreamGenerator makeGenerator() {
+        TestBitStreamGenerator generator = new TestBitStreamGenerator();
         generator.setSeed(1000);
         return generator;
     }
@@ -44,25 +44,11 @@ public class ReverseBitsStreamGeneratorTest extends ReverseBitsStreamGeneratorAb
     }
 
     static class TestBitStreamGenerator extends ReverseBitsStreamGenerator {
-        private static final long serialVersionUID = 1L;
         private final BitRandom ran = new BitRandom();
 
         TestBitStreamGenerator() {
         }
 
-        @Override
-        public void setSeed(int seed) {
-            this.ran.setSeed((long) seed);
-            this.clear();
-        }
-
-        @Override
-        public void setSeed(int[] seed) {
-            this.ran.setSeed(SeedUtils.convertToLong(seed));
-            this.clear();
-        }
-
-        @Override
         public void setSeed(long seed) {
             this.ran.setSeed(seed);
         }

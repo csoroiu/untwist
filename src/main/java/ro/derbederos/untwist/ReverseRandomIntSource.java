@@ -16,14 +16,17 @@
 
 package ro.derbederos.untwist;
 
+import org.apache.commons.rng.core.source32.RandomIntSource;
+
 /**
  * Source of randomness that generates a 32-bit int.
  */
-public interface ReverseRandomIntSource {
+public interface ReverseRandomIntSource extends RandomIntSource {
 
     /**
-     * @return the next random value
+     * {@inheritDoc}
      */
+    @Override
     int next();
 
     /**

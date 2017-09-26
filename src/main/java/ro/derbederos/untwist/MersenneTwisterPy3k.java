@@ -341,8 +341,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister implements Re
      * Clears the cache used by the default implementation of
      * {@link #nextGaussian}.
      */
-    @Override
-    public void clear() {
+    private void clear() {
         nextGaussian = Double.NaN;
         shouldReverseGaussian = false;
     }

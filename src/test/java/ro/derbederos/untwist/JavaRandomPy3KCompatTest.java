@@ -38,24 +38,19 @@ public class JavaRandomPy3KCompatTest {
     }
 
     @Test
-    public void testSet32BitSeedIntVsLongVsArray() {
+    public void testSet32BitSeedIntVsLong() {
         final int seedInt = 0x12345678;
         final long seedLong = 0x12345678L;
-        final int[] seedArray = {seedInt};
 
         JavaRandomPy3KCompat rInt = new JavaRandomPy3KCompat();
         rInt.setSeed(seedInt);
         int[] actualInt = nextInts(rInt, 10, 0, 1000).toArray();
 
-        JavaRandomPy3KCompat rLong = new JavaRandomPy3KCompat(seedLong);
+        JavaRandomPy3KCompat rLong = new JavaRandomPy3KCompat();
+        rLong.setSeed(seedLong);
         int[] actualLong = nextInts(rLong, 10, 0, 1000).toArray();
 
-        JavaRandomPy3KCompat rArray = new JavaRandomPy3KCompat();
-        rArray.setSeed(seedArray);
-        int[] actualArray = nextInts(rArray, 10, 0, 1000).toArray();
-
         assertThat("IntVsLong", actualInt, equalTo(actualLong));
-        assertThat("LongVsArray", actualLong, equalTo(actualArray));
     }
 
     @Test
