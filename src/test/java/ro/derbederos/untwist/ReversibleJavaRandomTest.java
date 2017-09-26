@@ -16,7 +16,6 @@
 
 package ro.derbederos.untwist;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -28,7 +27,7 @@ import static ro.derbederos.untwist.RandomUtils.nextLongs;
 import static ro.derbederos.untwist.Utils.nextBooleans;
 import static ro.derbederos.untwist.Utils.nextFloats;
 
-public class ReversibleJavaRandomTest extends ReverseRandomGeneratorAbstractTest<ReversibleJavaRandom> {
+public class ReversibleJavaRandomTest extends ReverseUniformRandomProviderAbstractTest<ReversibleJavaRandom> {
 
     @Override
     protected ReversibleJavaRandom makeGenerator() {
@@ -225,13 +224,6 @@ public class ReversibleJavaRandomTest extends ReverseRandomGeneratorAbstractTest
         Boolean[] actual = nextBooleans(generator, expected.length).toArray(Boolean[]::new);
 
         assertThat(actual, equalTo(expected));
-    }
-
-    @Override
-    @Test
-    @Ignore
-    public void testNextPrevMixedCalls() {
-        super.testNextPrevMixedCalls();
     }
 
     @Test

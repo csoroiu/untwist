@@ -16,7 +16,6 @@
 
 package ro.derbederos.untwist;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -122,12 +121,5 @@ public class TurboPascalRandomTest extends ReverseBitsStreamGeneratorAbstractTes
         Boolean[] actual = nextBooleans(generator, expected.length).toArray(Boolean[]::new);
 
         assertThat(actual, equalTo(expected));
-    }
-
-    @Override
-    @Test
-    @Ignore
-    public void testNextPrevMixedCalls() {
-        super.testNextPrevMixedCalls();
     }
 }

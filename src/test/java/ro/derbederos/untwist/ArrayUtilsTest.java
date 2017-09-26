@@ -16,8 +16,7 @@
 
 package ro.derbederos.untwist;
 
-import org.apache.commons.math3.random.RandomAdaptor;
-import org.apache.commons.math3.random.RandomGenerator;
+import org.apache.commons.rng.UniformRandomProvider;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,7 +31,7 @@ import static ro.derbederos.untwist.ArrayUtils.*;
 
 public class ArrayUtilsTest {
 
-    private RandomGenerator generator;
+    private UniformRandomProvider generator;
 
     @Before
     public void setUp() {
@@ -90,8 +89,8 @@ public class ArrayUtilsTest {
 
     @Test
     public void testShuffleModernVsCollections() {
-        RandomGenerator randomProvider1 = new MersenneTwisterPy3k(new int[]{0x123, 0x234, 0x345, 0x456});
-        RandomGenerator randomProvider2 = new MersenneTwisterPy3k(new int[]{0x123, 0x234, 0x345, 0x456});
+        ReverseUniformRandomProvider randomProvider1 = new MersenneTwisterPy3k(new int[]{0x123, 0x234, 0x345, 0x456});
+        ReverseUniformRandomProvider randomProvider2 = new MersenneTwisterPy3k(new int[]{0x123, 0x234, 0x345, 0x456});
 
         Integer[] expected = new Integer[]{5, 2, 8, 4, 7, 0, 6, 1, 9, 3};
         int[] actualInt = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -116,8 +115,8 @@ public class ArrayUtilsTest {
 
     @Test
     public void testShuffleModernVsCollectionsTwoCalls() {
-        RandomGenerator randomProvider1 = new MersenneTwisterPy3k(new int[]{0x123, 0x234, 0x345, 0x456});
-        RandomGenerator randomProvider2 = new MersenneTwisterPy3k(new int[]{0x123, 0x234, 0x345, 0x456});
+        ReverseUniformRandomProvider randomProvider1 = new MersenneTwisterPy3k(new int[]{0x123, 0x234, 0x345, 0x456});
+        ReverseUniformRandomProvider randomProvider2 = new MersenneTwisterPy3k(new int[]{0x123, 0x234, 0x345, 0x456});
 
         Integer[] expected = new Integer[]{2, 9, 3, 5, 4, 1, 8, 0, 7, 6};
         int[] actualInt = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};

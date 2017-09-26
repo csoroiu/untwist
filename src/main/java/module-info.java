@@ -1,5 +1,6 @@
 module ro.derbederos.untwist {
     exports ro.derbederos.untwist;
 
-    requires transitive commons.math3;
+    requires commons.rng.client.api;
+    requires commons.rng.sampling;
 }

@@ -23,7 +23,7 @@ import java.io.Serializable;
 
 
 /**
- * This class is a MersenneTwister which also implements {@link ReverseRandomGenerator}.
+ * This class is a MersenneTwister which also implements {@link ReverseUniformRandomProvider}.
  * <p>
  * This class implements a powerful pseudo-random number generator
  * developed by Makoto Matsumoto and Takuji Nishimura during
@@ -168,8 +168,6 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
             longMT = (1812433253L * (longMT ^ (longMT >>> 30)) + mti) & 0xFFFFFFFFL;
             mt[mti] = (int) longMT;
         }
-
-        clear(); // Clear normal deviate cache
     }
 
     /**
@@ -183,11 +181,9 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
      *
      * @param seed the initial seed (32 bits integer)
      */
-    @Override
     public void setSeed(int seed) {
         initGenRand(seed);
         fixState();
-        clear();
     }
 
     /**
@@ -203,7 +199,6 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
      *             the seed of the generator will be the current system time plus the
      *             system identity hash code of this instance
      */
-    @Override
     public void setSeed(int[] seed) {
 
         if (seed == null) {
@@ -245,7 +240,6 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
 
         mt[0] = 0x80000000; // MSB is 1; assuring non-zero initial array
         fixState();
-        clear(); // Clear normal deviate cache
     }
 
     /**
@@ -256,7 +250,6 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
      *
      * @param seed the initial seed (64 bits integer)
      */
-    @Override
     public void setSeed(long seed) {
         setSeed(new int[]{(int) (seed >>> 32), (int) (seed & 0xFFFFFFFFL)});
     }

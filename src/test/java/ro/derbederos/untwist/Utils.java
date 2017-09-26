@@ -16,7 +16,7 @@
 
 package ro.derbederos.untwist;
 
-import org.apache.commons.math3.random.RandomGenerator;
+import org.apache.commons.rng.UniformRandomProvider;
 import org.hamcrest.Matcher;
 import org.junit.Ignore;
 
@@ -83,19 +83,19 @@ class Utils {
         return b;
     }
 
-    static Stream<Float> nextFloats(RandomGenerator generator, int size) {
+    static Stream<Float> nextFloats(UniformRandomProvider generator, int size) {
         return Stream.generate(generator::nextFloat).limit(size);
     }
 
-    static Stream<Float> prevFloats(ReverseRandomGenerator generator, int size) {
+    static Stream<Float> prevFloats(ReverseUniformRandomProvider generator, int size) {
         return Stream.generate(generator::prevFloat).limit(size);
     }
 
-    static Stream<Boolean> nextBooleans(RandomGenerator generator, int size) {
+    static Stream<Boolean> nextBooleans(UniformRandomProvider generator, int size) {
         return Stream.generate(generator::nextBoolean).limit(size);
     }
 
-    static Stream<Boolean> prevBooleans(ReverseRandomGenerator generator, int size) {
+    static Stream<Boolean> prevBooleans(ReverseUniformRandomProvider generator, int size) {
         return Stream.generate(generator::prevBoolean).limit(size);
     }
 }

@@ -16,11 +16,11 @@
 
 package ro.derbederos.untwist;
 
-import org.apache.commons.math3.random.RandomGenerator;
+import org.apache.commons.rng.UniformRandomProvider;
 
 public class ArrayUtils {
 
-    public static int[] getTree(RandomGenerator generator, int n) {
+    public static int[] getTree(UniformRandomProvider generator, int n) {
         // http://algs4.cs.princeton.edu/41graph/GraphGenerator.java.html
         // https://en.wikipedia.org/wiki/Pr%C3%BCfer_sequence
         int[] perm = getPermutation(generator, n);
@@ -41,26 +41,26 @@ public class ArrayUtils {
         return perm;
     }
 
-    public static int[] getPermutation(RandomGenerator generator, int n) {
+    public static int[] getPermutation(UniformRandomProvider generator, int n) {
         int[] perm = getIdentityPermutation(n);
         shuffle(generator, perm);
         return perm;
     }
 
-    public static void shuffle(RandomGenerator generator, int[] source) {
+    public static void shuffle(UniformRandomProvider generator, int[] source) {
         // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm
         for (int i = source.length; i > 1; i--) {
             swap(source, i - 1, generator.nextInt(i));
         }
     }
 
-    public static int[] getPermutationInsideOut(RandomGenerator generator, int n) {
+    public static int[] getPermutationInsideOut(UniformRandomProvider generator, int n) {
         int[] perm = getIdentityPermutation(n);
         shuffleInsideOut(generator, perm);
         return perm;
     }
 
-    public static void shuffleInsideOut(RandomGenerator generator, int[] source) {
+    public static void shuffleInsideOut(UniformRandomProvider generator, int[] source) {
         // https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_.22inside-out.22_algorithm
         for (int i = 0; i < source.length; i++) {
             swap(source, i, generator.nextInt(i + 1));

@@ -27,7 +27,7 @@ import static ro.derbederos.untwist.Utils.reverseArray;
 
 
 public abstract class ReverseBitsStreamGeneratorAbstractTest<T extends ReverseBitsStreamGenerator>
-        extends ReverseRandomGeneratorAbstractTest<T> {
+        extends ReverseUniformRandomProviderAbstractTest<T> {
 
     @Override
     protected abstract T makeGenerator();

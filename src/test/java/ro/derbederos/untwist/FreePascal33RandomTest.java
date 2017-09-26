@@ -16,7 +16,6 @@
 
 package ro.derbederos.untwist;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -92,12 +91,5 @@ public class FreePascal33RandomTest extends FreePascalRandomTest {
 
         assertThat(expected, equalTo(4389652262288902656L));
         assertThat(actual, equalTo(expected));
-    }
-
-    @Override
-    @Test
-    @Ignore
-    public void testNextPrevMixedCalls() {
-        super.testNextPrevMixedCalls();
     }
 }
