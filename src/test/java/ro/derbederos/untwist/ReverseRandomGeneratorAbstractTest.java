@@ -21,6 +21,7 @@ import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.apache.commons.math3.random.RandomDataGenerator;
 import org.apache.commons.math3.random.RandomGeneratorAbstractTest;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -30,7 +31,6 @@ import org.junit.runner.RunWith;
 import java.util.IntSummaryStatistics;
 import java.util.function.Supplier;
 import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static java.util.Arrays.stream;
@@ -71,6 +71,76 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
      */
     @Override
     protected abstract T makeGenerator();
+
+    @Override
+    @Test
+    public void testNextInt2() {
+        final int N = 10000;
+        int positives = (int) RandomUtils.nextInts(generator, N).filter(value -> value >= 0).count();
+        int walk = 2 * positives - N;
+        Assert.assertTrue("Walked too far astray: " + walk + "\nNote: This " +
+                        "test will fail randomly about 1 in 100 times.",
+                Math.abs(walk) < Math.sqrt(N) * 2.576);
+    }
+
+    @Override
+    @Test
+    public void testNextLong2() {
+        final int N = 1000;
+        int positives = (int) RandomUtils.nextLongs(generator, N).filter(value -> value >= 0).count();
+        int walk = 2 * positives - N;
+
+        Assert.assertTrue("Walked too far astray: " + walk + "\nNote: This " +
+                        "test will fail randomly about 1 in 100 times.",
+                Math.abs(walk) < Math.sqrt(N) * 2.576);
+    }
+
+    @Override
+    @Test
+    public void testNexBoolean2() {
+        int walk = 0;
+        final int N = 10000;
+        for (int k = 0; k < N; ++k) {
+            if (this.generator.nextBoolean()) {
+                ++walk;
+            } else {
+                --walk;
+            }
+        }
+        Assert.assertTrue("Walked too far astray: " + walk + "\nNote: This " +
+                        "test will fail randomly about 1 in 100 times.",
+                Math.abs(walk) < Math.sqrt(N) * 2.576);
+    }
+
+    @Test
+    @Override
+    public void testNextIntWideRange() {
+        int lower = -0x6543210F;
+        int upper = 0x456789AB;
+        IntSummaryStatistics statistics = RandomUtils.nextInts(generator, 1_000_000, lower, upper)
+                .summaryStatistics();
+        assertThat(statistics.getMin(), greaterThanOrEqualTo(lower));
+        assertThat(statistics.getMax(), lessThanOrEqualTo(upper));
+        double ratio = ((double) statistics.getMax() - (double) statistics.getMin()) /
+                (((double) upper) - ((double) lower));
+        assertThat(ratio, greaterThan(0.99999));
+    }
+
+//    @Test
+//    @Ignore
+//    public void testNextLongWideRange() {
+//        long lower = -0x6543210FEDCBA987L;
+//        long upper = 0x456789ABCDEF0123L;
+//        LongSummaryStatistics statistics = LongStream
+//                .generate(() -> generator.nextLong(lower, upper))
+//                .limit(1_000_000)
+//                .summaryStatistics();
+//        assertThat(statistics.getMin(), greaterThanOrEqualTo(lower));
+//        assertThat(statistics.getMax(), lessThanOrEqualTo(upper));
+//        double ratio = ((double) statistics.getMax() - (double) statistics.getMin()) /
+//                (((double) upper) - ((double) lower));
+//        Assert.assertTrue(ratio > 0.99999);
+//    }
 
     @Test
     public void testSet32BitSeedIntVsLongVsArray() {
@@ -120,6 +190,7 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
         }
         try {
             generator.nextInt(0);
+            fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException ignored) {
         }
     }
@@ -133,6 +204,7 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
         }
         try {
             generator.prevInt(0);
+            fail("IllegalArgumentException expected");
         } catch (IllegalArgumentException ignored) {
         }
     }
@@ -153,34 +225,18 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
     }
 
     @Test
-    public void testNextIntWideRange2() {
-        int lower = -0x6543210F;
-        int upper = 0x456789AB;
-        IntSummaryStatistics statistics = IntStream
-                .generate(() -> generator.nextInt(lower, upper))
-                .limit(1_000_000)
-                .summaryStatistics();
-        assertThat(statistics.getMin(), greaterThanOrEqualTo(lower));
-        assertThat(statistics.getMax(), lessThanOrEqualTo(upper));
-        double ratio = ((double) statistics.getMax() - (double) statistics.getMin()) /
-                (((double) upper) - ((double) lower));
-        assertThat(ratio, greaterThan(0.99999));
+    public void testNextLongNeg() {
+        expectedException.expect(IllegalArgumentException.class);
+
+        generator.nextLong(-16);
     }
 
-//    @Test
-//    public void testNextLongWideRange2() {
-//        long lower = -0x6543210FEDCBA987L;
-//        long upper = 0x456789ABCDEF0123L;
-//        LongSummaryStatistics statistics = LongStream
-//                .generate(() -> generator.nextLong(lower, upper))
-//                .limit(1_000_000)
-//                .summaryStatistics();
-//        assertThat(statistics.getMin(), greaterThanOrEqualTo(lower));
-//        assertThat(statistics.getMax(), lessThanOrEqualTo(upper));
-//        double ratio = ((double) statistics.getMax() - (double) statistics.getMin()) /
-//                (((double) upper) - ((double) lower));
-//        Assert.assertTrue(ratio > 0.99999);
-//    }
+    @Test
+    public void testPrevLongNeg() {
+        expectedException.expect(IllegalArgumentException.class);
+
+        generator.prevLong(-16);
+    }
 
     @Test
     public void testNextPrevInt() {

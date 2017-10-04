@@ -181,6 +181,24 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
     /**
      * {@inheritDoc}
      * <p>
+     * <b>This method is not available in Turbo Pascal directly.</b>
+     */
+    @Override
+    public int nextInt() {
+        return super.nextInt();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int prevInt() {
+        return super.prevInt();
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
      * Preserves compatibility with Pascal where negative values are not allowed for parameter {@code n}.
      * Delphi allows negative values and treats {@code n} as unsigned in the computations, but the results
      * is still a signed integer.
@@ -308,11 +326,11 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
 
     /**
      * Similar to FreePascal's {@code Math.RandG(0, 1)} and returns the next pseudorandom, Gaussian ("normally") distributed
-     * {@code double} value with mean {@code 1.0} and standard deviation {@code 1.0} from this random number generator's sequence.
+     * {@code double} value with mean {@code 0.0} and standard deviation {@code 1.0} from this random number generator's sequence.
      * <p>
      * FreePascal and Delphi use <a href="https://en.wikipedia.org/wiki/Marsaglia_polar_method#Implementation">Marsaglia polar method</a>.
      *
-     * @return the next pseudorandom, Gaussian ("normally") distributed {@code double} value with mean {@code 1.0}
+     * @return the next pseudorandom, Gaussian ("normally") distributed {@code double} value with mean {@code 0.0}
      * and standard deviation {@code 1.0} from this random number generator's sequence.
      */
     @Override

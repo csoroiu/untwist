@@ -24,6 +24,7 @@ import java.util.stream.IntStream;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.lessThan;
+import static org.junit.Assert.fail;
 import static ro.derbederos.untwist.RandomUtils.nextDoubles;
 import static ro.derbederos.untwist.RandomUtils.nextInts;
 import static ro.derbederos.untwist.RandomUtils.nextLongs;
@@ -39,23 +40,39 @@ public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetR
 
     @Override
     @Test
-    @Ignore
-    public void testNextInt2() {
-        super.testNextInt2();
+    public void testNextIntIAE2() {
+        try {
+            generator.nextInt(-1);
+            fail("IllegalArgumentException expected");
+        } catch (IllegalArgumentException ignored) {
+        }
+        int nextInt = generator.nextInt(0);
+        assertThat(nextInt, equalTo(0));
+    }
+
+    @Override
+    @Test
+    public void testPrevIntIAE2() {
+        try {
+            generator.prevInt(-1);
+            fail("IllegalArgumentException expected");
+        } catch (IllegalArgumentException ignored) {
+        }
+
+        int prevInt = generator.prevInt(0);
+        assertThat(prevInt, equalTo(0));
     }
 
     @Override
     @Test
     @Ignore
-    public void testNextIntWideRange() {
-        super.testNextIntWideRange();
+    public void testNextInt2() {
+        super.testNextInt2();
     }
 
     @Test
     public void testNextIntIsPositiveNumber() {
-        boolean result = IntStream
-                .generate(generator::nextInt)
-                .limit(429_496_730)
+        boolean result = RandomUtils.nextInts(generator, 429_496_730)
                 .allMatch((i) -> 0 <= i && i < Integer.MAX_VALUE);
         assertThat(result, equalTo(true));
     }

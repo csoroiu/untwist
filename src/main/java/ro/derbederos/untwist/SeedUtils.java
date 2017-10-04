@@ -17,7 +17,6 @@
 package ro.derbederos.untwist;
 
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.security.SecureRandom;
 
 import static java.lang.Integer.toUnsignedLong;
@@ -72,7 +71,7 @@ public class SeedUtils {
     public static int[] generateSecureRandomIntArraySeed(int size) {
         byte[] bytes = SecureRandom.getSeed(Integer.BYTES * size);
         int[] result = new int[size];
-        ByteBuffer.wrap(bytes).order(ByteOrder.nativeOrder()).asIntBuffer().get(result);
+        ByteBuffer.wrap(bytes).asIntBuffer().get(result);
         return result;
     }
 }

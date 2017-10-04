@@ -114,7 +114,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
      * <p>
      * This method is the same as {@code genrand_real2} method in the
      * <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/CODES/mt19937ar.c">original implementation</a>
-     * of theMersenne Twister.
+     * of the Mersenne Twister.
      */
     @Override
     public double nextDouble() {
@@ -138,7 +138,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
      * <p>
      * This method is the same as {@code genrand_real2} method in the
      * <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/CODES/mt19937ar.c">original implementation</a>
-     * of theMersenne Twister.
+     * of the Mersenne Twister.
      */
     @Override
     public float nextFloat() {
@@ -153,6 +153,27 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
     @Override
     public float prevFloat() {
         return (float) prevDouble();
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * <b>This method is not available in FreePascal directly.</b>
+     * Maybe <a href="https://bugs.freepascal.org/view.php?id=31693">https://bugs.freepascal.org/view.php?id=31693</a>
+     * or <a href="https://bugs.freepascal.org/view.php?id=31633">https://bugs.freepascal.org/view.php?id=31633</a>
+     * will expose it.
+     */
+    @Override
+    public int nextInt() {
+        return super.nextInt();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int prevInt() {
+        return super.prevInt();
     }
 
     /**
@@ -204,7 +225,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
     /**
      * The reverse of {@link #nextInt(int, int)}.
      * <p>
-     * Feturns a random integer from the range that extends between {@code from} and {@code to} (exclusive).
+     * Returns a random integer from the range that extends between {@code from} and {@code to} (exclusive).
      * It can handle negative ranges (where {@code from} is greater than {@code to}).
      * <p>
      * Source code:
@@ -237,7 +258,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
     /**
      * The reverse of {@link #nextLong(long, long)}.
      * <p>
-     * Feturns a random long from the range that extends between {@code from} and {@code to} (exclusive).
+     * Returns a random long from the range that extends between {@code from} and {@code to} (exclusive).
      * It can handle negative ranges (where {@code from} is greater than {@code to}).
      * <p>
      * Source code:
@@ -253,6 +274,8 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
 
     /**
      * {@inheritDoc}
+     * <p>
+     * <b>This method is not available in FreePascal directly.</b>
      */
     @Override
     public long nextLong() {
@@ -309,14 +332,14 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
 
     /**
      * Similar to FreePascal's {@code Math.RandG(0, 1)} and returns the next pseudorandom, Gaussian ("normally") distributed
-     * {@code double} value with mean {@code 1.0} and standard deviation {@code 1.0} from this random number generator's sequence.
+     * {@code double} value with mean {@code 0.0} and standard deviation {@code 1.0} from this random number generator's sequence.
      * <p>
      * FreePascal and Delphi use <a href="https://en.wikipedia.org/wiki/Marsaglia_polar_method#Implementation">Marsaglia polar method</a>.
      * <p>
      * Source code:
      * <a href=https://github.com/graemeg/freepascal/blob/5186987/rtl/objpas/math.pp#L1314>math.pp#RandG(float, float)</a>
      *
-     * @return the next pseudorandom, Gaussian ("normally") distributed {@code double} value with mean {@code 1.0}
+     * @return the next pseudorandom, Gaussian ("normally") distributed {@code double} value with mean {@code 0.0}
      * and standard deviation {@code 1.0} from this random number generator's sequence.
      */
     @Override

@@ -16,8 +16,6 @@
 
 package ro.derbederos.untwist;
 
-import org.apache.commons.math3.exception.OutOfRangeException;
-
 import static java.lang.Integer.toUnsignedLong;
 
 public abstract class ReverseBitsStreamGenerator implements ReverseRandomGenerator {
@@ -73,19 +71,17 @@ public abstract class ReverseBitsStreamGenerator implements ReverseRandomGenerat
     public void nextBytes(byte[] bytes,
                           int start,
                           int len) {
-        if (start < 0 ||
-                start >= bytes.length) {
-            throw new OutOfRangeException(start, 0, bytes.length);
+        if (start < 0 || start >= bytes.length) {
+            throw new IndexOutOfBoundsException(start + " is out of interval [" + 0 + ", " + bytes.length + ")");
         }
-        if (len < 0 ||
-                len > bytes.length - start) {
-            throw new OutOfRangeException(len, 0, bytes.length - start);
+        if (len < 0 || len > bytes.length - start) {
+            throw new IndexOutOfBoundsException(len + " is out of interval [" + 0 + ", " + (bytes.length - start) + "]");
         }
 
         nextBytesFill(bytes, start, len);
     }
 
-    private void nextBytesFill(byte[] bytes, int start, int len) {
+    protected void nextBytesFill(byte[] bytes, int start, int len) {
         int index = start; // Index of first insertion.
 
         // Index of first insertion plus multiple 4 part of length (i.e. length
@@ -135,19 +131,19 @@ public abstract class ReverseBitsStreamGenerator implements ReverseRandomGenerat
     public void prevBytes(byte[] bytes, int start, int len) {
         if (start < 0 ||
                 start >= bytes.length) {
-            throw new OutOfRangeException(start, 0, bytes.length);
+            throw new IndexOutOfBoundsException(start + " is out of interval [" + 0 + ", " + bytes.length + ")");
         }
         if (len < 0 ||
                 len > bytes.length - start) {
-            throw new OutOfRangeException(len, 0, bytes.length - start);
+            throw new IndexOutOfBoundsException(len + " is out of interval [" + 0 + ", " + (bytes.length - start) + "]");
         }
 
         prevBytesFill(bytes, start, len);
     }
 
-    private void prevBytesFill(byte[] bytes,
-                               int start,
-                               int len) {
+    protected void prevBytesFill(byte[] bytes,
+                                 int start,
+                                 int len) {
         final int bytesInInt = Integer.SIZE / Byte.SIZE;
         final int remainder = bytes.length % bytesInInt;
         if (remainder > 0) {

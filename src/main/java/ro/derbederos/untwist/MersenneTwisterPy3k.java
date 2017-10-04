@@ -16,8 +16,6 @@
 
 package ro.derbederos.untwist;
 
-import org.apache.commons.math3.exception.OutOfRangeException;
-
 import static java.lang.Integer.toUnsignedLong;
 
 /**
@@ -232,29 +230,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
      * <a href="https://github.com/python/cpython/blob/master/Modules/_randommodule.c">_randommodule.c</a>.
      */
     @Override
-    public void nextBytes(byte[] bytes, int start, int len) {
-        if (start < 0 || start >= bytes.length) {
-            throw new OutOfRangeException(start, 0, bytes.length);
-        }
-        if (len < 0 || len > bytes.length - start) {
-            throw new OutOfRangeException(len, 0, bytes.length - start);
-        }
-
-        nextBytesFill(bytes, start, len);
-    }
-
-    /**
-     * {@inheritDoc}
-     * <p>
-     * Source code: {@code random_getrandbits} method in the file
-     * <a href="https://github.com/python/cpython/blob/master/Modules/_randommodule.c">_randommodule.c</a>.
-     */
-    @Override
-    public void nextBytes(byte[] bytes) {
-        nextBytesFill(bytes, 0, bytes.length);
-    }
-
-    private void nextBytesFill(byte[] bytes, int start, int len) {
+    protected void nextBytesFill(byte[] bytes, int start, int len) {
         int i = start;
         final int endIndex = start + len;
         final int iEnd = endIndex - 4;
@@ -282,31 +258,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
      * <a href="https://github.com/python/cpython/blob/master/Modules/_randommodule.c">_randommodule.c</a>.
      */
     @Override
-    public void prevBytes(byte[] bytes) {
-        prevBytesFill(bytes, 0, bytes.length);
-    }
-
-    /**
-     * {@inheritDoc}
-     * <p>
-     * Source code: {@code random_getrandbits} method in the file
-     * <a href="https://github.com/python/cpython/blob/master/Modules/_randommodule.c">_randommodule.c</a>.
-     */
-    @Override
-    public void prevBytes(byte[] bytes, int start, int len) {
-        if (start < 0 ||
-                start >= bytes.length) {
-            throw new OutOfRangeException(start, 0, bytes.length);
-        }
-        if (len < 0 ||
-                len > bytes.length - start) {
-            throw new OutOfRangeException(len, 0, bytes.length - start);
-        }
-
-        prevBytesFill(bytes, start, len);
-    }
-
-    private void prevBytesFill(byte[] bytes, int start, int len) {
+    protected void prevBytesFill(byte[] bytes, int start, int len) {
         int i = start;
         int iEnd = len - (len & 0x7ffffffc);
         if (iEnd != 0) {

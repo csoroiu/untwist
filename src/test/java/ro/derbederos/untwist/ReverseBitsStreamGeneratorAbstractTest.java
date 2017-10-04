@@ -33,20 +33,6 @@ public abstract class ReverseBitsStreamGeneratorAbstractTest<T extends ReverseBi
     protected abstract T makeGenerator();
 
     @Test
-    public void testNextLongNeg() {
-        expectedException.expect(IllegalArgumentException.class);
-
-        generator.nextLong(-16);
-    }
-
-    @Test
-    public void testPrevLongNeg() {
-        expectedException.expect(IllegalArgumentException.class);
-
-        generator.prevLong(-16);
-    }
-
-    @Test
     public void testNextPrevLongBound() {
         long[] expected = nextLongs(generator, 2459, 0, 0x7ABCDEL).toArray();
         long[] actual = prevLongs(generator, 2459, 0, 0x7ABCDEL).toArray();

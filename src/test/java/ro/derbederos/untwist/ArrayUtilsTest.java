@@ -90,15 +90,15 @@ public class ArrayUtilsTest {
 
     @Test
     public void testShuffleModernVsCollections() {
-        RandomGenerator randomizer1 = new MersenneTwisterPy3k(new int[]{0x123, 0x234, 0x345, 0x456});
-        RandomGenerator randomizer2 = new MersenneTwisterPy3k(new int[]{0x123, 0x234, 0x345, 0x456});
+        RandomGenerator randomProvider1 = new MersenneTwisterPy3k(new int[]{0x123, 0x234, 0x345, 0x456});
+        RandomGenerator randomProvider2 = new MersenneTwisterPy3k(new int[]{0x123, 0x234, 0x345, 0x456});
 
         Integer[] expected = new Integer[]{5, 2, 8, 4, 7, 0, 6, 1, 9, 3};
         int[] actualInt = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         List<Integer> actualInteger = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
 
-        shuffle(randomizer1, actualInt);
-        Collections.shuffle(actualInteger, new RandomAdaptor(randomizer2));
+        shuffle(randomProvider1, actualInt);
+        Collections.shuffle(actualInteger, new RandomAdaptor(randomProvider2));
 
         assertThat(stream(actualInt).boxed().toArray(), equalTo(actualInteger.toArray(new Integer[actualInt.length])));
         assertThat(stream(actualInt).boxed().toArray(), equalTo(expected));
@@ -116,17 +116,17 @@ public class ArrayUtilsTest {
 
     @Test
     public void testShuffleModernVsCollectionsTwoCalls() {
-        RandomGenerator randomizer1 = new MersenneTwisterPy3k(new int[]{0x123, 0x234, 0x345, 0x456});
-        RandomGenerator randomizer2 = new MersenneTwisterPy3k(new int[]{0x123, 0x234, 0x345, 0x456});
+        RandomGenerator randomProvider1 = new MersenneTwisterPy3k(new int[]{0x123, 0x234, 0x345, 0x456});
+        RandomGenerator randomProvider2 = new MersenneTwisterPy3k(new int[]{0x123, 0x234, 0x345, 0x456});
 
         Integer[] expected = new Integer[]{2, 9, 3, 5, 4, 1, 8, 0, 7, 6};
         int[] actualInt = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
         List<Integer> actualInteger = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
 
-        shuffle(randomizer1, actualInt);
-        shuffle(randomizer1, actualInt);
-        Collections.shuffle(actualInteger, new RandomAdaptor(randomizer2));
-        Collections.shuffle(actualInteger, new RandomAdaptor(randomizer2));
+        shuffle(randomProvider1, actualInt);
+        shuffle(randomProvider1, actualInt);
+        Collections.shuffle(actualInteger, new RandomAdaptor(randomProvider2));
+        Collections.shuffle(actualInteger, new RandomAdaptor(randomProvider2));
 
         assertThat(stream(actualInt).boxed().toArray(), equalTo(actualInteger.toArray(new Integer[actualInt.length])));
         assertThat(stream(actualInt).boxed().toArray(), equalTo(expected));

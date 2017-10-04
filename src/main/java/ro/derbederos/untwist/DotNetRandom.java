@@ -16,7 +16,6 @@
 
 package ro.derbederos.untwist;
 
-import org.apache.commons.math3.exception.OutOfRangeException;
 import org.apache.commons.math3.random.RandomGenerator;
 
 import java.util.Arrays;
@@ -484,10 +483,10 @@ public class DotNetRandom implements ReverseRandomGenerator {
      */
     public void nextBytes(byte[] bytes, int start, int len) {
         if (start < 0 || start >= bytes.length) {
-            throw new OutOfRangeException(start, 0, bytes.length);
+            throw new IndexOutOfBoundsException(start + " is out of interval [" + 0 + ", " + bytes.length + ")");
         }
         if (len < 0 || len > bytes.length - start) {
-            throw new OutOfRangeException(len, 0, bytes.length - start);
+            throw new IndexOutOfBoundsException(len + " is out of interval [" + 0 + ", " + (bytes.length - start) + "]");
         }
 
         nextBytesFill(bytes, start, len);
@@ -522,10 +521,10 @@ public class DotNetRandom implements ReverseRandomGenerator {
      */
     public void prevBytes(byte[] bytes, int start, int len) {
         if (start < 0 || start >= bytes.length) {
-            throw new OutOfRangeException(start, 0, bytes.length);
+            throw new IndexOutOfBoundsException(start + " is out of interval [" + 0 + ", " + bytes.length + ")");
         }
         if (len < 0 || len > bytes.length - start) {
-            throw new OutOfRangeException(len, 0, bytes.length - start);
+            throw new IndexOutOfBoundsException(len + " is out of interval [" + 0 + ", " + (bytes.length - start) + "]");
         }
 
         prevBytesFill(bytes, start, len);
@@ -556,6 +555,8 @@ public class DotNetRandom implements ReverseRandomGenerator {
     /**
      * Returns a 64 bit random integer (long). Unlike {@link #nextInt()} all 2<sup>64</sup> possible
      * {@code long} values should be produced with (approximately) equal probability.
+     * <p>
+     * <b>This method is not available in .Net directly.</b>
      *
      * @return a 64 bit random integer (long).
      */
@@ -585,6 +586,8 @@ public class DotNetRandom implements ReverseRandomGenerator {
 
     /**
      * {@inheritDoc}
+     * <p>
+     * <b>This method is not available in .Net directly.</b>
      */
     @Override
     public long nextLong(long maxValue) {
@@ -626,7 +629,7 @@ public class DotNetRandom implements ReverseRandomGenerator {
     /**
      * {@inheritDoc}
      * <p>
-     * It uses the same implementation as {@link BitsStreamGenerator#nextGaussian()}.
+     * It uses <a href="https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform#Implementation">Box-Müller transform</a>.
      */
     @Override
     public double nextGaussian() {
@@ -637,9 +640,9 @@ public class DotNetRandom implements ReverseRandomGenerator {
             final double x = nextDouble();
             final double y = nextDouble();
             final double alpha = 2 * Math.PI * x;
-            final double r = Math.sqrt(-2 * Math.log(y));
-            random = r * Math.cos(alpha);
-            nextGaussian = r * Math.sin(alpha);
+            final double r = StrictMath.sqrt(-2 * StrictMath.log(y));
+            random = r * StrictMath.cos(alpha);
+            nextGaussian = r * StrictMath.sin(alpha);
         } else {
             // use the second element of the pair already generated
             random = nextGaussian;
