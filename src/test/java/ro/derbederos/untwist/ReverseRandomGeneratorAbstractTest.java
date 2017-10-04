@@ -148,15 +148,15 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
         final long seedLong = 0x12345678L;
         final int[] seedArray = {0x12345678};
 
-        ReverseRandomGenerator rInt = makeGenerator();
+        T rInt = makeGenerator();
         rInt.setSeed(seedInt);
         int[] actualInt = nextInts(rInt, 10, 0, 1000).toArray();
 
-        ReverseRandomGenerator rLong = makeGenerator();
+        T rLong = makeGenerator();
         rLong.setSeed(seedLong);
         int[] actualLong = nextInts(rLong, 10, 0, 1000).toArray();
 
-        ReverseRandomGenerator rArray = makeGenerator();
+        T rArray = makeGenerator();
         rArray.setSeed(seedArray);
         int[] actualArray = nextInts(rArray, 10, 0, 1000).toArray();
 
@@ -169,11 +169,11 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
         final long seedLong = 0x1234567823456789L;
         final int[] seedArray = {0x12345678, 0x23456789};
 
-        ReverseRandomGenerator rLong = makeGenerator();
+        T rLong = makeGenerator();
         rLong.setSeed(seedLong);
         int[] actualLong = nextInts(rLong, 10, 0, 1000).toArray();
 
-        ReverseRandomGenerator rArray = makeGenerator();
+        T rArray = makeGenerator();
         rArray.setSeed(seedArray);
         int[] actualArray = nextInts(rArray, 10, 0, 1000).toArray();
 

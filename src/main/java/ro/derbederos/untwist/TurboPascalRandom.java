@@ -271,6 +271,42 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
     /**
      * {@inheritDoc}
      * <p>
+     * <b>This method is not available in Turbo Pascal directly.</b>
+     */
+    @Override
+    public long nextLong() {
+        return super.nextLong();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long prevLong() {
+        return super.prevLong();
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * <b>This method is not available in Turbo Pascal directly.</b>
+     */
+    @Override
+    public long nextLong(long bound) throws IllegalArgumentException {
+        return super.nextLong(bound);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long prevLong(long bound) throws IllegalArgumentException {
+        return super.prevLong(bound);
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
      * Source code:
      * <a href="http://www.efg2.com/Lab/Library/Delphi/MathFunctions/random.txt">_randExt</a>.
      */

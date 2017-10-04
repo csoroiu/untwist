@@ -251,7 +251,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
      * @param to   the upper bound (exclusive), unless lower than {@code from}.
      * @return a random integer from a specified range.
      */
-    long nextLong(long from, long to) {
+    public long nextLong(long from, long to) {
         return nextLong(abs(to - from)) + Math.min(from, to);
     }
 
@@ -268,7 +268,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
      * @param to   the upper bound (exclusive), unless lower than {@code from}.
      * @return a random integer from a specified range.
      */
-    long prevLong(long from, long to) {
+    public long prevLong(long from, long to) {
         return prevLong(abs(to - from)) + Math.min(from, to);
     }
 
