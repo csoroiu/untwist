@@ -157,15 +157,15 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
 
     /**
      * {@inheritDoc}
-     * <p>
-     * <b>This method is not available in FreePascal directly.</b>
+     * @implNote
+     * <b>This method is not exposed in FreePascal.</b>
      * Maybe <a href="https://bugs.freepascal.org/view.php?id=31693">https://bugs.freepascal.org/view.php?id=31693</a>
      * or <a href="https://bugs.freepascal.org/view.php?id=31633">https://bugs.freepascal.org/view.php?id=31633</a>
      * will expose it.
      */
     @Override
     public int nextInt() {
-        return super.nextInt();
+        return next(32);
     }
 
     /**
@@ -173,7 +173,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
      */
     @Override
     public int prevInt() {
-        return super.prevInt();
+        return prev(32);
     }
 
     /**
@@ -274,8 +274,8 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
 
     /**
      * {@inheritDoc}
-     * <p>
-     * <b>This method is not available in FreePascal directly.</b>
+     * @implNote
+     * <b>This method is not part of FreePascal implementation.</b>
      */
     @Override
     public long nextLong() {

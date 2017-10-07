@@ -556,7 +556,7 @@ public class DotNetRandom implements ReverseRandomGenerator {
      * Returns a 64 bit random integer (long). Unlike {@link #nextInt()} all 2<sup>64</sup> possible
      * {@code long} values should be produced with (approximately) equal probability.
      * <p>
-     * <b>This method is not available in .Net directly.</b>
+     * <b>This method is not part of .Net implementation.</b>
      *
      * @return a 64 bit random integer (long).
      */
@@ -586,8 +586,8 @@ public class DotNetRandom implements ReverseRandomGenerator {
 
     /**
      * {@inheritDoc}
-     * <p>
-     * <b>This method is not available in .Net directly.</b>
+     * @implNote
+     * <b>This method is not part of .Net implementation.</b>
      */
     @Override
     public long nextLong(long maxValue) {
@@ -630,6 +630,8 @@ public class DotNetRandom implements ReverseRandomGenerator {
      * {@inheritDoc}
      * <p>
      * It uses <a href="https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform#Implementation">Box-Müller transform</a>.
+     * @implNote
+     * <b>This method is not part of .Net implementation.</b>
      */
     @Override
     public double nextGaussian() {

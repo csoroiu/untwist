@@ -180,12 +180,12 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
 
     /**
      * {@inheritDoc}
-     * <p>
-     * <b>This method is not available in Turbo Pascal directly.</b>
+     * @implNote
+     * <b>This method is not exposed in Turbo Pascal.</b>
      */
     @Override
     public int nextInt() {
-        return super.nextInt();
+        return next(32);
     }
 
     /**
@@ -193,7 +193,7 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
      */
     @Override
     public int prevInt() {
-        return super.prevInt();
+        return prev(32);
     }
 
     /**
@@ -270,8 +270,8 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
 
     /**
      * {@inheritDoc}
-     * <p>
-     * <b>This method is not available in Turbo Pascal directly.</b>
+     * @implNote
+     * <b>This method is not part of Turbo Pascal implementation.</b>
      */
     @Override
     public long nextLong() {
@@ -289,7 +289,7 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator {
     /**
      * {@inheritDoc}
      * <p>
-     * <b>This method is not available in Turbo Pascal directly.</b>
+     * <b>This method is not part of Turbo Pascal implementation.</b>
      */
     @Override
     public long nextLong(long bound) throws IllegalArgumentException {
