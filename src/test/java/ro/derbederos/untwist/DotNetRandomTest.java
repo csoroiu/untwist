@@ -166,9 +166,9 @@ public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetR
     @Override
     @Test
     public void testNextFloatExactValue() {
-        float[] expected = {0.31840175F, 0.63970035F, 0.059839107F, 0.6334691F, 0.8837889F,
+        Float[] expected = {0.31840175F, 0.63970035F, 0.059839107F, 0.6334691F, 0.8837889F,
                 0.042218864F, 0.367642F, 0.10970801F, 0.1661123F, 0.283534F};
-        float[] actual = nextFloats(generator, expected.length);
+        Float[] actual = nextFloats(generator, expected.length).toArray(Float[]::new);
 
         assertThat(actual, equalTo(expected));
     }
@@ -176,9 +176,9 @@ public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetR
     @Override
     @Test
     public void testNextBooleanExactValue() {
-        boolean[] expected = {false, true, false, true, true, false, false, false, false, false,
+        Boolean[] expected = {false, true, false, true, true, false, false, false, false, false,
                 true, false, false, true, false, true, false, true, true, false};
-        boolean[] actual = nextBooleans(generator, expected.length);
+        Boolean[] actual = nextBooleans(generator, expected.length).toArray(Boolean[]::new);
 
         assertThat(actual, equalTo(expected));
     }

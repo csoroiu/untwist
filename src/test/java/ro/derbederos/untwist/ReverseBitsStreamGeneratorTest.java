@@ -239,9 +239,9 @@ public class ReverseBitsStreamGeneratorTest extends ReverseBitsStreamGeneratorAb
     @Override
     @Test
     public void testNextFloatExactValue() {
-        float[] expected = {0.7101848F, 0.24691546F, 0.57483625F, 0.46028805F, 0.9464191F,
+        Float[] expected = {0.7101848F, 0.24691546F, 0.57483625F, 0.46028805F, 0.9464191F,
                 0.015927553F, 0.039405942F, 0.828673F, 0.48640978F, 0.3570944F};
-        float[] actual = nextFloats(generator, expected.length);
+        Float[] actual = nextFloats(generator, expected.length).toArray(Float[]::new);
 
         assertThat(actual, equalTo(expected));
     }
@@ -249,9 +249,9 @@ public class ReverseBitsStreamGeneratorTest extends ReverseBitsStreamGeneratorAb
     @Override
     @Test
     public void testNextBooleanExactValue() {
-        boolean[] expected = {true, false, true, false, true, false, false, true, false, false,
+        Boolean[] expected = {true, false, true, false, true, false, false, true, false, false,
                 false, false, true, false, true, true, true, false, true, false};
-        boolean[] actual = nextBooleans(generator, expected.length);
+        Boolean[] actual = nextBooleans(generator, expected.length).toArray(Boolean[]::new);
 
         assertThat(actual, equalTo(expected));
     }

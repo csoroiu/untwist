@@ -21,7 +21,6 @@ import com.tngtech.java.junit.dataprovider.DataProviderRunner;
 import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.apache.commons.math3.random.RandomDataGenerator;
 import org.apache.commons.math3.random.RandomGeneratorAbstractTest;
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -35,10 +34,7 @@ import java.util.stream.Stream;
 
 import static java.util.Arrays.stream;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.lessThanOrEqualTo;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.fail;
 import static ro.derbederos.untwist.RandomUtils.*;
 import static ro.derbederos.untwist.Utils.*;
@@ -75,41 +71,34 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
     @Override
     @Test
     public void testNextInt2() {
-        final int N = 10000;
-        int positives = (int) RandomUtils.nextInts(generator, N).filter(value -> value >= 0).count();
-        int walk = 2 * positives - N;
-        Assert.assertTrue("Walked too far astray: " + walk + "\nNote: This " +
+        long N = 10000;
+        long positives = RandomUtils.nextInts(generator, N).filter(value -> value >= 0).count();
+        long walk = 2 * positives - N;
+        assertThat("Walked too far astray: " + walk + "\nNote: This " +
                         "test will fail randomly about 1 in 100 times.",
-                Math.abs(walk) < Math.sqrt(N) * 2.576);
+                Math.abs((double) walk), lessThan(Math.sqrt(N) * 2.576));
     }
 
     @Override
     @Test
     public void testNextLong2() {
-        final int N = 1000;
-        int positives = (int) RandomUtils.nextLongs(generator, N).filter(value -> value >= 0).count();
-        int walk = 2 * positives - N;
-
-        Assert.assertTrue("Walked too far astray: " + walk + "\nNote: This " +
+        long N = 1000;
+        long positives = RandomUtils.nextLongs(generator, N).filter(value -> value >= 0).count();
+        long walk = 2 * positives - N;
+        assertThat("Walked too far astray: " + walk + "\nNote: This " +
                         "test will fail randomly about 1 in 100 times.",
-                Math.abs(walk) < Math.sqrt(N) * 2.576);
+                Math.abs((double) walk), lessThan(Math.sqrt(N) * 2.576));
     }
 
     @Override
     @Test
     public void testNexBoolean2() {
-        int walk = 0;
-        final int N = 10000;
-        for (int k = 0; k < N; ++k) {
-            if (this.generator.nextBoolean()) {
-                ++walk;
-            } else {
-                --walk;
-            }
-        }
-        Assert.assertTrue("Walked too far astray: " + walk + "\nNote: This " +
+        long N = 10000;
+        long positives = Stream.generate(generator::nextBoolean).limit(N).filter(value -> value).count();
+        long walk = 2 * positives - N;
+        assertThat("Walked too far astray: " + walk + "\nNote: This " +
                         "test will fail randomly about 1 in 100 times.",
-                Math.abs(walk) < Math.sqrt(N) * 2.576);
+                Math.abs((double) walk), lessThan(Math.sqrt(N) * 2.576));
     }
 
     @Test
@@ -402,6 +391,7 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
+    @Test
     public void testNextPrevDouble() {
         double[] expected = nextDoubles(generator, 2459).toArray();
         double[] actual = prevDoubles(generator, 2459).toArray();
@@ -429,53 +419,54 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
+    @Test
     public void testNextPrevFloat() {
-        float[] expected = nextFloats(generator, 2459);
-        float[] actual = prevFloats(generator, 2459);
+        Float[] expected = nextFloats(generator, 2459).toArray(Float[]::new);
+        Float[] actual = prevFloats(generator, 2459).toArray(Float[]::new);
 
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = nextFloats(generator, 2467);
-        actual = prevFloats(generator, 2467);
+        expected = nextFloats(generator, 2467).toArray(Float[]::new);
+        actual = prevFloats(generator, 2467).toArray(Float[]::new);
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testPrevNextFloat() {
-        float[] expected = prevFloats(generator, 2459);
-        float[] actual = nextFloats(generator, 2459);
+        Float[] expected = prevFloats(generator, 2459).toArray(Float[]::new);
+        Float[] actual = nextFloats(generator, 2459).toArray(Float[]::new);
 
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = prevFloats(generator, 2467);
-        actual = nextFloats(generator, 2467);
+        expected = prevFloats(generator, 2467).toArray(Float[]::new);
+        actual = nextFloats(generator, 2467).toArray(Float[]::new);
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testNextPrevBoolean() {
-        boolean[] expected = nextBooleans(generator, 2459);
-        boolean[] actual = prevBooleans(generator, 2459);
+        Boolean[] expected = nextBooleans(generator, 2459).toArray(Boolean[]::new);
+        Boolean[] actual = prevBooleans(generator, 2459).toArray(Boolean[]::new);
 
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = nextBooleans(generator, 2467);
-        actual = prevBooleans(generator, 2467);
+        expected = nextBooleans(generator, 2467).toArray(Boolean[]::new);
+        actual = prevBooleans(generator, 2467).toArray(Boolean[]::new);
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }
 
     @Test
     public void testPrevNextBoolean() {
-        boolean[] expected = prevBooleans(generator, 2459);
-        boolean[] actual = nextBooleans(generator, 2459);
+        Boolean[] expected = prevBooleans(generator, 2459).toArray(Boolean[]::new);
+        Boolean[] actual = nextBooleans(generator, 2459).toArray(Boolean[]::new);
 
         assertThat(actual, equalTo(reverseArray(expected)));
 
-        expected = prevBooleans(generator, 2467);
-        actual = nextBooleans(generator, 2467);
+        expected = prevBooleans(generator, 2467).toArray(Boolean[]::new);
+        actual = nextBooleans(generator, 2467).toArray(Boolean[]::new);
 
         assertThat(actual, equalTo(reverseArray(expected)));
     }

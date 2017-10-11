@@ -54,9 +54,9 @@ public class TurboPascalRandomCoprocEnabledTest extends TurboPascalRandomTest {
     @Override
     @Test
     public void testNextFloatExactValue() {
-        float[] expected = {0.30312338F, 0.013781279F, 0.18803224F, 0.31765863F, 0.27547088F,
+        Float[] expected = {0.30312338F, 0.013781279F, 0.18803224F, 0.31765863F, 0.27547088F,
                 0.95204455F, 0.7180317F, 0.44134504F, 0.66371536F, 0.74916583F};
-        float[] actual = nextFloats(generator, expected.length);
+        Float[] actual = nextFloats(generator, expected.length).toArray(Float[]::new);
 
         assertThat(actual, equalTo(expected));
     }

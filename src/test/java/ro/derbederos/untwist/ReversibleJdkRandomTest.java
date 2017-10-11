@@ -202,9 +202,9 @@ public class ReversibleJdkRandomTest extends ReverseRandomGeneratorAbstractTest<
     @Override
     @Test
     public void testNextFloatExactValue() {
-        float[] expected = {0.7101849F, 0.24691546F, 0.5748363F, 0.46028805F, 0.9464192F,
+        Float[] expected = {0.7101849F, 0.24691546F, 0.5748363F, 0.46028805F, 0.9464192F,
                 0.015927613F, 0.039405942F, 0.828673F, 0.48640984F, 0.3570944F};
-        float[] actual = nextFloats(generator, expected.length);
+        Float[] actual = nextFloats(generator, expected.length).toArray(Float[]::new);
 
         assertThat(actual, equalTo(expected));
     }
@@ -212,9 +212,9 @@ public class ReversibleJdkRandomTest extends ReverseRandomGeneratorAbstractTest<
     @Override
     @Test
     public void testNextBooleanExactValue() {
-        boolean[] expected = {true, false, true, false, true, false, false, true, false, false,
+        Boolean[] expected = {true, false, true, false, true, false, false, true, false, false,
                 false, false, true, false, true, true, true, false, true, false};
-        boolean[] actual = nextBooleans(generator, expected.length);
+        Boolean[] actual = nextBooleans(generator, expected.length).toArray(Boolean[]::new);
 
         assertThat(actual, equalTo(expected));
     }

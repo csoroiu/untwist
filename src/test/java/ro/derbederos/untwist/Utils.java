@@ -20,14 +20,16 @@ import org.apache.commons.math3.random.RandomGenerator;
 import org.hamcrest.Matcher;
 import org.junit.Ignore;
 
+import java.util.stream.Stream;
+
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.lessThan;
 
 @Ignore
-public class Utils {
+class Utils {
 
-    public static <T extends java.lang.Comparable<T>> Matcher<T> between(T minValue, T maxValue) {
+    static <T extends java.lang.Comparable<T>> Matcher<T> between(T minValue, T maxValue) {
         return allOf(greaterThanOrEqualTo(minValue), lessThan(maxValue));
     }
 
@@ -71,55 +73,29 @@ public class Utils {
         return b;
     }
 
-    static float[] reverseArray(float[] b) {
+    static <T> T[] reverseArray(T[] b) {
         int j = b.length - 1;
         for (int i = 0; i < b.length / 2; i++) {
-            final float tmp = b[i];
+            final T tmp = b[i];
             b[i] = b[j];
             b[j--] = tmp;
         }
         return b;
     }
 
-    static boolean[] reverseArray(boolean[] b) {
-        int j = b.length - 1;
-        for (int i = 0; i < b.length / 2; i++) {
-            final boolean tmp = b[i];
-            b[i] = b[j];
-            b[j--] = tmp;
-        }
-        return b;
+    static Stream<Float> nextFloats(RandomGenerator generator, int size) {
+        return Stream.generate(generator::nextFloat).limit(size);
     }
 
-    static float[] nextFloats(RandomGenerator generator, int size) {
-        float[] result = new float[size];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = generator.nextFloat();
-        }
-        return result;
+    static Stream<Float> prevFloats(ReverseRandomGenerator generator, int size) {
+        return Stream.generate(generator::prevFloat).limit(size);
     }
 
-    static float[] prevFloats(ReverseRandomGenerator generator, int size) {
-        float[] result = new float[size];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = generator.prevFloat();
-        }
-        return result;
+    static Stream<Boolean> nextBooleans(RandomGenerator generator, int size) {
+        return Stream.generate(generator::nextBoolean).limit(size);
     }
 
-    static boolean[] nextBooleans(RandomGenerator generator, int size) {
-        boolean[] result = new boolean[size];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = generator.nextBoolean();
-        }
-        return result;
-    }
-
-    static boolean[] prevBooleans(ReverseRandomGenerator generator, int size) {
-        boolean[] result = new boolean[size];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = generator.prevBoolean();
-        }
-        return result;
+    static Stream<Boolean> prevBooleans(ReverseRandomGenerator generator, int size) {
+        return Stream.generate(generator::prevBoolean).limit(size);
     }
 }

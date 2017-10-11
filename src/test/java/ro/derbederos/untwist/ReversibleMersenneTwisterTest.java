@@ -393,9 +393,9 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
     @Override
     @Test
     public void testNextFloatExactValue() {
-        float[] expected = {0.24856889F, 0.2225734F, 0.111127615F, 0.9562863F, 0.98463523F,
+        Float[] expected = {0.24856889F, 0.2225734F, 0.111127615F, 0.9562863F, 0.98463523F,
                 0.77866304F, 0.7812817F, 0.05299878F, 0.1886394F, 0.6033317F};
-        float[] actual = nextFloats(generator, expected.length);
+        Float[] actual = nextFloats(generator, expected.length).toArray(Float[]::new);
 
         assertThat(actual, equalTo(expected));
     }
@@ -403,9 +403,9 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
     @Override
     @Test
     public void testNextBooleanExactValue() {
-        boolean[] expected = {false, false, false, true, true, true, true, false, false, true,
+        Boolean[] expected = {false, false, false, true, true, true, true, false, false, true,
                 true, true, false, false, true, false, true, true, false, false};
-        boolean[] actual = nextBooleans(generator, expected.length);
+        Boolean[] actual = nextBooleans(generator, expected.length).toArray(Boolean[]::new);
 
         assertThat(actual, equalTo(expected));
     }

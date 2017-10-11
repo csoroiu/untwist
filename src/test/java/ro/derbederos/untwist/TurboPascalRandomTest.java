@@ -107,9 +107,9 @@ public class TurboPascalRandomTest extends ReverseBitsStreamGeneratorAbstractTes
     @Override
     @Test
     public void testNextFloatExactValue() {
-        float[] expected = {0.80312335F, 0.5137813F, 0.68803227F, 0.81765866F, 0.7754709F,
+        Float[] expected = {0.80312335F, 0.5137813F, 0.68803227F, 0.81765866F, 0.7754709F,
                 0.45204455F, 0.2180317F, 0.94134504F, 0.16371538F, 0.24916582F};
-        float[] actual = nextFloats(generator, expected.length);
+        Float[] actual = nextFloats(generator, expected.length).toArray(Float[]::new);
 
         assertThat(actual, equalTo(expected));
     }
@@ -117,9 +117,9 @@ public class TurboPascalRandomTest extends ReverseBitsStreamGeneratorAbstractTes
     @Override
     @Test
     public void testNextBooleanExactValue() {
-        boolean[] expected = {true, true, true, true, true, false, false, true, false, false,
+        Boolean[] expected = {true, true, true, true, true, false, false, true, false, false,
                 true, false, true, true, false, true, false, true, true, false};
-        boolean[] actual = nextBooleans(generator, expected.length);
+        Boolean[] actual = nextBooleans(generator, expected.length).toArray(Boolean[]::new);
 
         assertThat(actual, equalTo(expected));
     }

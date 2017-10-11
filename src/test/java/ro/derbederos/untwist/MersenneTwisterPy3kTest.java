@@ -158,9 +158,9 @@ public class MersenneTwisterPy3kTest extends
     @Override
     @Test
     public void testNextBooleanExactValue() {
-        boolean[] expected = {false, true, true, false, false, true, false, true, false, true,
+        Boolean[] expected = {false, true, true, false, false, true, false, true, false, true,
                 true, false, false, true, false, true, true, false, false, true};
-        boolean[] actual = nextBooleans(generator, expected.length);
+        Boolean[] actual = nextBooleans(generator, expected.length).toArray(Boolean[]::new);
 
         assertThat(actual, equalTo(expected));
     }
