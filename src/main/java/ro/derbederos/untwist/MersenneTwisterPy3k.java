@@ -83,6 +83,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
     @Override
     public void setSeed(int seed) {
         setSeed(new int[]{seed});
+        clear();
     }
 
     /**
@@ -98,6 +99,13 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
         } else {
             setSeed(new int[]{(int) (seed & 0xFFFFFFFFL), high});
         }
+        clear();
+    }
+
+    @Override
+    public void setSeed(int[] seed) {
+        super.setSeed(seed);
+        clear();
     }
 
     /**
@@ -323,5 +331,61 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
             return bits;
         }
         throw new IllegalArgumentException("bound must be strictly positive");
+    }
+
+    // the state of the generator
+    private boolean shouldReverseGaussian;
+    private double nextGaussian;
+
+    /**
+     * Clears the cache used by the default implementation of
+     * {@link #nextGaussian}.
+     */
+    @Override
+    public void clear() {
+        nextGaussian = Double.NaN;
+        shouldReverseGaussian = false;
+    }
+
+    /**
+     * It uses a variation of <a href="https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform#Implementation">Box-Müller transform</a>.
+     * <p>
+     * Source code: {@code gauss} method in the file
+     * <a href="https://github.com/python/cpython/blob/master/Lib/random.py">random.py</a>.
+     */
+    @Override
+    public double nextGaussian() {
+        shouldReverseGaussian = !shouldReverseGaussian;
+
+        final double random;
+        if (Double.isNaN(nextGaussian)) {
+            // generate a new pair of gaussian numbers
+            final double x = nextDouble();
+            final double y = nextDouble();
+            final double alpha = 2 * Math.PI * x;
+            final double r = StrictMath.sqrt(-2 * StrictMath.log(1 - y));
+            random = r * StrictMath.cos(alpha);
+            nextGaussian = r * StrictMath.sin(alpha);
+        } else {
+            // use the second element of the pair already generated
+            random = nextGaussian;
+            nextGaussian = Double.NaN;
+        }
+
+        return random;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void undoNextGaussian() {
+        if (shouldReverseGaussian) {
+            prevDouble();
+            prevDouble();
+            clear();
+        } else {
+            shouldReverseGaussian = true;
+        }
     }
 }
