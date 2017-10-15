@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * This class extends the random class and ads methods for generating random values in reverse.
  */
-public class ReversibleJdkRandom extends Random implements ReverseRandomGenerator {
+public class ReversibleJdkRandom extends Random implements ReverseRandomGenerator, ReverseNormalizedGaussianSampler {
     private static final long serialVersionUID = 1L;
 
     private static final long MULTIPLIER = 0x5DEECE66DL;

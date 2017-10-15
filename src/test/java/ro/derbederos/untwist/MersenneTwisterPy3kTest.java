@@ -37,8 +37,7 @@ import static ro.derbederos.untwist.RandomUtils.nextLongs;
 import static ro.derbederos.untwist.Utils.nextBooleans;
 
 @RunWith(DataProviderRunner.class)
-public class MersenneTwisterPy3kTest extends
-        ReversibleMersenneTwisterTest {
+public class MersenneTwisterPy3kTest extends ReversibleMersenneTwisterTest {
 
     @Override
     protected ReversibleMersenneTwister makeGenerator() {

@@ -28,7 +28,7 @@ import static java.lang.Integer.toUnsignedLong;
  * </ul>
  * Test
  */
-public class MersenneTwisterPy3k extends ReversibleMersenneTwister {
+public class MersenneTwisterPy3k extends ReversibleMersenneTwister implements ReverseNormalizedGaussianSampler {
 
     private static final long serialVersionUID = 1L;
 

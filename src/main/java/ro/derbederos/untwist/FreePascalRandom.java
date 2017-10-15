@@ -31,7 +31,7 @@ import static java.lang.Math.abs;
  * <p>
  * The source code used is <a href="https://github.com/graemeg/freepascal/blob/5186987/rtl/inc/system.inc#L531">System.inc</a>
  */
-public class FreePascalRandom extends ReversibleMersenneTwister {
+public class FreePascalRandom extends ReversibleMersenneTwister implements ReverseNormalizedGaussianSampler {
     private static final long serialVersionUID = 1L;
 
     private static final double DOUBLE_UNIT = 0x1.0p-32d; // 1.0 / (1L << 32)
@@ -157,8 +157,8 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
 
     /**
      * {@inheritDoc}
-     * @implNote
-     * <b>This method is not exposed in FreePascal.</b>
+     *
+     * @implNote <b>This method is not exposed in FreePascal.</b>
      * Maybe <a href="https://bugs.freepascal.org/view.php?id=31693">https://bugs.freepascal.org/view.php?id=31693</a>
      * or <a href="https://bugs.freepascal.org/view.php?id=31633">https://bugs.freepascal.org/view.php?id=31633</a>
      * will expose it.
@@ -274,8 +274,8 @@ public class FreePascalRandom extends ReversibleMersenneTwister {
 
     /**
      * {@inheritDoc}
-     * @implNote
-     * <b>This method is not part of FreePascal implementation.</b>
+     *
+     * @implNote <b>This method is not part of FreePascal implementation.</b>
      */
     @Override
     public long nextLong() {
