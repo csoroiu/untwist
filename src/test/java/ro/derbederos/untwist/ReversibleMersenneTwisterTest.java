@@ -319,13 +319,44 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
         }
     }
 
-    @Override
     @Test
     @Ignore
     public void testSet32BitSeedIntVsLongVsArray() {
-        super.testSet32BitSeedIntVsLongVsArray();
+        final int seedInt = 0x12345678;
+        final long seedLong = 0x12345678L;
+        final int[] seedArray = {0x12345678};
+
+        ReversibleMersenneTwister rInt = this.makeGenerator();
+        rInt.setSeed(seedInt);
+        int[] actualInt = nextInts(rInt, 10, 0, 1000).toArray();
+
+        ReversibleMersenneTwister rLong = this.makeGenerator();
+        rLong.setSeed(seedLong);
+        int[] actualLong = nextInts(rLong, 10, 0, 1000).toArray();
+
+        ReversibleMersenneTwister rArray = this.makeGenerator();
+        rArray.setSeed(seedArray);
+        int[] actualArray = nextInts(rArray, 10, 0, 1000).toArray();
+
+        assertThat("IntVsLong", actualInt, equalTo(actualLong));
+        assertThat("LongVsArray", actualLong, equalTo(actualArray));
     }
 
+    @Test
+    public void testSet64bitSeedLongVsArray() {
+        final long seedLong = 0x1234567823456789L;
+        final int[] seedArray = {0x12345678, 0x23456789};
+
+        ReversibleMersenneTwister rLong = this.makeGenerator();
+        rLong.setSeed(seedLong);
+        int[] actualLong = nextInts(rLong, 10, 0, 1000).toArray();
+
+        ReversibleMersenneTwister rArray = this.makeGenerator();
+        rArray.setSeed(seedArray);
+        int[] actualArray = nextInts(rArray, 10, 0, 1000).toArray();
+
+        assertThat("LongVsArray", actualLong, equalTo(actualArray));
+    }
 
     @Override
     @Test
@@ -418,14 +449,14 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
 
     @Test
     public void testStateNextPrev() {
-        int[] expected = generator.getState();
+        byte[] expected = generator.getState();
 
         //going forward
         generator.twist();
         //going back to the initial state
         generator.untwist();
 
-        int[] actual = generator.getState();
+        byte[] actual = generator.getState();
 
         //compare states
         assertThat(actual, equalTo(expected));
@@ -436,14 +467,14 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
         int errors = 0;
 
         for (int i = 0; i < COMPARE_STEPS; i++, generator.twist()) {
-            int[] expected = generator.getState();
+            byte[] expected = generator.getState();
 
             //going forward
             generator.twist();
             //going back to the initial state
             generator.untwist();
 
-            int[] actual = generator.getState();
+            byte[] actual = generator.getState();
 
             //compare states
             try {
@@ -464,14 +495,14 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
         int errors = 0;
 
         for (int i = 0; i < COMPARE_STEPS; i++, generator.twist()) {
-            int[] expected = generator.getState();
+            byte[] expected = generator.getState();
 
             //going forward
             generator.twist();
             //going back to the initial state
             generator.untwist();
 
-            int[] actual = generator.getState();
+            byte[] actual = generator.getState();
 
             //compare states
             try {
@@ -488,14 +519,14 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
 
     @Test
     public void testStatePrevNext() {
-        int[] expected = generator.getState();
+        byte[] expected = generator.getState();
 
         //going back
         generator.untwist();
         //going forward to the initial state
         generator.twist();
 
-        int[] actual = generator.getState();
+        byte[] actual = generator.getState();
 
         //compare states
         assertThat(actual, equalTo(expected));
@@ -506,14 +537,14 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
         int errors = 0;
 
         for (int i = 0; i < COMPARE_STEPS; i++, generator.untwist()) {
-            int[] expected = generator.getState();
+            byte[] expected = generator.getState();
 
             //going back
             generator.untwist();
             //going forward to the initial state
             generator.twist();
 
-            int[] actual = generator.getState();
+            byte[] actual = generator.getState();
 
             //compare states
             try {
@@ -534,14 +565,14 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
         int errors = 0;
 
         for (int i = 0; i < COMPARE_STEPS; i++, generator.untwist()) {
-            int[] expected = generator.getState();
+            byte[] expected = generator.getState();
 
             //going back
             generator.untwist();
             //going forward to the initial state
             generator.twist();
 
-            int[] actual = generator.getState();
+            byte[] actual = generator.getState();
 
             //compare states
             try {
@@ -561,13 +592,13 @@ public class ReversibleMersenneTwisterTest extends ReverseBitsStreamGeneratorAbs
         ReversibleMersenneTwister mt1 = makeGenerator();
         mt1.untwist();
         mt1.twist();
-        int[] expected = mt1.getState();
+        byte[] expected = mt1.getState();
 
 
         ReversibleMersenneTwister mt2 = makeGenerator();
         mt2.twist();
         mt2.untwist();
-        int[] actual = mt2.getState();
+        byte[] actual = mt2.getState();
 
         //compare states
         assertThat(actual, equalTo(expected));

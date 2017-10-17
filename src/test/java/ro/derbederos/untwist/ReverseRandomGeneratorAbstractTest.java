@@ -131,44 +131,6 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
 //        Assert.assertTrue(ratio > 0.99999);
 //    }
 
-    @Test
-    public void testSet32BitSeedIntVsLongVsArray() {
-        final int seedInt = 0x12345678;
-        final long seedLong = 0x12345678L;
-        final int[] seedArray = {0x12345678};
-
-        T rInt = makeGenerator();
-        rInt.setSeed(seedInt);
-        int[] actualInt = nextInts(rInt, 10, 0, 1000).toArray();
-
-        T rLong = makeGenerator();
-        rLong.setSeed(seedLong);
-        int[] actualLong = nextInts(rLong, 10, 0, 1000).toArray();
-
-        T rArray = makeGenerator();
-        rArray.setSeed(seedArray);
-        int[] actualArray = nextInts(rArray, 10, 0, 1000).toArray();
-
-        assertThat("IntVsLong", actualInt, equalTo(actualLong));
-        assertThat("LongVsArray", actualLong, equalTo(actualArray));
-    }
-
-    @Test
-    public void testSet64bitSeedLongVsArray() {
-        final long seedLong = 0x1234567823456789L;
-        final int[] seedArray = {0x12345678, 0x23456789};
-
-        T rLong = makeGenerator();
-        rLong.setSeed(seedLong);
-        int[] actualLong = nextInts(rLong, 10, 0, 1000).toArray();
-
-        T rArray = makeGenerator();
-        rArray.setSeed(seedArray);
-        int[] actualArray = nextInts(rArray, 10, 0, 1000).toArray();
-
-        assertThat("LongVsArray", actualLong, equalTo(actualArray));
-    }
-
     @Override
     @Test
     public void testNextIntIAE2() {

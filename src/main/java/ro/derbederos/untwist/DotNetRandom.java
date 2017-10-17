@@ -18,7 +18,9 @@ package ro.derbederos.untwist;
 
 import org.apache.commons.math3.random.RandomGenerator;
 
-import java.util.Arrays;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * A Java implementation of the .NET random number generator.
@@ -61,6 +63,8 @@ import java.util.Arrays;
 public class DotNetRandom implements ReverseRandomGenerator {
     private static final long serialVersionUID = 1L;
 
+    private static final int STATE_SIZE = 58 * Integer.BYTES; //seedArray, iNext, INextp
+
     private static final int MBIG = Integer.MAX_VALUE;
     private static final int MSEED = 161803398;
     private static final int MZ = 0;
@@ -74,9 +78,11 @@ public class DotNetRandom implements ReverseRandomGenerator {
 
     /**
      * Initializes a new instance of the {@link DotNetRandom} class, using a time-dependent default seed value.
+     * <p>
+     * The instance is initialized using the current time plus the system identity hash code of this instance as the seed.
      */
     public DotNetRandom() {
-        setSeed(System.currentTimeMillis() + System.identityHashCode(this));
+        setSeed((int) (System.currentTimeMillis() + System.identityHashCode(this)));
     }
 
     /**
@@ -226,8 +232,19 @@ public class DotNetRandom implements ReverseRandomGenerator {
         return retVal;
     }
 
-    int[] getState() {
-        return Arrays.copyOf(seedArray, seedArray.length);
+    byte[] getState() {
+        ByteArrayOutputStream byteOutput = new ByteArrayOutputStream(STATE_SIZE);
+        DataOutputStream output = new DataOutputStream(byteOutput);
+        try {
+            output.writeInt(iNext);
+            output.writeInt(iNextp);
+            for (int i = 0; i < seedArray.length; i++) {
+                output.writeInt(seedArray[i]);
+            }
+            output.close();
+        } catch (IOException ignore) {
+        }
+        return byteOutput.toByteArray();
     }
 
     private double getSampleForLargeRange() {
@@ -586,8 +603,8 @@ public class DotNetRandom implements ReverseRandomGenerator {
 
     /**
      * {@inheritDoc}
-     * @implNote
-     * <b>This method is not part of .Net implementation.</b>
+     *
+     * @implNote <b>This method is not part of .Net implementation.</b>
      */
     @Override
     public long nextLong(long maxValue) {
@@ -630,8 +647,8 @@ public class DotNetRandom implements ReverseRandomGenerator {
      * {@inheritDoc}
      * <p>
      * It uses <a href="https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform#Implementation">Box-Müller transform</a>.
-     * @implNote
-     * <b>This method is not part of .Net implementation.</b>
+     *
+     * @implNote <b>This method is not part of .Net implementation.</b>
      */
     @Override
     public double nextGaussian() {

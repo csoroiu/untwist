@@ -27,7 +27,6 @@ public interface NormalizedGaussianSampler {
      * Returns the next pseudorandom, Gaussian ("normally") distributed
      * <code>double</code> value with mean <code>0.0</code> and standard
      * deviation <code>1.0</code> from this random number generator's sequence.
-     *
      */
     double nextGaussian();
 }

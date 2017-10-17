@@ -190,14 +190,14 @@ public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetR
 
     @Test
     public void testStateNextPrev() {
-        int[] expected = generator.getState();
+        byte[] expected = generator.getState();
 
         //going forward
         generator.nextInt();
         //going back to the initial state
         generator.prevInt();
 
-        int[] actual = generator.getState();
+        byte[] actual = generator.getState();
 
         //compare states
         assertThat(actual, equalTo(expected));
@@ -208,14 +208,14 @@ public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetR
         int errors = 0;
 
         for (int i = 0; i < COMPARE_STEPS; i++, generator.nextInt()) {
-            int[] expected = generator.getState();
+            byte[] expected = generator.getState();
 
             //going forward
             generator.nextInt();
             //going back to the initial state
             generator.prevInt();
 
-            int[] actual = generator.getState();
+            byte[] actual = generator.getState();
 
             //compare states
             try {
@@ -232,14 +232,14 @@ public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetR
 
     @Test
     public void testStatePrevNext() {
-        int[] expected = generator.getState();
+        byte[] expected = generator.getState();
 
         //going back
         generator.prevInt();
         //going forward to the initial state
         generator.nextInt();
 
-        int[] actual = generator.getState();
+        byte[] actual = generator.getState();
 
         //compare states
         assertThat(actual, equalTo(expected));
@@ -250,14 +250,14 @@ public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetR
         int errors = 0;
 
         for (int i = 0; i < COMPARE_STEPS; i++, generator.prevInt()) {
-            int[] expected = generator.getState();
+            byte[] expected = generator.getState();
 
             //going back
             generator.prevInt();
             //going forward to the initial state
             generator.nextInt();
 
-            int[] actual = generator.getState();
+            byte[] actual = generator.getState();
 
             //compare states
             try {
@@ -277,13 +277,13 @@ public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetR
         DotNetRandom dotNetRandom1 = new DotNetRandom(-0x3f97396e);
         dotNetRandom1.prevInt();
         dotNetRandom1.nextInt();
-        int[] expected = dotNetRandom1.getState();
+        byte[] expected = dotNetRandom1.getState();
 
 
         DotNetRandom dotNetRandom2 = new DotNetRandom(-0x3f97396e);
         dotNetRandom2.prevInt();
         dotNetRandom2.nextInt();
-        int[] actual = dotNetRandom2.getState();
+        byte[] actual = dotNetRandom2.getState();
 
         //compare states
         assertThat(actual, equalTo(expected));

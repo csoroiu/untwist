@@ -84,7 +84,7 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
      *
      * @return the seed (which can be used with {@link #setSeed(long)}.
      */
-    public long getSeed() {
+    long getSeed() {
         return scrambleSeed(seed.get());
     }
 

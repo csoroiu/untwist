@@ -16,8 +16,10 @@
 
 package ro.derbederos.untwist;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
-import java.util.Arrays;
 
 
 /**
@@ -83,10 +85,13 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
      */
     private static final long serialVersionUID = 1L;
 
+
     /**
      * Size of the bytes pool.
      */
     private static final int N = 624;
+
+    private static final int STATE_SIZE = N * Integer.BYTES + Integer.BYTES; //mt, mti
 
     /**
      * Period second parameter.
@@ -386,7 +391,17 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
         return y;
     }
 
-    int[] getState() {
-        return Arrays.copyOf(mt, mt.length);
+    byte[] getState() {
+        ByteArrayOutputStream byteOutput = new ByteArrayOutputStream(STATE_SIZE);
+        DataOutputStream output = new DataOutputStream(byteOutput);
+        try {
+            output.writeInt(mti);
+            for (int i = 0; i < mt.length; i++) {
+                output.writeInt(mt[i]);
+            }
+            output.close();
+        } catch (IOException ignore) {
+        }
+        return byteOutput.toByteArray();
     }
 }

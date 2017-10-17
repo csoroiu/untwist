@@ -366,6 +366,5 @@ public class FreePascalRandom extends ReversibleMersenneTwister implements Rever
             v2 = 2 * prevDouble() - 1; // between -1 and 1
             s = v1 * v1 + v2 * v2;
         } while (s >= 1 || s == 0);
-        clear();
     }
 }

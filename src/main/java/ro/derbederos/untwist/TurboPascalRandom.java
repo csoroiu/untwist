@@ -131,9 +131,9 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator implements Rev
     /**
      * Returns the seed used by this generator.
      *
-     * @return the seed (which can be used with {@link #setSeed(long)}.
+     * @return the seed (which can be used with {@link #setSeed(int)}.
      */
-    public int getSeed() {
+    int getSeed() {
         return (int) seed;
     }
 
@@ -393,6 +393,5 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator implements Rev
             v2 = 2 * prevDouble() - 1; // between -1 and 1
             s = v1 * v1 + v2 * v2;
         } while (s >= 1 || s == 0);
-        clear();
     }
 }

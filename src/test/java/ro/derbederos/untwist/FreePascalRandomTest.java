@@ -49,11 +49,11 @@ public class FreePascalRandomTest extends ReversibleMersenneTwisterTest {
         final long seedLong = 0x1234567823456789L;
         final int[] seedArray = {0x23456789, 0x12345678};
 
-        ReverseRandomGenerator rLong = makeGenerator();
+        ReversibleMersenneTwister rLong = makeGenerator();
         rLong.setSeed(seedLong);
         int[] actualLong = nextInts(rLong, 10, 0, 1000).toArray();
 
-        ReverseRandomGenerator rArray = makeGenerator();
+        ReversibleMersenneTwister rArray = makeGenerator();
         rArray.setSeed(seedArray);
         int[] actualArray = nextInts(rArray, 10, 0, 1000).toArray();
 
