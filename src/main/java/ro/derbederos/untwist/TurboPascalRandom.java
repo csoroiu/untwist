@@ -163,17 +163,17 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator implements Rev
      * {@inheritDoc}
      */
     @Override
-    protected int next(int bits) {
+    public int next() {
         seed = (seed * MULTIPLIER + ADDEND) & MASK;
-        return (int) (seed >>> (32 - bits));
+        return (int) seed;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected int prev(int bits) {
-        int result = (int) (seed >>> (32 - bits));
+    public int prev() {
+        int result = (int) seed;
         seed = ((seed - ADDEND) * INVERSE_MULTIPLIER) & MASK;
         return result;
     }
@@ -185,7 +185,7 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator implements Rev
      */
     @Override
     public int nextInt() {
-        return next(32);
+        return next();
     }
 
     /**
@@ -193,7 +193,7 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator implements Rev
      */
     @Override
     public int prevInt() {
-        return prev(32);
+        return prev();
     }
 
     /**
@@ -212,7 +212,7 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator implements Rev
     }
 
     private int nextIntUnsigned(int bound) {
-        long nextInt = toUnsignedLong(next(32));
+        long nextInt = toUnsignedLong(next());
         return (int) ((nextInt * toUnsignedLong(bound)) >>> 32);
     }
 
@@ -228,7 +228,7 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator implements Rev
     }
 
     private int prevIntUnsigned(int bound) {
-        long prevInt = toUnsignedLong(prev(32));
+        long prevInt = toUnsignedLong(prev());
         return (int) ((prevInt * toUnsignedLong(bound)) >>> 32);
     }
 
@@ -312,7 +312,7 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator implements Rev
      */
     @Override
     public double nextDouble() {
-        int nextInt = next(32);
+        int nextInt = next();
         if (coprocessorEnabled) {
             // in turbo pascal the seed was 32 bit signed integer
             return nextInt * DOUBLE_UNIT + 0x1p-1d; // 0x1p-1d = 0.5d
@@ -330,7 +330,7 @@ public class TurboPascalRandom extends ReverseBitsStreamGenerator implements Rev
      */
     @Override
     public double prevDouble() {
-        int prevInt = prev(32);
+        int prevInt = prev();
         if (coprocessorEnabled) {
             // in turbo pascal the seed was 32 bit signed integer
             return prevInt * DOUBLE_UNIT + 0x1p-1d; // 0x1p-1d = 0.5d

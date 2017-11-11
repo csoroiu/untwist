@@ -210,8 +210,8 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister implements Re
      */
     @Override
     public long nextLong() {
-        long low = toUnsignedLong(next(32));
-        long high = toUnsignedLong(next(32)) << 32;
+        long low = toUnsignedLong(next());
+        long high = toUnsignedLong(next()) << 32;
         return low | high;
     }
 
@@ -226,8 +226,8 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister implements Re
      */
     @Override
     public long prevLong() {
-        long high = toUnsignedLong(prev(32)) << 32;
-        long low = toUnsignedLong(prev(32));
+        long high = toUnsignedLong(prev()) << 32;
+        long low = toUnsignedLong(prev());
         return low | high;
     }
 
@@ -243,14 +243,14 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister implements Re
         final int endIndex = start + len;
         final int iEnd = endIndex - 4;
         while (i < iEnd) {
-            final int random = next(32);
+            final int random = next();
             bytes[i] = (byte) (random & 0xFF);
             bytes[i + 1] = (byte) ((random >>> 8) & 0xFF);
             bytes[i + 2] = (byte) ((random >>> 16) & 0xFF);
             bytes[i + 3] = (byte) ((random >>> 24) & 0xFF);
             i += 4;
         }
-        int random = next(32);
+        int random = next();
         final int k = (endIndex - i) * 8;
         random >>>= 32 - k;
         while (i < endIndex) {
@@ -270,7 +270,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister implements Re
         int i = start;
         int iEnd = len - (len & 0x7ffffffc);
         if (iEnd != 0) {
-            int random = prev(32);
+            int random = prev();
             int indexLoopLimit = start + iEnd;
             while (i < indexLoopLimit) {
                 bytes[i++] = (byte) ((random >> 24) & 0xFF);
@@ -279,7 +279,7 @@ public class MersenneTwisterPy3k extends ReversibleMersenneTwister implements Re
         }
         int endIndex = start + len;
         while (i < endIndex) {
-            final int random = prev(32);
+            final int random = prev();
             bytes[i] = (byte) ((random >>> 24) & 0xFF);
             bytes[i + 1] = (byte) ((random >>> 16) & 0xFF);
             bytes[i + 2] = (byte) ((random >>> 8) & 0xFF);

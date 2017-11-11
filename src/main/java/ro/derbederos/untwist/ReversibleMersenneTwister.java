@@ -269,36 +269,25 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
     }
 
     /**
-     * Generate next pseudorandom number.
-     * <p>
-     * This method is the core generation algorithm. It is used by all the
-     * public generation methods for the various primitive types {@link
-     * #nextBoolean()}, {@link #nextBytes(byte[])}, {@link #nextDouble()},
-     * {@link #nextFloat()}, {@link #nextGaussian()}, {@link #nextInt()},
-     * {@link #next(int)} and {@link #nextLong()}.
+     * {@inheritDoc}
      * <p>
      * Part of the <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/CODES/mt19937ar.c">original code</a>.
-     * Modified version of method {@code genrand_int32} to return exactly {@code bits} bits.
-     * It is a generalization of method {@code genrand_int31}.
-     *
-     * @param bits number of random bits to produce
-     * @return random bits generated
      */
     @Override
-    protected int next(int bits) {
+    public int next() {
         if (mti >= N) {
             twist();
             mti = 0;
         }
-        return temper(mt[mti++]) >>> (32 - bits);
+        return temper(mt[mti++]);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected int prev(int bits) {
-        int result = temper(mt[--mti]) >>> (32 - bits);
+    public int prev() {
+        int result = temper(mt[--mti]);
         if (mti == 0) {
             untwist();
             mti = N;

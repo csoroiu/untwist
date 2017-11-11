@@ -18,11 +18,25 @@ package ro.derbederos.untwist;
 
 import static java.lang.Integer.toUnsignedLong;
 
-public abstract class ReverseBitsStreamGenerator implements ReverseRandomGenerator {
+public abstract class ReverseBitsStreamGenerator
+        implements ReverseRandomGenerator {
     private static final long serialVersionUID = 1L;
 
     private static final double DOUBLE_UNIT = 0x1.0p-52d; // 1.0 / (1L << 52)
     private static final float FLOAT_UNIT = 0x1.0p-23f;   // 1.0 / (1 << 23)
+
+
+    /**
+     * @return the next random value.
+     */
+    public abstract int next();
+
+    /**
+     * The reverse of {@link #next()}.
+     *
+     * @return the previous random value
+     */
+    public abstract int prev();
 
     /**
      * Generate next pseudorandom number.
@@ -33,7 +47,9 @@ public abstract class ReverseBitsStreamGenerator implements ReverseRandomGenerat
      * @param bits number of random bits to produce
      * @return random bits generated
      */
-    protected abstract int next(int bits);
+    protected int next(int bits) {
+        return next() >>> 32 - bits;
+    }
 
     /**
      * The reverse of {@link #next(int)}.
@@ -46,7 +62,9 @@ public abstract class ReverseBitsStreamGenerator implements ReverseRandomGenerat
      * @param bits number of random bits to produce
      * @return random bits generated
      */
-    protected abstract int prev(int bits);
+    protected int prev(int bits) {
+        return prev() >>> 32 - bits;
+    }
 
     /**
      * {@inheritDoc}
@@ -90,7 +108,7 @@ public abstract class ReverseBitsStreamGenerator implements ReverseRandomGenerat
 
         // Start filling in the byte array, 4 bytes at a time.
         while (index < indexLoopLimit) {
-            final int random = next(32);
+            final int random = next();
             bytes[index++] = (byte) random;
             bytes[index++] = (byte) (random >>> 8);
             bytes[index++] = (byte) (random >>> 16);
@@ -101,7 +119,7 @@ public abstract class ReverseBitsStreamGenerator implements ReverseRandomGenerat
 
         // Fill in the remaining bytes.
         if (index < indexLimit) {
-            int random = next(32);
+            int random = next();
             while (true) {
                 bytes[index++] = (byte) random;
                 if (index < indexLimit) {
@@ -167,7 +185,7 @@ public abstract class ReverseBitsStreamGenerator implements ReverseRandomGenerat
      */
     @Override
     public int nextInt() {
-        return next(32);
+        return next();
     }
 
     /**
@@ -183,7 +201,7 @@ public abstract class ReverseBitsStreamGenerator implements ReverseRandomGenerat
      */
     @Override
     public int prevInt() {
-        return prev(32);
+        return prev();
     }
 
     /**
@@ -224,8 +242,8 @@ public abstract class ReverseBitsStreamGenerator implements ReverseRandomGenerat
      */
     @Override
     public long nextLong() {
-        final long high = toUnsignedLong(next(32)) << 32;
-        final long low = toUnsignedLong(next(32));
+        final long high = toUnsignedLong(next()) << 32;
+        final long low = toUnsignedLong(next());
         return high | low;
     }
 
@@ -234,8 +252,8 @@ public abstract class ReverseBitsStreamGenerator implements ReverseRandomGenerat
      */
     @Override
     public long prevLong() {
-        long low = toUnsignedLong(prev(32));
-        long high = toUnsignedLong(prev(32)) << 32;
+        long low = toUnsignedLong(prev());
+        long high = toUnsignedLong(prev()) << 32;
         return low | high;
     }
 

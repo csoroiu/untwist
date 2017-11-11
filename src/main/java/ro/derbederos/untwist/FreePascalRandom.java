@@ -118,7 +118,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister implements Rever
      */
     @Override
     public double nextDouble() {
-        return toUnsignedLong(next(32)) * DOUBLE_UNIT;
+        return toUnsignedLong(next()) * DOUBLE_UNIT;
     }
 
     /**
@@ -128,7 +128,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister implements Rever
      */
     @Override
     public double prevDouble() {
-        return toUnsignedLong(prev(32)) * DOUBLE_UNIT;
+        return toUnsignedLong(prev()) * DOUBLE_UNIT;
     }
 
     /**
@@ -165,7 +165,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister implements Rever
      */
     @Override
     public int nextInt() {
-        return next(32);
+        return next();
     }
 
     /**
@@ -173,7 +173,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister implements Rever
      */
     @Override
     public int prevInt() {
-        return prev(32);
+        return prev();
     }
 
     /**
@@ -187,7 +187,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister implements Rever
         if (bound < 0) {
             bound++;
         }
-        long nextInt = toUnsignedLong(next(32));
+        long nextInt = toUnsignedLong(next());
         return (int) ((nextInt * bound) >>> 32);
     }
 
@@ -202,7 +202,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister implements Rever
         if (bound < 0) {
             bound++;
         }
-        long prevInt = toUnsignedLong(prev(32));
+        long prevInt = toUnsignedLong(prev());
         return (int) ((prevInt * bound) >>> 32);
     }
 
@@ -279,8 +279,8 @@ public class FreePascalRandom extends ReversibleMersenneTwister implements Rever
      */
     @Override
     public long nextLong() {
-        long low = toUnsignedLong(next(32));
-        long high = toUnsignedLong(next(32)) << 32;
+        long low = toUnsignedLong(next());
+        long high = toUnsignedLong(next()) << 32;
         return low | high;
     }
 
@@ -289,8 +289,8 @@ public class FreePascalRandom extends ReversibleMersenneTwister implements Rever
      */
     @Override
     public long prevLong() {
-        long high = toUnsignedLong(prev(32)) << 32;
-        long low = toUnsignedLong(prev(32));
+        long high = toUnsignedLong(prev()) << 32;
+        long low = toUnsignedLong(prev());
         return high | low;
     }
 
@@ -302,8 +302,8 @@ public class FreePascalRandom extends ReversibleMersenneTwister implements Rever
      */
     @Override
     public long nextLong(long bound) throws IllegalArgumentException {
-        long low = toUnsignedLong(next(32));
-        long high = toUnsignedLong(next(32)) & 0x7FFFFFFFL; // drop highest one bit
+        long low = toUnsignedLong(next());
+        long high = toUnsignedLong(next()) & 0x7FFFFFFFL; // drop highest one bit
         long value = low | (high << 32);
         if (bound != 0) {
             return value % bound;
@@ -320,8 +320,8 @@ public class FreePascalRandom extends ReversibleMersenneTwister implements Rever
      */
     @Override
     public long prevLong(long bound) throws IllegalArgumentException {
-        long high = toUnsignedLong(prev(32)) & 0x7FFFFFFFL; // drop highest one bit
-        long low = toUnsignedLong(prev(32));
+        long high = toUnsignedLong(prev()) & 0x7FFFFFFFL; // drop highest one bit
+        long low = toUnsignedLong(prev());
         long value = low | (high << 32);
         if (bound != 0) {
             return value % bound;

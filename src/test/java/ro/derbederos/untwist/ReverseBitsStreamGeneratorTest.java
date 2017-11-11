@@ -41,14 +41,6 @@ public class ReverseBitsStreamGeneratorTest extends ReverseBitsStreamGeneratorAb
 
         public BitRandom() {
         }
-
-        int nextBits(int bits) {
-            return this.next(bits);
-        }
-
-        int prevBits(int bits) {
-            return this.prev(bits);
-        }
     }
 
     static class TestBitStreamGenerator extends ReverseBitsStreamGenerator {
@@ -76,13 +68,13 @@ public class ReverseBitsStreamGeneratorTest extends ReverseBitsStreamGeneratorAb
         }
 
         @Override
-        protected int next(int bits) {
-            return this.ran.nextBits(bits);
+        public int next() {
+            return this.ran.next(32);
         }
 
         @Override
-        protected int prev(int bits) {
-            return this.ran.prevBits(bits);
+        public int prev() {
+            return this.ran.prev(32);
         }
     }
 
