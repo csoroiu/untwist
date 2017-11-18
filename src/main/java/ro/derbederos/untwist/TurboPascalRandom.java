@@ -35,7 +35,8 @@ import static java.lang.Integer.toUnsignedLong;
  * This seems to be a <a href="https://groups.google.com/d/msg/borland.public.delphi.language.objectpascal/_3BBDQ0X5H0/WlGuqooixE0J">
  * design fault</a>, as 32 bit numbers are emulated in Turbo Pascal 7.
  */
-public class TurboPascalRandom extends ReverseBitsStreamGenerator implements ReverseNormalizedGaussianSampler {
+public class TurboPascalRandom extends ReverseBitsStreamGenerator
+        implements ReverseNormalizedGaussianSampler {
     private static final long serialVersionUID = 1L;
 
     private static final long MULTIPLIER = 0x08088405L;

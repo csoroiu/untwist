@@ -19,7 +19,7 @@ package ro.derbederos.untwist;
 import static java.lang.Integer.toUnsignedLong;
 
 public abstract class ReverseBitsStreamGenerator
-        implements ReverseRandomGenerator {
+        implements ReverseRandomGenerator, ReverseRandomIntSource {
     private static final long serialVersionUID = 1L;
 
     private static final double DOUBLE_UNIT = 0x1.0p-52d; // 1.0 / (1L << 52)
@@ -29,6 +29,7 @@ public abstract class ReverseBitsStreamGenerator
     /**
      * @return the next random value.
      */
+    @Override
     public abstract int next();
 
     /**
@@ -36,6 +37,7 @@ public abstract class ReverseBitsStreamGenerator
      *
      * @return the previous random value
      */
+    @Override
     public abstract int prev();
 
     /**
