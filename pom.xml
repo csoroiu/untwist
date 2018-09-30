@@ -65,7 +65,7 @@
         <!--<downloadSources>true</downloadSources>-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <commons-rng.version>1.0</commons-rng.version>
+        <commons-rng.version>1.2</commons-rng.version>
         <junit.version>4.12</junit.version>
         <junit4-dataprovider.version>2.6</junit4-dataprovider.version>
         <hamcrest.version>2.2</hamcrest.version>
