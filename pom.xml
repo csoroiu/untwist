@@ -68,8 +68,8 @@
         <commons-math3.version>3.6.1</commons-math3.version>
         <junit.version>4.12</junit.version>
         <junit-dataprovider.version>1.12.0</junit-dataprovider.version>
-        <hamcrest.version>1.3</hamcrest.version>
-        <jacoco.version>0.8.1</jacoco.version>
+        <hamcrest.version>2.1</hamcrest.version>
+        <jacoco.version>0.8.5</jacoco.version>
     </properties>
 
     <build>
@@ -89,14 +89,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
+                <version>3.8.1</version>
                 <executions>
                     <execution>
                         <id>default-compile</id>
                         <configuration>
                             <!-- compile everything to ensure module-info contains right entries -->
                             <!-- required when JAVA_HOME is JDK 8 or below -->
-                            <release>10</release>
+                            <release>11</release>
                         </configuration>
                     </execution>
                     <execution>
@@ -115,7 +115,7 @@
                 <configuration>
                     <!-- Only required when JAVA_HOME isn't at least Java 9 and when haven't configured the maven-toolchains-plugin -->
                     <jdkToolchain>
-                        <version>10</version>
+                        <version>11</version>
                     </jdkToolchain>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -124,18 +124,11 @@
                     </compilerArgs>
                     <showDeprecation>true</showDeprecation>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.ow2.asm</groupId>
-                        <artifactId>asm</artifactId>
-                        <version>6.2</version>
-                    </dependency>
-                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.1</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -148,7 +141,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.0.1</version>
+                <version>3.1.1</version>
                 <executions>
                     <execution>
                         <id>attach-javadoc</id>
@@ -159,7 +152,7 @@
                 </executions>
                 <configuration>
                     <jdkToolchain>
-                        <version>10</version>
+                        <version>11</version>
                     </jdkToolchain>
                     <source>1.8</source>
                     <sourceFileExcludes>
@@ -198,7 +191,7 @@
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-all</artifactId>
+            <artifactId>hamcrest</artifactId>
             <version>${hamcrest.version}</version>
             <scope>test</scope>
         </dependency>
