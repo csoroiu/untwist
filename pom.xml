@@ -67,7 +67,7 @@
 
         <commons-math3.version>3.6.1</commons-math3.version>
         <junit.version>4.12</junit.version>
-        <junit-dataprovider.version>1.12.0</junit-dataprovider.version>
+        <junit4-dataprovider.version>2.6</junit4-dataprovider.version>
         <hamcrest.version>2.1</hamcrest.version>
         <jacoco.version>0.8.5</jacoco.version>
     </properties>
@@ -184,9 +184,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.tngtech.java</groupId>
-            <artifactId>junit-dataprovider</artifactId>
-            <version>${junit-dataprovider.version}</version>
+            <groupId>com.tngtech.junit.dataprovider</groupId>
+            <artifactId>junit4-dataprovider</artifactId>
+            <version>${junit4-dataprovider.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
