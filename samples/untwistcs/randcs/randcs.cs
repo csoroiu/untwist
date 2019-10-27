@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Threading;
 
-namespace Program
+namespace ro.derbederos.untwist
 {
     internal static class randcs
     {
@@ -25,29 +25,23 @@ namespace Program
         public static void Main(string[] args)
         {
             EnableCulture("en-US");
-            TestDouble();
-            TestInt();
+
+            TestDouble(-0x3f97396e);
+            TestInt(-0x3f97396e);
         }
 
-        private static void TestInt()
+        private static void TestInt(int seed)
         {
-            var generator = new Random(-0x3f97396e);
+            var generator = new Random(seed);
             for (var i = 0; i < 20; i++)
             {
                 Console.WriteLine(generator.Next(-1_000_000_000, int.MaxValue));
             }
         }
 
-        private static void TestDouble()
+        private static void TestDouble(int seed)
         {
-            var generator = new Random(-0x3f97396e);
-            double[] expected =
-            {
-                0.31840173914954145, 0.6397003506495154, 0.05983910758972127, 0.6334691106497632,
-                0.8837888645398378, 0.04221886538072436, 0.3676419772057058, 0.10970801166710817,
-                0.1661123024141939, 0.2835339788736468
-            };
-
+            var generator = new Random(seed);
             for (var i = 0; i < 10; i++)
             {
                 var d = generator.NextDouble();
