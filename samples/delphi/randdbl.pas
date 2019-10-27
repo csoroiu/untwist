@@ -22,22 +22,16 @@ begin
   doubleToHexStr := theresult;
 end;
 
-procedure randDoubleSingle(seed : longint);
+procedure randDouble(seed : longint; count : integer);
 var
   rand : double;
+  i : integer;
 begin
   randseed := seed;
-  rand := random;
-  writeln(rand: 17 : 16, ' ', doubleToHexStr(rand), ' ', randseed);
-end;
-
-procedure randDoubleInterval(start_seed, end_seed : longint);
-var
-  i : longint;
-begin
-  for i:=start_seed to end_seed do
+  for i:=1 to count do
   begin
-    randDoubleSingle(i);
+    rand := random;
+    writeln(rand: 17 : 16, ' ', doubleToHexStr(rand), ' ', randseed);
   end;
 end;
 
@@ -51,27 +45,26 @@ begin
 end;
 
 var
-  start_seed, end_seed : longint;
+  seed : longint;
+  count : integer;
   error : integer;
 begin
   if ((paramcount < 1) or (paramcount > 2)) then
   begin
     writeln('Invalid number of arguments.');
     writeln('Usage: randDbl seed - generates one double in the interval [0, 1)');
-    writeln('Usage: randDbl start_seed end_seed - generates one double from each seed');
+    writeln('Usage: randDbl seed count - generates <count> doubles in the interval [0, 1)');
     halt(1);
   end;
-  if (paramcount = 1) then
+
+  val(paramstr(1), seed, error);
+  checkerror(error, paramstr(1));
+
+  count := 1;
+  if (paramcount = 2) then
   begin
-    val(paramstr(1), start_seed, error);
-    checkerror(error, paramstr(1));
-    randDoubleSingle(start_seed);
-  end
-  else begin
-    val(paramstr(1), start_seed, error);
-    checkerror(error, paramstr(1));
-    val(paramstr(2), end_seed, error);
+    val(paramstr(2), count, error);
     checkerror(error, paramstr(2));
-    randDoubleInterval(start_seed, end_seed);
   end;
+  randDouble(seed, count);
 end.
