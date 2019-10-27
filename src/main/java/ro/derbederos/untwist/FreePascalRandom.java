@@ -29,7 +29,8 @@ import static java.lang.Math.abs;
  * is the {@link #nextDouble()} method which is using only 32 random bits
  * to get a double precision float.
  * <p>
- * The source code used is <a href="https://github.com/graemeg/freepascal/blob/5186987/rtl/inc/system.inc#L531">System.inc</a>
+ * The current java implementation is based on the source code:
+ * <a href="https://github.com/graemeg/freepascal/blob/5186987/rtl/inc/system.inc#L531">System.inc</a>.
  */
 public class FreePascalRandom extends ReversibleMersenneTwister implements ReverseNormalizedGaussianSampler {
     private static final long serialVersionUID = 1L;
@@ -211,7 +212,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister implements Rever
      * It can handle negative ranges (where {@code from} is greater than {@code to}).
      * <p>
      * Source code:
-     * <a href=https://github.com/graemeg/freepascal/blob/5186987/rtl/objpas/math.pp#L1325>math.pp#RandomRange(Integer, Integer)</a>
+     * <a href="https://github.com/graemeg/freepascal/blob/5186987/rtl/objpas/math.pp#L1325">math.pp#RandomRange(Integer, Integer)</a>
      *
      * @param from the least value, unless greater than {@code to}.
      * @param to   the upper bound (exclusive), unless lower than {@code from}.
@@ -229,7 +230,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister implements Rever
      * It can handle negative ranges (where {@code from} is greater than {@code to}).
      * <p>
      * Source code:
-     * <a href=https://github.com/graemeg/freepascal/blob/5186987/rtl/objpas/math.pp#L1325>math.pp#RandomRange(Integer, Integer)</a>
+     * <a href="https://github.com/graemeg/freepascal/blob/5186987/rtl/objpas/math.pp#L1325">math.pp#RandomRange(Integer, Integer)</a>
      *
      * @param from the least value, unless greater than {@code to}.
      * @param to   the upper bound (exclusive), unless lower than {@code from}.
@@ -245,7 +246,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister implements Rever
      * It can handle negative ranges (where {@code from} is greater than {@code to}).
      * <p>
      * Source code:
-     * <a href=https://github.com/graemeg/freepascal/blob/5186987/rtl/objpas/math.pp#L1331>math.pp#RandomRange(Int64, Int64)</a>
+     * <a href="https://github.com/graemeg/freepascal/blob/5186987/rtl/objpas/math.pp#L1331">math.pp#RandomRange(Int64, Int64)</a>
      *
      * @param from the least value, unless greater than {@code to}.
      * @param to   the upper bound (exclusive), unless lower than {@code from}.
@@ -262,7 +263,7 @@ public class FreePascalRandom extends ReversibleMersenneTwister implements Rever
      * It can handle negative ranges (where {@code from} is greater than {@code to}).
      * <p>
      * Source code:
-     * <a href=https://github.com/graemeg/freepascal/blob/5186987/rtl/objpas/math.pp#L1325>math.pp#RandomRange(Integer, Integer)</a>
+     * <a href="https://github.com/graemeg/freepascal/blob/5186987/rtl/objpas/math.pp#L1331">math.pp#RandomRange(Int64, Int64)</a>
      *
      * @param from the least value, unless greater than {@code to}.
      * @param to   the upper bound (exclusive), unless lower than {@code from}.

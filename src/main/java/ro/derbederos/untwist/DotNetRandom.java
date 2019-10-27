@@ -58,6 +58,8 @@ import java.io.IOException;
  * https://connect.microsoft.com/VisualStudio/feedback/details/634761/system-random-serious-bug</a></li>
  * <li><a href="https://github.com/dotnet/coreclr/issues/5974">
  * https://github.com/dotnet/coreclr/issues/5974</a></li>
+ * <li><a href="https://github.com/dotnet/corefx/issues/12746">
+ * https://github.com/dotnet/corefx/issues/12746</a></li>
  * </ul>
  */
 public class DotNetRandom implements ReverseRandomGenerator {
