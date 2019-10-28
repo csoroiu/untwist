@@ -1,7 +1,11 @@
 {$N+,E-}
 {$D-,L-,Y-}
 program randDbl;
-{$APPTYPE CONSOLE}
+{$IFDEF CONDITIONALEXPRESSIONS}
+  {$IF CompilerVersion >= 14}
+    {$APPTYPE CONSOLE}
+  {$IFEND}
+{$ENDIF}
 {dcc32 -B -CC -U..\Lib randDbl.pas}
 
 function doubleToHexStr(input : double) : string;

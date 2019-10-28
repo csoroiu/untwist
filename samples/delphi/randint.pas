@@ -1,7 +1,11 @@
 {$N+,E-}
 {$D-,L-,Y-}
 program randInt;
-{$APPTYPE CONSOLE}
+{$IFDEF CONDITIONALEXPRESSIONS}
+  {$IF CompilerVersion >= 14}
+    {$APPTYPE CONSOLE}
+  {$IFEND}
+{$ENDIF}
 {dcc32 -B -CC -U..\Lib randInt.pas}
 
 procedure randInteger(seed : longint; range, count : integer);

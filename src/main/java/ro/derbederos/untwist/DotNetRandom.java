@@ -44,12 +44,14 @@ import java.io.IOException;
  * <p>
  * Source code:
  * <ul>
- * <li><a href="http://referencesource.microsoft.com/#mscorlib/system/random.cs">
+ * <li><a href="https://docs.microsoft.com/en-us/dotnet/api/system.random?view=netcore-3.0">
  * .NET Framework Random class Reference Source</a></li>
- * <li><a href="https://github.com/dotnet/coreclr/blob/master/src/mscorlib/shared/System/Random.cs">
+ * <li><a href="https://github.com/dotnet/corefx/blob/master/src/Common/src/CoreLib/System/Random.cs">
  * .NET Core Random class source</a></li>
- * <li><a href="https://github.com/dotnet/coreclr/tree/master/tests/src/CoreMangLib/cti/system/random">
- * .NET Core Random class tests</a></li>
+ * <li><a href="https://github.com/dotnet/coreclr/tree/f7f0929a46/tests/src/CoreMangLib/cti/system/random">
+ * .NET Core Random class tests (before moving to corefx)</a></li>
+ * <li><a href="https://github.com/dotnet/corefx/blob/master/src/System.Runtime.Extensions/tests/System/Random.cs">
+ * .NET CoreFx Random class tests</a></li>
  * </ul>
  * <p>
  * Issues:
@@ -240,8 +242,8 @@ public class DotNetRandom implements ReverseRandomGenerator {
         try {
             output.writeInt(iNext);
             output.writeInt(iNextp);
-            for (int i = 0; i < seedArray.length; i++) {
-                output.writeInt(seedArray[i]);
+            for (int value : seedArray) {
+                output.writeInt(value);
             }
             output.close();
         } catch (IOException ignore) {

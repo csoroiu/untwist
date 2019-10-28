@@ -11,7 +11,7 @@ Odities
    Java generates for -1097262571 same values python generates for 3197704725. But Python, for value
    -1097262571 drops the sign and generates the same values as for seed 1097262571.
 
-6. Delphi's considers bound as unsigned even if signed and generates value
+6. Delphi considers bound as unsigned even if signed and generates value
    between 0 and the received parameter, returning it as a signed it after that.
    (seems was done on purpose, to allow Math.RandomRange to function properly for a wide range).
    The java implementation of nextInt(int) throws exception if bound is negative.

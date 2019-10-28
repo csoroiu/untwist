@@ -32,8 +32,8 @@ import static ro.derbederos.untwist.Utils.between;
 /**
  * This class contains the tests from the CoreCLR library.
  * <p>
- * <a href="https://github.com/dotnet/coreclr/tree/master/tests/src/CoreMangLib/cti/system/random">
- * .NET Core Random class tests</a>
+ * <a href="https://github.com/dotnet/coreclr/tree/f7f0929a46/tests/src/CoreMangLib/cti/system/random">
+ * .NET Core Random class tests (before moving to corefx)</a>
  */
 public class DotNetRandomCoreCLRTest {
 
@@ -42,7 +42,7 @@ public class DotNetRandomCoreCLRTest {
 
     private static final DotNetRandom rand = new DotNetRandom(-55);
 
-    // https://github.com/dotnet/coreclr/blob/master/tests/src/Common/CoreCLRTestLibrary/Generator.cs
+    // https://github.com/dotnet/coreclr/blob/f7f0929a46/tests/src/Common/CoreCLRTestLibrary/Generator.cs
     private int newInt32WithCondition(Predicate<Integer> loopCondition) {
         int result;
         do {
