@@ -95,7 +95,7 @@ public class DotNetRandomCoreFxTest {
     public void expectedValues() {
         int[][] expectedValues = values();
         for (int seed = 0; seed < expectedValues.length; seed++) {
-            var r = new DotNetRandom(seed);
+            DotNetRandom r = new DotNetRandom(seed);
             for (int i = 0; i < expectedValues[seed].length; i++) {
                 assertThat(r.nextInt(), equalTo(expectedValues[seed][i]));
             }
@@ -132,7 +132,7 @@ public class DotNetRandomCoreFxTest {
         byte[][] expectedValues = byteValues();
         for (int seed = 0; seed < expectedValues.length; seed++) {
             byte[] actualValues = new byte[expectedValues[seed].length];
-            var r = new DotNetRandom(seed);
+            DotNetRandom r = new DotNetRandom(seed);
             r.nextBytes(actualValues);
             assertThat(actualValues, equalTo(expectedValues[seed]));
         }
