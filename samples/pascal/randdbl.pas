@@ -1,6 +1,9 @@
-{$N+,E-}
-{$D-,L-,Y-}
-program randDbl;
+{$IFDEF FPC}
+  {$mode objfpc} {$H+}
+{$ELSE}
+  {$N+,E-,D-,L-,Y-}
+{$ENDIF}
+program randdbl;
 {$IFDEF CONDITIONALEXPRESSIONS}
   {$IF CompilerVersion >= 14}
     {$APPTYPE CONSOLE}
@@ -13,10 +16,11 @@ const
   hexchars : array [$0..$F] of char = '0123456789ABCDEF';
 var
   theresult : string[16];
-  temp : array [1..8] of byte;
+  temp : array [1..8] of byte absolute input;
   i : byte;
 begin
-  move(input, temp, sizeof(temp));
+  {we do not need the following line if we use the absolute statement}
+  {move(input, temp, sizeof(temp));}
 
   theresult := '';
   for i:= 8 downto 1 do
@@ -35,7 +39,11 @@ begin
   for i:=1 to count do
   begin
     rand := random;
+    {$IFDEF FPC}
+    writeln(rand: 17 : 16, ' ', doubleToHexStr(rand));
+    {$ELSE}
     writeln(rand: 17 : 16, ' ', doubleToHexStr(rand), ' ', randseed);
+    {$ENDIF}
   end;
 end;
 

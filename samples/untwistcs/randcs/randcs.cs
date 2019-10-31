@@ -9,19 +9,22 @@ namespace ro.derbederos.untwist
         public static void Main(string[] args)
         {
             EnableCulture("en-US");
-            int seed = 0;
-            int count = 1;
-            if (args.Length != 2)
+            if (args.Length < 1 || args.Length > 2)
             {
                 Console.WriteLine("Invalid number of arguments");
-                Console.WriteLine("Usage: randcs seed - generates one double in the interval [0, 1)");
-                Console.WriteLine("Usage: randcs seed count - generates <count> doubles in the interval [0, 1)");
+                Console.WriteLine("Usage: randcs seed - generates one double in the interval [0, 1) and one int");
+                Console.WriteLine("Usage: randcs seed count - generates <count> doubles in the interval [0, 1) and <count> ints");
                 System.Environment.Exit(1);
             }
+            int seed = 0;
+            int count = 1;
             try
             {
                 seed = ParseInt(args[0]);
-                count = ParseInt(args[1]);
+                if (args.Length == 2)
+                {
+                    count = ParseInt(args[1]);
+                }
             }
             catch (FormatException ex)
             {
@@ -33,11 +36,10 @@ namespace ro.derbederos.untwist
                 Console.WriteLine(ex.ToString());
                 System.Environment.Exit(2);
             }
-            TestDouble(seed, count);
-            TestInt(seed, count);
+            GenerateDouble(seed, count);
+            GenerateInt(seed, count);
         }
-
-        private static void TestDouble(int seed, int count)
+        private static void GenerateDouble(int seed, int count)
         {
             var generator = new Random(seed);
             for (var i = 0; i < count; i++)
@@ -47,8 +49,7 @@ namespace ro.derbederos.untwist
                 Console.WriteLine(s + " " + ToHexBinaryString(d));
             }
         }
-
-        private static void TestInt(int seed, int count)
+        private static void GenerateInt(int seed, int count)
         {
             var generator = new Random(seed);
             for (var i = 0; i < count; i++)
@@ -56,12 +57,10 @@ namespace ro.derbederos.untwist
                 Console.WriteLine(generator.Next());
             }
         }
-
         private static string ToHexBinaryString(double d)
         {
             return Convert.ToString(BitConverter.DoubleToInt64Bits(d), 16);
         }
-
         private static int ParseInt(String s)
         {
             if (s.ToLower().StartsWith("0x"))
@@ -73,7 +72,6 @@ namespace ro.derbederos.untwist
                 return Convert.ToInt32(s, 10);
             }
         }
-
         private static void EnableCulture(string name)
         {
             try

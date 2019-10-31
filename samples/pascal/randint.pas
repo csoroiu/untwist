@@ -1,5 +1,8 @@
-{$N+,E-}
-{$D-,L-,Y-}
+{$IFDEF FPC}
+  {$mode objfpc} {$H+}
+{$ELSE}
+  {$N+,E-,D-,L-,Y-}
+{$ENDIF}
 program randInt;
 {$IFDEF CONDITIONALEXPRESSIONS}
   {$IF CompilerVersion >= 14}
@@ -15,7 +18,11 @@ begin
   randseed := seed;
   for i:=1 to count do
   begin
+    {$IFDEF FPC}
+    writeln(random(range));
+    {$ELSE}
     writeln(random(range), ' ', randseed);
+    {$ENDIF}
   end;
 end;
 
