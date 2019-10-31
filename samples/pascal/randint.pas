@@ -11,7 +11,7 @@ program randInt;
 {$ENDIF}
 {dcc32 -B -CC -U..\Lib randInt.pas}
 
-procedure randInteger(seed : longint; range, count : integer);
+procedure randInteger(seed, range : longint; count : integer);
 var
   i : integer;
 begin
@@ -36,8 +36,8 @@ begin
 end;
 
 var
-  seed : longint;
-  range, count : integer;
+  seed, range : longint;
+  count : integer;
   error : integer;
 begin
   if ((paramcount < 2) or (paramcount > 3)) then
