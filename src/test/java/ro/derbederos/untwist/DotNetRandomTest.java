@@ -33,9 +33,11 @@ import static ro.derbederos.untwist.Utils.nextFloats;
 
 public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetRandom> {
 
+    private static final int SEED = 0xc068c692; // -0x3f97396e = 0xc068c692
+
     @Override
     protected DotNetRandom makeGenerator() {
-        return new DotNetRandom(-0x3f97396e);
+        return new DotNetRandom(SEED);
     }
 
     @Override
@@ -95,7 +97,7 @@ public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetR
     public void testNextInt() {
         boolean result = IntStream.
                 generate(() -> generator.nextInt(1000))
-                .limit((long) 100000)
+                .limit(100000)
                 .allMatch((i) -> 0 <= i && i < 1000);
 
         assertThat(result, equalTo(true));
@@ -274,13 +276,13 @@ public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetR
 
     @Test
     public void testStatePrevNextVsNextPrev() {
-        DotNetRandom dotNetRandom1 = new DotNetRandom(-0x3f97396e);
+        DotNetRandom dotNetRandom1 = new DotNetRandom(SEED);
         dotNetRandom1.prevInt();
         dotNetRandom1.nextInt();
         byte[] expected = dotNetRandom1.getState();
 
 
-        DotNetRandom dotNetRandom2 = new DotNetRandom(-0x3f97396e);
+        DotNetRandom dotNetRandom2 = new DotNetRandom(SEED);
         dotNetRandom2.prevInt();
         dotNetRandom2.nextInt();
         byte[] actual = dotNetRandom2.getState();

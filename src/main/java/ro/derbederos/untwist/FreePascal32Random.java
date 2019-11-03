@@ -33,6 +33,8 @@ package ro.derbederos.untwist;
  * 0035878: Random numbers provided by "function Random(l:int64):int64;" are not equidistributed.</a>
  */
 public class FreePascal32Random extends FreePascalRandom {
+    private static final long serialVersionUID = 1L;
+
     /**
      * Creates a new random number generator.
      * <p>

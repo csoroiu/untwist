@@ -35,7 +35,7 @@ public class ArrayUtilsTest {
     private RandomGenerator generator;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         generator = new MersenneTwisterPy3k(new int[]{0x123, 0x234, 0x345, 0x456});
     }
 

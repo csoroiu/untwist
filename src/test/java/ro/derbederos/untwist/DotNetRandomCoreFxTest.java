@@ -149,6 +149,8 @@ public class DotNetRandomCoreFxTest {
     }
 
     static class SubRandom extends DotNetRandom {
+        private static final long serialVersionUID = 1L;
+
         double exposeSample() {
             return sample();
         }

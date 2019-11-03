@@ -385,8 +385,8 @@ public class ReversibleMersenneTwister extends ReverseBitsStreamGenerator implem
         DataOutputStream output = new DataOutputStream(byteOutput);
         try {
             output.writeInt(mti);
-            for (int i = 0; i < mt.length; i++) {
-                output.writeInt(mt[i]);
+            for (int value : mt) {
+                output.writeInt(value);
             }
             output.close();
         } catch (IOException ignore) {

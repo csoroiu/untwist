@@ -301,7 +301,8 @@ public class DotNetRandomCoreCLRTest {
         random.nextBytes(null);
     }
 
+    @SuppressWarnings("ConstantConditions")
     private static boolean verificationHelper(byte[] bytes) {
-        return IntStream.range(0, bytes.length).map(i -> bytes[i]).allMatch(value -> value >= Byte.MIN_VALUE);
+        return IntStream.range(0, bytes.length).map(i -> bytes[i]).allMatch(value -> true);
     }
 }

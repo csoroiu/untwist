@@ -69,6 +69,7 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("ConstantConditions")
     @Override
     public synchronized void setSeed(long seed) {
         if (this.seed != null) { //work around miserable override NPE in constructor.
