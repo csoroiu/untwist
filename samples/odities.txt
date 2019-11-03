@@ -1,17 +1,22 @@
 Odities
 1. .Net nextInt generates a value between 0 and Integer.MAX_VALUE (exclusive).
+     So there is no way to get Integer.MAX_VALUE.
 2. .Net nextInt(int) allows 0 as a bound(maxValue).
 
-3. FreePascal's nextInt(int) generates value between bound(exclusive) and 0 (exclusive) if bound is negative.
-4. FreePascal does implicit downcast for int64 to integer, thus, when using a 64 bit seed, the high 32 bits are lost.
+3. FreePascal's nextInt(int) generates value between bound(exclusive) and 0 (*exclusive*) if bound is negative.
+    So 0 is not generated. Or the occurrence is very low.
+    On the opposite side, nextLong(long) generates value between 0 (inclusive) and -bound(*exclusive*) if bound is negative.
+4. FreePascal's 3.2 nextLong(long) (after #35878 was implemented) generates value between
+    bound(exclusive) and 0 (*inclusive*) if bound is negative.
+5. FreePascal does implicit downcast for int64 to integer, thus, when using a 64 bit seed, the high 32 bits are lost.
 
-5. Python, for negative int seed drops the sign, while in java implementation we consider that
+6. Python, for negative int seed drops the sign, while in java implementation we consider that
    seed as unsigned and work with it as is. This is similar to using the unsigned version of the seed in
    python. For instance value 0xbe991a15, as signed it is -1097262571 and as unsigned 3197704725.
    Java generates for -1097262571 same values python generates for 3197704725. But Python, for value
    -1097262571 drops the sign and generates the same values as for seed 1097262571.
 
-6. Delphi considers bound as unsigned even if signed and generates value
+7. Delphi considers bound as unsigned even if signed and generates value
    between 0 and the received parameter, returning it as a signed it after that.
    (seems was done on purpose, to allow Math.RandomRange to function properly for a wide range).
    The java implementation of nextInt(int) throws exception if bound is negative.

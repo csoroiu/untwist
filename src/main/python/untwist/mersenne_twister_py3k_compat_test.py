@@ -17,7 +17,7 @@ def int_from_bytes_list(bytes_list, byte_order='little'):
     # python3
     # return int.from_bytes(bytes_list, 'little')
     from binascii import hexlify
-    bytes_list = reversed(bytes_list) if byte_order is 'little' else bytes_list
+    bytes_list = reversed(bytes_list) if byte_order == 'little' else bytes_list
     return int(hexlify(bytearray(bytes_list)), 16)
 
 

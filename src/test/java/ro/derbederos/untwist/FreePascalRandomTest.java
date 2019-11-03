@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017-2018 Claudiu Soroiu
+ * Copyright (c) 2017-2019 Claudiu Soroiu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,7 @@ import java.util.stream.LongStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static ro.derbederos.untwist.RandomUtils.nextDoubles;
-import static ro.derbederos.untwist.RandomUtils.nextInts;
-import static ro.derbederos.untwist.RandomUtils.nextLongs;
+import static ro.derbederos.untwist.RandomUtils.*;
 import static ro.derbederos.untwist.Utils.nextBooleans;
 import static ro.derbederos.untwist.Utils.nextFloats;
 
@@ -181,6 +179,14 @@ public class FreePascalRandomTest extends ReversibleMersenneTwisterTest {
     public void testNextLong16ExactValue() {
         long[] expected = {9L, 9L, 13L, 13L, 13L, 6L, 14L, 13L, 15L, 1L};
         long[] actual = nextLongs(generator, expected.length, 0, 16).toArray();
+
+        assertThat(actual, equalTo(expected));
+    }
+
+    @Test
+    public void testNextLongNeg16ExactValue() {
+        long[] expected = {9L, 9L, 13L, 13L, 13L, 6L, 14L, 13L, 15L, 1L};
+        long[] actual = nextLongs(generator, expected.length, 0, -16).toArray();
 
         assertThat(actual, equalTo(expected));
     }
