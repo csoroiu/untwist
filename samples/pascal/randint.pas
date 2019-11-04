@@ -3,7 +3,8 @@
 {$ELSE}
   {$N+,E-,D-,L-,Y-}
 {$ENDIF}
-program randInt;
+
+Program random_integer;
 {$IFDEF CONDITIONALEXPRESSIONS}
   {$IF CompilerVersion >= 14}
     {$APPTYPE CONSOLE}
@@ -11,42 +12,47 @@ program randInt;
 {$ENDIF}
 {dcc32 -B -CC -U..\Lib randInt.pas}
 
-procedure randInteger(seed, range : longint; count : integer);
-var
+Procedure randInteger(seed, range : longint; count : integer);
+
+Var 
   i : integer;
-begin
+Begin
   randseed := seed;
-  for i:=1 to count do
-  begin
+  For i:=1 To count Do
+    Begin
     {$IFDEF FPC}
-    writeln(random(range));
+      writeln(random(range));
     {$ELSE}
-    writeln(random(range), ' ', randseed);
+      writeln(random(range), ' ', randseed);
     {$ENDIF}
-  end;
-end;
+    End;
+End;
 
-procedure checkerror(error : integer; argument : string);
-begin
-  if (error <> 0) then
-  begin
-    writeln('invalid argument ', argument);
-    halt(2);
-  end;
-end;
+Procedure checkerror(error : integer; argument : String);
+Begin
+  If (error <> 0) Then
+    Begin
+      writeln('invalid argument ', argument);
+      halt(2);
+    End;
+End;
 
-var
+Var 
   seed, range : longint;
   count : integer;
   error : integer;
-begin
-  if ((paramcount < 2) or (paramcount > 3)) then
-  begin
-    writeln('Invalid number of arguments.');
-    writeln('Usage: randInt seed range - generates one int in the interval [0, range)');
-    writeln('Usage: randInt seed range count - generates count ints in the interval [0, range)');
-    halt(1);
-  end;
+Begin
+  If ((paramcount < 2) Or (paramcount > 3)) Then
+    Begin
+      writeln('Invalid number of arguments.');
+      writeln(
+      'Usage: randInt seed range - generates one int in the interval [0, range)'
+      );
+      writeln(
+'Usage: randInt seed range count - generates count ints in the interval [0, range)'
+      );
+      halt(1);
+    End;
 
   val(paramstr(1), seed, error);
   checkerror(error, paramstr(1));
@@ -54,10 +60,10 @@ begin
   checkerror(error, paramstr(2));
 
   count := 1;
-  if (paramcount = 3) then
-  begin
-    val(paramstr(3), count, error);
-    checkerror(error, paramstr(3));
-  end;
+  If (paramcount = 3) Then
+    Begin
+      val(paramstr(3), count, error);
+      checkerror(error, paramstr(3));
+    End;
   randInteger(seed, range, count);
-end.
+End.

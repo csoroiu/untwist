@@ -88,7 +88,8 @@ public class FreePascal32Random extends FreePascalRandom {
             bound++;
         }
         long q = bound;
-        if (Long.compareUnsigned(q, bound & 0xFFFFFFFFL) > 0) {
+		if (q < 0) {
+//        if (Long.compareUnsigned(q, Long.MIN_VALUE) > 0) {
             q = -bound;
         }
         long a = Integer.toUnsignedLong(next());
@@ -119,7 +120,8 @@ public class FreePascal32Random extends FreePascalRandom {
             bound++;
         }
         long q = bound;
-        if (Long.compareUnsigned(q, bound & 0xFFFFFFFFL) > 0) {
+        if (q < 0) {
+//        if (Long.compareUnsigned(q, Long.MIN_VALUE) > 0) {
             q = -bound;
         }
         long b = Integer.toUnsignedLong(prev());

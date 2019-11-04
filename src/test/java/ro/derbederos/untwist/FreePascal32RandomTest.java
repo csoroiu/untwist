@@ -34,8 +34,8 @@ public class FreePascal32RandomTest extends FreePascalRandomTest {
     @Override
     @Test
     public void testNextLongNeg() {
-        long nextLong = generator.nextLong(-16);
-        assertThat(nextLong, equalTo(-7L));
+        long nextLong = generator.nextLong(-0x7ABCDEF8FFFFFFFFL);
+        assertThat(nextLong, equalTo(-4389652262288902655L));
     }
 
     @Override
@@ -90,7 +90,7 @@ public class FreePascal32RandomTest extends FreePascalRandomTest {
         long expected = generator.nextLong(0x7ABCDEF8FFFFFFFFL);
         long actual = generator.prevLong(0x7ABCDEF8FFFFFFFFL);
 
-        assertThat(expected, equalTo(4766053535330551952L));
+        assertThat(expected, equalTo(4389652262288902656L));
         assertThat(actual, equalTo(expected));
     }
 

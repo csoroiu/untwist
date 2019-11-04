@@ -3,7 +3,8 @@
 {$ELSE}
   {$N+,E-,D-,L-,Y-}
 {$ENDIF}
-program randdbl;
+
+Program random_double;
 {$IFDEF CONDITIONALEXPRESSIONS}
   {$IF CompilerVersion >= 14}
     {$APPTYPE CONSOLE}
@@ -11,72 +12,80 @@ program randdbl;
 {$ENDIF}
 {dcc32 -B -CC -U..\Lib randDbl.pas}
 
-function doubleToHexStr(input : double) : string;
-const
-  hexchars : array [$0..$F] of char = '0123456789ABCDEF';
-var
+Function doubleToHexStr(input : double) : string;
+
+Const 
+  hexchars : array [$0..$F] Of char = '0123456789ABCDEF';
+
+Var 
   theresult : string[16];
-  temp : array [1..8] of byte absolute input;
+  temp : array [1..8] Of byte absolute input;
   i : byte;
-begin
+Begin
   {we do not need the following line if we use the absolute statement}
   {move(input, temp, sizeof(temp));}
 
   theresult := '';
-  for i:= 8 downto 1 do
-  begin
-    theresult := theresult + hexchars[temp[i] div 16] + hexchars[temp[i] mod 16];
-  end;
+  For i:= 8 Downto 1 Do
+    Begin
+      theresult := theresult + hexchars[temp[i] Div 16] + hexchars[temp[i] Mod
+                   16];
+    End;
   doubleToHexStr := theresult;
-end;
+End;
 
-procedure randDouble(seed : longint; count : integer);
-var
+Procedure randDouble(seed : longint; count : integer);
+
+Var 
   rand : double;
   i : integer;
-begin
+Begin
   randseed := seed;
-  for i:=1 to count do
-  begin
-    rand := random;
+  For i:=1 To count Do
+    Begin
+      rand := random;
     {$IFDEF FPC}
-    writeln(rand: 17 : 16, ' ', doubleToHexStr(rand));
+      writeln(rand: 17 : 16, ' ', doubleToHexStr(rand));
     {$ELSE}
-    writeln(rand: 17 : 16, ' ', doubleToHexStr(rand), ' ', randseed);
+      writeln(rand: 17 : 16, ' ', doubleToHexStr(rand), ' ', randseed);
     {$ENDIF}
-  end;
-end;
+    End;
+End;
 
-procedure checkerror(error : integer; argument : string);
-begin
-  if (error <> 0) then
-  begin
-    writeln('invalid argument ', argument);
-    halt(2);
-  end;
-end;
+Procedure checkerror(error : integer; argument : String);
+Begin
+  If (error <> 0) Then
+    Begin
+      writeln('invalid argument ', argument);
+      halt(2);
+    End;
+End;
 
-var
+Var 
   seed : longint;
   count : integer;
   error : integer;
-begin
-  if ((paramcount < 1) or (paramcount > 2)) then
-  begin
-    writeln('Invalid number of arguments.');
-    writeln('Usage: randDbl seed - generates one double in the interval [0, 1)');
-    writeln('Usage: randDbl seed count - generates <count> doubles in the interval [0, 1)');
-    halt(1);
-  end;
+Begin
+  If ((paramcount < 1) Or (paramcount > 2)) Then
+    Begin
+      writeln('Invalid number of arguments.');
+      writeln(
+             'Usage: randDbl seed - generates one double in the interval [0, 1)'
+      );
+      writeln(
+  'Usage: randDbl seed count - generates <count> doubles in the interval [0, 1)'
+      );
+      halt(1);
+    End;
 
   val(paramstr(1), seed, error);
   checkerror(error, paramstr(1));
 
   count := 1;
-  if (paramcount = 2) then
-  begin
-    val(paramstr(2), count, error);
-    checkerror(error, paramstr(2));
-  end;
+  If (paramcount = 2) Then
+    Begin
+      val(paramstr(2), count, error);
+      checkerror(error, paramstr(2));
+    End;
   randDouble(seed, count);
-end.
+End.
