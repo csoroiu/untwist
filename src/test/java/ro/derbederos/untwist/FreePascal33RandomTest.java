@@ -24,11 +24,11 @@ import static org.hamcrest.Matchers.equalTo;
 import static ro.derbederos.untwist.RandomUtils.nextInts;
 import static ro.derbederos.untwist.RandomUtils.nextLongs;
 
-public class FreePascal32RandomTest extends FreePascalRandomTest {
+public class FreePascal33RandomTest extends FreePascalRandomTest {
 
     @Override
     protected ReversibleMersenneTwister makeGenerator() {
-        return new FreePascal32Random(123456789013L);
+        return new FreePascal33Random(123456789013L);
     }
 
     @Override

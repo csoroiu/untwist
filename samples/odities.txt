@@ -6,7 +6,7 @@ Odities
 3. FreePascal's nextInt(int) generates value between bound(exclusive) and 0 (*exclusive*) if bound is negative.
     So 0 is not generated. Or the occurrence is very low.
     On the opposite side, nextLong(long) generates value between 0 (inclusive) and -bound(*exclusive*) if bound is negative.
-4. FreePascal's 3.2 nextLong(long) (after #35878 was implemented) generates value between
+4. FreePascal's 3.3.1 nextLong(long) (after #35878 was implemented) generates value between
     bound(exclusive) and 0 (*inclusive*) if bound is negative.
 5. FreePascal does implicit downcast for int64 to integer, thus, when using a 64 bit seed, the high 32 bits are lost.
 

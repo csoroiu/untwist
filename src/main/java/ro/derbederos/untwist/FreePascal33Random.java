@@ -17,7 +17,7 @@
 package ro.derbederos.untwist;
 
 /**
- * Java implementation of the random number generator used by FreePascal.
+ * Java implementation of the random number generator used by FreePascal 3.3.1.
  * FreePascal uses Mersenne Twister, but it has to be initialized with a
  * 32bit seed in order to get the same values.
  * <p>
@@ -32,7 +32,7 @@ package ro.derbederos.untwist;
  * The issue fixed is #35878: <a href="https://bugs.freepascal.org/view.php?id=35878">
  * 0035878: Random numbers provided by "function Random(l:int64):int64;" are not equidistributed.</a>
  */
-public class FreePascal32Random extends FreePascalRandom {
+public class FreePascal33Random extends FreePascalRandom {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -41,7 +41,7 @@ public class FreePascal32Random extends FreePascalRandom {
      * The instance is initialized using the current time plus the
      * system identity hash code of this instance as the seed.
      */
-    public FreePascal32Random() {
+    public FreePascal33Random() {
         super();
     }
 
@@ -51,7 +51,7 @@ public class FreePascal32Random extends FreePascalRandom {
      * @param seed the initial seed (32 bits integer).
      * @see #setSeed(int)
      */
-    public FreePascal32Random(int seed) {
+    public FreePascal33Random(int seed) {
         this(new int[]{seed});
     }
 
@@ -62,7 +62,7 @@ public class FreePascal32Random extends FreePascalRandom {
      *             the seed of the generator will be related to the current time.
      * @see #setSeed(int[])
      */
-    public FreePascal32Random(int[] seed) {
+    public FreePascal33Random(int[] seed) {
         super(seed);
     }
 
@@ -72,7 +72,7 @@ public class FreePascal32Random extends FreePascalRandom {
      * @param seed the initial seed (64 bits integer).
      * @see #setSeed(long)
      */
-    public FreePascal32Random(long seed) {
+    public FreePascal33Random(long seed) {
         super(seed);
     }
 
