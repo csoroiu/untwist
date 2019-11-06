@@ -28,18 +28,18 @@ import static org.hamcrest.Matchers.equalTo;
 import static ro.derbederos.untwist.RandomUtils.nextDoubles;
 import static ro.derbederos.untwist.RandomUtils.nextInts;
 
-public class JDKRandomPy3kCompatTest {
+public class JavaRandomPy3KCompatTest {
     // openjdk random tests.
     // http://hg.openjdk.java.net/jdk8/jdk8/jdk/file/687fd7c7986d/test/java/util/Random
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
-    private JDKRandomPy3kCompat generator;
+    private JavaRandomPy3KCompat generator;
 
     @Before
     public void setup() {
-        generator = new JDKRandomPy3kCompat(0L);
+        generator = new JavaRandomPy3KCompat(0L);
     }
 
     @Test
@@ -48,14 +48,14 @@ public class JDKRandomPy3kCompatTest {
         final long seedLong = 0x12345678L;
         final int[] seedArray = {seedInt};
 
-        JDKRandomPy3kCompat rInt = new JDKRandomPy3kCompat();
+        JavaRandomPy3KCompat rInt = new JavaRandomPy3KCompat();
         rInt.setSeed(seedInt);
         int[] actualInt = nextInts(rInt, 10, 0, 1000).toArray();
 
-        JDKRandomPy3kCompat rLong = new JDKRandomPy3kCompat(seedLong);
+        JavaRandomPy3KCompat rLong = new JavaRandomPy3KCompat(seedLong);
         int[] actualLong = nextInts(rLong, 10, 0, 1000).toArray();
 
-        JDKRandomPy3kCompat rArray = new JDKRandomPy3kCompat();
+        JavaRandomPy3KCompat rArray = new JavaRandomPy3KCompat();
         rArray.setSeed(seedArray);
         int[] actualArray = nextInts(rArray, 10, 0, 1000).toArray();
 

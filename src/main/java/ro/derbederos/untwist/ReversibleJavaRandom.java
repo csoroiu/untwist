@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * This class extends the random class and ads methods for generating random values in reverse.
  */
-public class ReversibleJdkRandom extends Random implements ReverseRandomGenerator, ReverseNormalizedGaussianSampler {
+public class ReversibleJavaRandom extends Random implements ReverseRandomGenerator, ReverseNormalizedGaussianSampler {
     private static final long serialVersionUID = 1L;
 
     private static final long MULTIPLIER = 0x5DEECE66DL;
@@ -30,7 +30,7 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
     private static final long ADDEND = 0xBL;
     private static final long MASK = 0xFFFFFFFFFFFFL;     // (1L << 48) - 1
     private static final double DOUBLE_UNIT = 0x1.0p-53d; // 1.0 / (1L << 53)
-    private static final float FLOAT_UNIT = 0x1.0p-24f;   // 1.0 / (1 << 24)
+    private static final float FLOAT_UNIT = 0x1.0p-24f;   // 1.0f / (1 << 24)
 
     protected static final long SEED_UNIQUIFIER_INVERSE_MULTIPLIER = -289066557591992163L;
 
@@ -40,12 +40,12 @@ public class ReversibleJdkRandom extends Random implements ReverseRandomGenerato
     private boolean shouldReverseGaussian;
     private boolean hasNextGaussian;
 
-    public ReversibleJdkRandom() {
+    public ReversibleJavaRandom() {
         super();
         setSeed(tempSeed);
     }
 
-    public ReversibleJdkRandom(long seed) {
+    public ReversibleJavaRandom(long seed) {
         super(seed);
         setSeed(tempSeed);
     }

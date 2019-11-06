@@ -28,23 +28,23 @@ import static ro.derbederos.untwist.RandomUtils.nextLongs;
 import static ro.derbederos.untwist.Utils.nextBooleans;
 import static ro.derbederos.untwist.Utils.nextFloats;
 
-public class ReversibleJdkRandomTest extends ReverseRandomGeneratorAbstractTest<ReversibleJdkRandom> {
+public class ReversibleJavaRandomTest extends ReverseRandomGeneratorAbstractTest<ReversibleJavaRandom> {
 
     @Override
-    protected ReversibleJdkRandom makeGenerator() {
-        return new ReversibleJdkRandom(1000);
+    protected ReversibleJavaRandom makeGenerator() {
+        return new ReversibleJavaRandom(1000);
     }
 
     @Test
     public void testDefaultConstructor() {
-        long firstSeed = new ReversibleJdkRandom().getSeed();
-        long secondSeed = new ReversibleJdkRandom().getSeed();
+        long firstSeed = new ReversibleJavaRandom().getSeed();
+        long secondSeed = new ReversibleJavaRandom().getSeed();
         assertThat(secondSeed, not(equalTo(firstSeed)));
     }
 
     @Test
     public void testGetSeed() {
-        ReversibleJdkRandom generator = new ReversibleJdkRandom();
+        ReversibleJavaRandom generator = new ReversibleJavaRandom();
         long seed = generator.getSeed();
         long expected = generator.nextLong();
 

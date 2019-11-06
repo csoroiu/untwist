@@ -68,7 +68,7 @@
         <commons-math3.version>3.6.1</commons-math3.version>
         <junit.version>4.12</junit.version>
         <junit4-dataprovider.version>2.6</junit4-dataprovider.version>
-        <hamcrest.version>2.1</hamcrest.version>
+        <hamcrest.version>2.2</hamcrest.version>
         <jacoco.version>0.8.5</jacoco.version>
     </properties>
 

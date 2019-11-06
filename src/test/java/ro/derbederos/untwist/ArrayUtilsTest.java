@@ -41,7 +41,7 @@ public class ArrayUtilsTest {
 
     @Test
     public void testRandomTree() {
-        ReversibleJdkRandom randomizer = new ReversibleJdkRandom();
+        ReversibleJavaRandom randomizer = new ReversibleJavaRandom();
         int maxDepth = 0;
         int N = 10000;
         for (int i = 0; i < 1000; i++) {

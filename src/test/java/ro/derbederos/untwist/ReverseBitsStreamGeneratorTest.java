@@ -36,7 +36,7 @@ public class ReverseBitsStreamGeneratorTest extends ReverseBitsStreamGeneratorAb
         return generator;
     }
 
-    static class BitRandom extends ReversibleJdkRandom {
+    static class BitRandom extends ReversibleJavaRandom {
         private static final long serialVersionUID = 1L;
 
         public BitRandom() {

@@ -16,15 +16,15 @@
 
 package ro.derbederos.untwist;
 
-public class JDKRandomPy3kCompat extends ReversibleJdkRandom {
+public class JavaRandomPy3KCompat extends ReversibleJavaRandom {
 
     private static final long serialVersionUID = 1L;
 
-    public JDKRandomPy3kCompat() {
+    public JavaRandomPy3KCompat() {
         super();
     }
 
-    public JDKRandomPy3kCompat(long seed) {
+    public JavaRandomPy3KCompat(long seed) {
         super(seed);
     }
 
