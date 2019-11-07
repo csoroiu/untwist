@@ -20,7 +20,6 @@ namespace ro.derbederos.untwist
             {
                 throw new ArgumentOutOfRangeException("len", len, "out of range, starting from start parameter");
             }
-
             for (int i = start; i < start + len; i++)
             {
                 bytes[i] = (byte)(NextInt() % (1 << 8));
@@ -29,9 +28,9 @@ namespace ro.derbederos.untwist
 
         public virtual float NextFloat() => (float)NextDouble();
 
-        public virtual int NextInt() => Next();
+        public int NextInt() => Next();
 
-        public virtual int NextInt(int bound) => Next(bound);
+        public int NextInt(int bound) => Next(bound);
 
         public virtual long NextLong()
         {
@@ -41,29 +40,6 @@ namespace ro.derbederos.untwist
             return b1 << 48 | b2 << 24 | b3;
         }
 
-        public virtual long NextLong(long bound)
-        {
-            if (bound <= 0)
-            {
-                throw new ArgumentException("bound must be strictly positive");
-            }
-
-            long r = this.NextLong();
-            long m = bound - 1;
-            if ((bound & m) == 0)
-            {  // i.e., bound is a power of 2
-                r = r & m;
-            }
-            else
-            {
-                // reject over-represented candidates
-                long u = (long)((ulong)r >> 1);
-                while (u + m - (r = u % bound) < 0L)
-                {
-                    u = (long)((ulong)this.NextLong() >> 1);
-                }
-            }
-            return r;
-        }
+        public virtual long NextLong(long bound) => DefaultRandomPrimitivesFactory.NextLong(this, bound);
     }
 }

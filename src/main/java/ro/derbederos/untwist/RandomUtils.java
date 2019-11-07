@@ -82,13 +82,11 @@ public class RandomUtils {
     }
 
     public static LongStream nextLongs(ReverseRandomGenerator generator, long streamSize, long origin, long bound) {
-        checkRange(origin, bound);
-        return LongStream.generate(() -> generator.nextLong(bound - origin) + origin).limit(streamSize);
+        return nextLongs(generator, origin, bound).limit(streamSize);
     }
 
     public static LongStream prevLongs(ReverseRandomGenerator generator, long streamSize, long origin, long bound) {
-        checkRange(origin, bound);
-        return LongStream.generate(() -> generator.prevLong(bound - origin) + origin).limit(streamSize);
+        return prevLongs(generator, origin, bound).limit(streamSize);
     }
 
     public static DoubleStream nextDoubles(RandomGenerator generator) {
@@ -100,11 +98,11 @@ public class RandomUtils {
     }
 
     public static DoubleStream nextDoubles(RandomGenerator generator, long streamSize) {
-        return DoubleStream.generate(generator::nextDouble).limit(streamSize);
+        return nextDoubles(generator).limit(streamSize);
     }
 
     public static DoubleStream prevDoubles(ReverseRandomGenerator generator, long streamSize) {
-        return DoubleStream.generate(generator::prevDouble).limit(streamSize);
+        return prevDoubles(generator).limit(streamSize);
     }
 
     private static void checkRange(long origin, long bound) {

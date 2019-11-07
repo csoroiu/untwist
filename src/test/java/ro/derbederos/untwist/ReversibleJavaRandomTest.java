@@ -145,6 +145,14 @@ public class ReversibleJavaRandomTest extends ReverseRandomGeneratorAbstractTest
         assertThat(actual, equalTo(expected));
     }
 
+    @Test
+    public void testNextInt255ExactValue() {
+        int[] expected = {112, 190, 246, 34, 177, 179, 106, 230, 254, 90};
+        int[] actual = nextInts(generator, expected.length, 0, 255).toArray();
+
+        assertThat(actual, equalTo(expected));
+    }
+
     @Override
     @Test
     public void testNextIntExactValue() {

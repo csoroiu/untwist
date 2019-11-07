@@ -34,7 +34,7 @@ namespace ro.derbederos.untwist
         public virtual void TestNextLong2()
         {
             int N = 10000;
-            int positives = (int)RandomUtils.NextLongs(generator, N).Where(value => value >= 0).Count();
+            int positives = (int)RandomUtils.NextLongs((UniformRandomProvider)generator, N).Where(value => value >= 0).Count();
             int walk = 2 * positives - N;
             Assert.IsTrue(Math.Abs(walk) < Math.Sqrt(N) * 2.576,
                             "Walked too far astray: " + walk + "\nNote: This " +
@@ -45,7 +45,7 @@ namespace ro.derbederos.untwist
         public virtual void TestNexBoolean2()
         {
             int N = 10000;
-            int positives = (int)RandomUtils.NextBooleans(generator, N).Where(value => value).Count();
+            int positives = (int)RandomUtils.NextBooleans((UniformRandomProvider)generator, N).Where(value => value).Count();
             int walk = 2 * positives - N;
             Assert.IsTrue(Math.Abs(walk) < Math.Sqrt(N) * 2.576,
                             "Walked too far astray: " + walk + "\nNote: This " +

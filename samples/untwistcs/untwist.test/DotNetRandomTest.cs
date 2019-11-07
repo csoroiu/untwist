@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using org.apache.commons.rng;
 
 namespace ro.derbederos.untwist
 {
@@ -66,10 +67,12 @@ namespace ro.derbederos.untwist
         }
 
         [TestMethod]
-        [Ignore("NextLong(int) not implemented.")]
         public override void TestNextLong16ExactValue()
         {
-            Assert.IsTrue(false, "NextLong(int) not implemented.");
+            long[] expected = { 1L, 3L, 13L, 9L, 14L, 11L, 15L, 14L, 4L, 10L };
+            long[] actual = ((UniformRandomProvider)generator).NextLongs(expected.Length, 0, 16).ToArray();
+
+            CollectionAssert.AreEqual(actual, expected);
         }
 
         [TestMethod]
@@ -78,7 +81,7 @@ namespace ro.derbederos.untwist
             long[] expected = {7160971568492367569L, -8931728783750763133L, -1986638387611489539L, -2925306645117407511L,
                 6258300555690268542L, -554966206143487861L, 3824004281963357759L, -2002195686033151106L,
                 -777744680147937180L, 7928930161609697530L};
-            long[] actual = generator.NextLongs(expected.Length).ToArray();
+            long[] actual = ((UniformRandomProvider)generator).NextLongs(expected.Length).ToArray();
 
             CollectionAssert.AreEqual(actual, expected);
         }
@@ -99,7 +102,7 @@ namespace ro.derbederos.untwist
         {
             float[] expected = {0.31840175F, 0.63970035F, 0.059839107F, 0.6334691F, 0.8837889F,
                 0.042218864F, 0.367642F, 0.10970801F, 0.1661123F, 0.283534F};
-            float[] actual = generator.NextFloats(expected.Length).ToArray();
+            float[] actual = ((UniformRandomProvider)generator).NextFloats(expected.Length).ToArray();
 
             CollectionAssert.AreEqual(actual, expected);
         }
@@ -109,7 +112,7 @@ namespace ro.derbederos.untwist
         {
             bool[] expected = {false, true, false, true, true, false, false, false, false, false,
                 true, false, false, true, false, true, false, true, true, false};
-            bool[] actual = generator.NextBooleans(expected.Length).ToArray();
+            bool[] actual = ((UniformRandomProvider)generator).NextBooleans(expected.Length).ToArray();
 
             CollectionAssert.AreEqual(actual, expected);
         }

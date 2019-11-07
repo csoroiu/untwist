@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using org.apache.commons.rng;
 
 namespace ro.derbederos.untwist
 {
@@ -40,12 +41,26 @@ namespace ro.derbederos.untwist
         public static IEnumerable<long> NextLongs(this Random generator, long streamSize)
             => NextLongs(generator).TakeLong(streamSize);
 
+        public static IEnumerable<long> NextLongs(this UniformRandomProvider generator)
+            => Generate(generator.NextLong);
+
+        public static IEnumerable<long> NextLongs(this UniformRandomProvider generator, int origin, int bound)
+            => Generate(() => generator.NextLong(bound - origin) + origin);
+        public static IEnumerable<long> NextLongs(this UniformRandomProvider generator, long streamSize)
+            => NextLongs(generator).TakeLong(streamSize);
+        public static IEnumerable<long> NextLongs(this UniformRandomProvider generator, long streamSize, int origin, int bound)
+            => NextLongs(generator, origin, bound).TakeLong(streamSize);
+
         public static IEnumerable<float> NextFloats(this Random generator)
             => Generate(generator.NextFloat);
 
         public static IEnumerable<float> NextFloats(this Random generator, long streamSize)
             => NextFloats(generator).TakeLong(streamSize);
 
+        public static IEnumerable<float> NextFloats(this UniformRandomProvider generator)
+            => Generate(generator.NextFloat);
+        public static IEnumerable<float> NextFloats(this UniformRandomProvider generator, long streamSize)
+            => NextFloats(generator).TakeLong(streamSize);
         public static IEnumerable<double> NextDoubles(this Random generator)
             => Generate(generator.NextDouble);
 
@@ -54,10 +69,12 @@ namespace ro.derbederos.untwist
 
         public static IEnumerable<bool> NextBooleans(this Random generator)
             => Generate(generator.NextBoolean);
-
         public static IEnumerable<bool> NextBooleans(this Random generator, long streamSize)
             => NextBooleans(generator).TakeLong(streamSize);
-
+        public static IEnumerable<bool> NextBooleans(this UniformRandomProvider generator)
+            => Generate(generator.NextBoolean);
+        public static IEnumerable<bool> NextBooleans(this UniformRandomProvider generator, long streamSize)
+            => NextBooleans(generator).TakeLong(streamSize);
         static IEnumerable<TSource> TakeLong<TSource>(this IEnumerable<TSource> source, long count)
         {
             if (source == null)
