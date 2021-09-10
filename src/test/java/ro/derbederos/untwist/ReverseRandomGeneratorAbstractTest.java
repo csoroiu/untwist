@@ -22,9 +22,7 @@ import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.apache.commons.math3.random.RandomDataGenerator;
 import org.apache.commons.math3.random.RandomGeneratorAbstractTest;
 import org.junit.Ignore;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import java.util.IntSummaryStatistics;
@@ -35,6 +33,7 @@ import java.util.stream.Stream;
 import static java.util.Arrays.stream;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.fail;
 import static ro.derbederos.untwist.RandomUtils.*;
 import static ro.derbederos.untwist.Utils.*;
@@ -43,9 +42,6 @@ import static ro.derbederos.untwist.Utils.*;
 @RunWith(DataProviderRunner.class)
 public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandomGenerator>
         extends RandomGeneratorAbstractTest {
-
-    @Rule
-    public final ExpectedException expectedException = ExpectedException.none();
 
     /**
      * RandomGenerator under test
@@ -163,30 +159,26 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
     @Override
     @Test
     public void testNextIntNeg() {
-        expectedException.expect(IllegalArgumentException.class);
-
-        generator.nextInt(-1);
+        assertThrows(IllegalArgumentException.class,
+                     () -> generator.nextInt(-1));
     }
 
     @Test
     public void testPrevIntNeg() {
-        expectedException.expect(IllegalArgumentException.class);
-
-        generator.prevInt(-1);
+        assertThrows(IllegalArgumentException.class,
+                     () -> generator.prevInt(-1));
     }
 
     @Test
     public void testNextLongNeg() {
-        expectedException.expect(IllegalArgumentException.class);
-
-        generator.nextLong(-16);
+        assertThrows(IllegalArgumentException.class,
+                     () -> generator.nextLong(-16));
     }
 
     @Test
     public void testPrevLongNeg() {
-        expectedException.expect(IllegalArgumentException.class);
-
-        generator.prevLong(-16);
+        assertThrows(IllegalArgumentException.class,
+                     () -> generator.prevLong(-16));
     }
 
     @Test
@@ -480,16 +472,14 @@ public abstract class ReverseRandomGeneratorAbstractTest<T extends ReverseRandom
 
     @Test
     public void testNextBytes_NullBuffer() {
-        expectedException.expect(NullPointerException.class);
-
-        generator.nextBytes(null);
+        assertThrows(NullPointerException.class,
+                     () -> generator.nextBytes(null));
     }
 
     @Test
     public void testPrevBytes_NullBuffer() {
-        expectedException.expect(NullPointerException.class);
-
-        generator.nextBytes(null);
+        assertThrows(NullPointerException.class,
+                     () -> generator.prevBytes(null));
     }
 
     @Test

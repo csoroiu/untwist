@@ -66,10 +66,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <commons-math3.version>3.6.1</commons-math3.version>
-        <junit.version>4.13.1</junit.version>
-        <junit4-dataprovider.version>2.6</junit4-dataprovider.version>
+        <junit.version>4.13.2</junit.version>
+        <junit4-dataprovider.version>2.8</junit4-dataprovider.version>
         <hamcrest.version>2.2</hamcrest.version>
-        <jacoco.version>0.8.5</jacoco.version>
+        <jacoco.version>0.8.7</jacoco.version>
     </properties>
 
     <build>

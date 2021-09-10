@@ -24,6 +24,7 @@ import java.util.stream.IntStream;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.lessThan;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.fail;
 import static ro.derbederos.untwist.RandomUtils.nextDoubles;
 import static ro.derbederos.untwist.RandomUtils.nextInts;
@@ -81,16 +82,14 @@ public class DotNetRandomTest extends ReverseRandomGeneratorAbstractTest<DotNetR
 
     @Test
     public void testNextInt_InvalidRange() {
-        expectedException.expect(IllegalArgumentException.class);
-
-        generator.nextInt(200, 100);
+        assertThrows(IllegalArgumentException.class,
+                     () -> generator.nextInt(200, 100));
     }
 
     @Test
     public void testPrevInt_InvalidRange() {
-        expectedException.expect(IllegalArgumentException.class);
-
-        generator.prevInt(200, 100);
+        assertThrows(IllegalArgumentException.class,
+                     () -> generator.prevInt(200, 100));
     }
 
     @Test

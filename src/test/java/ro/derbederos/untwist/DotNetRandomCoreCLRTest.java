@@ -16,9 +16,7 @@
 
 package ro.derbederos.untwist;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
@@ -26,6 +24,7 @@ import java.util.stream.IntStream;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static ro.derbederos.untwist.Utils.between;
 
@@ -36,9 +35,6 @@ import static ro.derbederos.untwist.Utils.between;
  * .NET Core Random class tests (before moving to corefx)</a>
  */
 public class DotNetRandomCoreCLRTest {
-
-    @Rule
-    public final ExpectedException expectedException = ExpectedException.none();
 
     private static final DotNetRandom rand = new DotNetRandom(-55);
 
@@ -155,9 +151,9 @@ public class DotNetRandomCoreCLRTest {
 
     @Test
     public void testRandomNext2_int_NegTest1() {
-        expectedException.expect(IllegalArgumentException.class);
         DotNetRandom random = new DotNetRandom(-55);
-        random.nextInt(-1);
+        assertThrows(IllegalArgumentException.class,
+                     () -> random.nextInt(-1));
     }
 
     @Test
@@ -231,9 +227,9 @@ public class DotNetRandomCoreCLRTest {
 
     @Test
     public void testRandomNext3_int_int_NegTest1() {
-        expectedException.expect(IllegalArgumentException.class);
         DotNetRandom random = new DotNetRandom(-55);
-        random.nextInt(1, 0);
+        assertThrows(IllegalArgumentException.class,
+                     () -> random.nextInt(1, 0));
     }
 
     @Test
@@ -296,9 +292,9 @@ public class DotNetRandomCoreCLRTest {
 
     @Test
     public void testRandomNextBytes_NegTest1() {
-        expectedException.expect(NullPointerException.class);
         DotNetRandom random = new DotNetRandom(-55);
-        random.nextBytes(null);
+        assertThrows(NullPointerException.class,
+                     () -> random.nextBytes(null));
     }
 
     @SuppressWarnings("ConstantConditions")

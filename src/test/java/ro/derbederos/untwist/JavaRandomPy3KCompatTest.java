@@ -17,9 +17,7 @@
 package ro.derbederos.untwist;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import java.util.stream.DoubleStream;
 
@@ -31,9 +29,6 @@ import static ro.derbederos.untwist.RandomUtils.nextInts;
 public class JavaRandomPy3KCompatTest {
     // openjdk random tests.
     // http://hg.openjdk.java.net/jdk8/jdk8/jdk/file/687fd7c7986d/test/java/util/Random
-
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
 
     private JavaRandomPy3KCompat generator;
 
