@@ -47,7 +47,7 @@ class JavaRandom(object):
         """Create a new random number generator."""
 
         if seed is None:
-            micros = int(time.time() * 1E6)
+            micros = int(time.monotonic() * 1E6)
             seed = micros ^ JavaRandom.__next_seed_uniquifier()
         self.__seed = 0
         self.set_seed(seed)
